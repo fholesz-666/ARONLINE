@@ -30,7 +30,7 @@ test("kompletní průchod analýzou s platbou a exportem", async ({ page }) => {
   await page.getByLabel("Jméno a příjmení").fill("Test Projektant");
   await page.getByLabel("E-mail").fill(email);
   await page.getByLabel("Heslo").fill(password);
-  await page.getByRole("checkbox").check();
+  await page.getByRole("checkbox").first().check();
   await page.getByRole("button", { name: "Založit účet" }).click();
   await expect(page).toHaveURL(/\/app\/profil/);
   verifyEmailInDb();
@@ -65,6 +65,7 @@ test("kompletní průchod analýzou s platbou a exportem", async ({ page }) => {
   await page.getByRole("button", { name: /Pokračovat: Bouřková činnost/ }).click();
 
   // 4. Bouřková činnost
+  await page.getByRole("radio", { name: /Hustota výbojů NG/ }).check();
   await page.getByRole("textbox", { name: /NG – hustota/ }).fill("2,5");
   await page.getByLabel("Zdroj hodnoty").fill("mapa bouřkové činnosti (test)");
   await page.getByRole("button", { name: /Pokračovat: Přívodní vedení/ }).click();
@@ -96,7 +97,9 @@ test("kompletní průchod analýzou s platbou a exportem", async ({ page }) => {
   await expect(page.getByText("R1 – ztráta lidského života")).toBeVisible({ timeout: 30_000 });
   await shot(page, "09-vysledek");
 
-  // Platba přes simulovanou bránu
+  // Platba přes simulovanou bránu – bez potvrzení odpovědnosti zpracovatele nelze
+  await expect(page.getByRole("button", { name: /Zaplatit analýzu/ })).toBeDisabled();
+  await page.getByRole("checkbox", { name: /Potvrzuji, že jsem osobou/ }).check();
   await page.getByRole("button", { name: /Zaplatit analýzu/ }).click();
   await expect(page).toHaveURL(/mock-brana/);
   await shot(page, "10-brana");

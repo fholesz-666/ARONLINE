@@ -13,7 +13,12 @@ export const POST = handler(async (_req: Request, ctx: Ctx) => {
   const { id } = await ctx.params;
   await enforce(`calc:${c.user.id}`, LIMITS.calc);
   const r = await runCalculation(c.user.id, c.workspaceId, id);
-  if (!r.ok) return json({ ok: false, issues: r.issues }, { status: 422 });
+  if (!r.ok) {
+    return json(
+      { error: "invalid_input", message: "Výpočet nelze provést – doplňte chybějící údaje.", details: r.issues },
+      { status: 422 },
+    );
+  }
   const unlocked = (await getUnlock(id)) != null;
   return json({ ok: true, runId: r.runId, createdAt: r.createdAt, view: resultView(r.result as Ed2CalculationResult, unlocked) });
 });

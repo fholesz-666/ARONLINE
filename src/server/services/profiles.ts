@@ -21,7 +21,7 @@ export async function getProfile(workspaceId: string, id: string) {
   return p;
 }
 
-export async function saveProfile(workspaceId: string, id: string | null, input: { label: string; isDefault: boolean; data: unknown }) {
+export async function saveProfile(workspaceId: string, id: string | null, input: { label: string; isDefault: boolean; data?: unknown }) {
   const parsed = zProcessorData.safeParse(input.data);
   if (!parsed.success) throw badRequest("Neplatné údaje profilu.", parsed.error.issues.map((i) => ({ path: i.path.join("."), message: i.message })));
   const db = getDb();

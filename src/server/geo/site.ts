@@ -55,7 +55,6 @@ export interface SiteLookup {
 }
 
 const SRC_RUIAN = "RÚIAN (ČÚZK), vrstva Stavební objekt";
-const SRC_HEIGHT = "Odhad: DMP 1G − DMR 5G (ČÚZK), rozdíl povrchu a terénu";
 
 async function pool<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R>): Promise<R[]> {
   const out: R[] = new Array(items.length);
@@ -117,7 +116,7 @@ export async function lookupSite(lon: number, lat: number, opts: { neighbourRadi
   });
 
   // Hlavní budova: zvolená uživatelem, nebo budova obsahující bod, nebo nejbližší do 15 m
-  let main =
+  const main =
     (opts.pickBuildingId ? shapes.find((s) => String(s.b.objectId) === opts.pickBuildingId) : undefined) ??
     shapes.find((s) => pointInPolygon(here, s.xy)) ??
     [...shapes].filter((s) => s.dist <= 15).sort((a, c) => a.dist - c.dist)[0];
@@ -191,28 +190,4 @@ export async function lookupSite(lon: number, lat: number, opts: { neighbourRadi
   };
 }
 
-export interface CdSuggestion {
-  key: "surrounded_higher" | "surrounded_same_or_lower" | "isolated";
-  reason: string;
-}
-
-/**
- * Návrh součinitele polohy CD z okolních budov ve vzdálenosti do 3H.
- * Jde jen o NÁVRH – volbu (včetně „na vrcholu kopce“) potvrzuje projektant.
- */
-export function suggestCd(H: number, neighbours: { distance: number; height: number | null; include: boolean }[]): CdSuggestion {
-  const within = neighbours.filter((n) => n.include && n.distance <= 3 * H);
-  if (!within.length) return { key: "isolated", reason: `V okruhu 3H = ${(3 * H).toFixed(1)} m nejsou zahrnuté žádné objekty.` };
-  const known = within.filter((n) => n.height != null);
-  if (known.some((n) => (n.height as number) > H)) {
-    return {
-      key: "surrounded_higher",
-      reason: `V okruhu 3H je ${within.length} objektů, alespoň jeden je vyšší než posuzovaný objekt.`,
-    };
-  }
-  const unknown = within.length - known.length;
-  return {
-    key: "surrounded_same_or_lower",
-    reason: `V okruhu 3H je ${within.length} objektů stejné nebo nižší výšky${unknown ? ` (u ${unknown} chybí výška – ověřte)` : ""}.`,
-  };
-}
+export { suggestCd, type CdSuggestion } from "@/domain/cd";

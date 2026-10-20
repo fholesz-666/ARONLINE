@@ -14,6 +14,7 @@
  * Popisy řádků (label/help) jsou vlastní parafráze, nikoliv citace normy.
  */
 import type { NormTable, PublicSource } from "../../types";
+export type { NormTable, TableRow } from "../../types";
 
 const DEHN_LPG: PublicSource = {
   title: "DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2",

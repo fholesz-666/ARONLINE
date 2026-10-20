@@ -1,0 +1,25 @@
+name: Deploy
+
+# Nasazení na Render po úspěšném CI na větvi main.
+# Vyžaduje tajemství RENDER_DEPLOY_HOOK_URL (Render → služba → Settings → Deploy Hook).
+on:
+  workflow_run:
+    workflows: [CI]
+    branches: [main]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Spustit nasazení na Render
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "Tajemství RENDER_DEPLOY_HOOK_URL není nastaveno – nasazení přeskočeno."; exit 0; fi
+          curl -fsS -X POST "$HOOK" > /dev/null
+          echo "Nasazení spuštěno."

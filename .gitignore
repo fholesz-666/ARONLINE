@@ -44,3 +44,6 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /sample-output/
+
+# povolit příklad konfigurace
+!.env.example

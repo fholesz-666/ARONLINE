@@ -1,0 +1,67 @@
+# Render Blueprint – webová služba + PostgreSQL (region Frankfurt, EU)
+# Návod: docs/deployment.md
+services:
+  - type: web
+    name: aronline
+    runtime: node
+    region: frankfurt
+    plan: starter
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    # nasazení spouští GitHub Actions až po úspěšných testech (deploy hook), viz .github/workflows/deploy.yml
+    autoDeploy: false
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aronline-db
+          property: connectionString
+      - key: APP_ENV
+        value: production
+      - key: APP_URL
+        sync: false # např. https://aronline.cz
+      - key: PAYMENTS_MODE
+        value: sandbox # po ověření přepnout na production
+      - key: GOPAY_GOID
+        sync: false
+      - key: GOPAY_CLIENT_ID
+        sync: false
+      - key: GOPAY_CLIENT_SECRET
+        sync: false
+      - key: GOPAY_RECURRENCE_ENABLED
+        value: "true"
+      - key: REQUIRE_VERIFIED_CORE
+        value: "true"
+      - key: PREVIEW_DETAIL
+        value: summary
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: OPERATOR_NAME
+        sync: false
+      - key: OPERATOR_ICO
+        sync: false
+      - key: OPERATOR_ADDRESS
+        sync: false
+      - key: OPERATOR_EMAIL
+        sync: false
+      - key: OPERATOR_VAT_PAYER
+        value: "false"
+      - key: ADMIN_EMAILS
+        sync: false
+
+databases:
+  - name: aronline-db
+    region: frankfurt
+    plan: basic-256mb
+    databaseName: aronline
+    postgresMajorVersion: "16"

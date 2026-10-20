@@ -78,6 +78,15 @@ export function SiteFooter() {
           )}
         </div>
         <nav className="flex flex-col gap-1.5" aria-label="Informace">
+          <Link className="link" href="/analyza-rizika-lps">
+            Analýza rizika LPS podle ČSN EN 62305-2
+          </Link>
+          <Link className="link" href="/analyza-rizika-fve">
+            Analýza rizika u fotovoltaiky (FVE)
+          </Link>
+          <Link className="link" href="/casto-kladene-otazky">
+            Časté otázky
+          </Link>
           <Link className="link" href="/cenik">
             Ceník a podmínky tarifů
           </Link>

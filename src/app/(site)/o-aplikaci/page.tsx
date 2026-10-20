@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "O aplikaci" };
+export const metadata: Metadata = { title: "O aplikaci", alternates: { canonical: "/o-aplikaci" } };
 
 export default function AboutPage() {
   return (

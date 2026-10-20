@@ -4,8 +4,11 @@ import { RESULT_DISCLAIMER } from "@/config/liability";
 import { OPERATOR } from "@/config/operator";
 import { getPublicProducts, PricingTable } from "@/components/pricing";
 import { getVerificationSummary } from "@/core/risk/methodologies/csn-en-62305-2-ed2/verification";
+import { JsonLd } from "@/components/json-ld";
+import { SITE_URL } from "@/config/site";
 
 export const dynamic = "force-dynamic";
+export const metadata = { alternates: { canonical: "/" } };
 
 function SampleSheet() {
   return (
@@ -62,12 +65,47 @@ const STEPS = [
 export default async function HomePage() {
   const products = await getPublicProducts();
   const v = getVerificationSummary();
+  const single = products.find((p) => p.code === "SINGLE");
   return (
     <>
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "ARONLINE – analýza rizika LPS",
+            applicationCategory: "BusinessApplication",
+            operatingSystem: "Web",
+            inLanguage: "cs",
+            url: SITE_URL,
+            description:
+              "Online výpočet analýzy rizika ochrany před bleskem (LPS) podle ČSN EN 62305-2 s dokumentací v PDF a DOCX.",
+            offers: products.map((p) => ({
+              "@type": "Offer",
+              name: p.name,
+              price: p.priceCzk,
+              priceCurrency: "CZK",
+            })),
+            provider: { "@type": "Organization", name: "FVSOL – Filip Holesz", url: "https://fvsol.cz", email: OPERATOR.email },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "FVSOL",
+            url: "https://fvsol.cz",
+            email: OPERATOR.email,
+            founder: { "@type": "Person", name: "Filip Holesz" },
+            knowsAbout: ["ochrana před bleskem", "analýza rizika LPS", "fotovoltaické elektrárny", "ČSN EN 62305"],
+          },
+        ]}
+      />
       <section className="border-b border-line bg-sheet">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 lg:grid-cols-[1.1fr_1fr] lg:py-20">
           <div>
-            <h1 className="text-[2.1rem] sm:text-[2.6rem]">Analýza rizika ochrany před bleskem bez přepisování podkladů</h1>
+            <h1 className="text-[2.1rem] sm:text-[2.6rem]">Analýza rizika LPS online – ochrana před bleskem podle ČSN EN 62305-2</h1>
+            <p className="mt-3 text-lg font-semibold text-ink">
+              Výpočet rizika úderu blesku bez přepisování podkladů{single ? ` – jedna analýza za ${single.priceCzk} Kč` : ""}.
+            </p>
             <p className="mt-5 max-w-[60ch] text-lg text-ink-soft">
               Ověření rizika podle ČSN EN 62305-2 ed. 2 (výpočet podle ed. 3 nasadíme od 10/2027). Budovu a okolí načte z katastru, bouřkové dny z mapy ČR, výpočet vede krok za krokem a dokumentaci vydá s vaším razítkem v PDF i ve Wordu.
             </p>
@@ -157,6 +195,24 @@ export default async function HomePage() {
             </ul>
             <p className="mt-4 text-sm text-muted">Tyto údaje nelze spolehlivě získat z veřejných dat. Aplikace je nedomýšlí.</p>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pt-12">
+        <h2 className="text-2xl">Analýza rizika LPS – průvodce</h2>
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          {(
+            [
+              ["/analyza-rizika-lps", "Co je analýza rizika LPS", "Kdy ji zpracovat, co se počítá a jaké podklady budete potřebovat."],
+              ["/analyza-rizika-fve", "Analýza rizika u fotovoltaiky", "Co se mění po instalaci FVE na střechu a jak zadat vedení a střídač."],
+              ["/casto-kladene-otazky", "Časté otázky", "Norma, cena, doba zpracování, ed. 2 a ed. 3, odpovědnost zpracovatele."],
+            ] as const
+          ).map(([href, t, d]) => (
+            <Link key={href} href={href} className="panel block p-5 no-underline hover:border-ink">
+              <h3 className="text-base">{t}</h3>
+              <p className="mt-1 text-sm text-ink-soft">{d}</p>
+            </Link>
+          ))}
         </div>
       </section>
 

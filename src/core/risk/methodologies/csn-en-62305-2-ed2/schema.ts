@@ -58,6 +58,9 @@ export const zLossValue = z.discriminatedUnion("source", [
 ]);
 export type LossValueInput = z.infer<typeof zLossValue>;
 
+/** Nejvyšší počet sousedních objektů připojených vedením (NDJ). */
+export const MAX_ADJACENT_STRUCTURES = 5;
+
 export const zAdjacentStructure = z.object({
   L: meters(2000),
   W: meters(2000),
@@ -171,6 +174,11 @@ export const zEd2Input = z
       mode: z.enum(["ng", "td"]),
       ng: z.number().finite().positive().max(100).nullable(),
       td: z.number().finite().positive().max(365).nullable(),
+      /**
+       * Přepočet Td → NG: "annex_a" = NG ≈ 0,1·Td (ČSN EN 62305-2 ed. 2, příl. A),
+       * "csn_332000_4_443" = NG = 0,04·Td^1,25 (ČSN 33 2000-4-443 ed. 2, čl. 443.3.2.1 – postup programu Prozik).
+       */
+      tdMethod: z.enum(["annex_a", "csn_332000_4_443"]).optional(),
       source: z.string().trim().min(3, "Uveďte zdroj hodnoty NG / Td").max(300),
     }),
     lossTypes: z.object({ L1: z.boolean(), L2: z.boolean(), L3: z.boolean(), L4: z.boolean() }),
@@ -194,6 +202,15 @@ export const zEd2Input = z
     }
     if (!v.lossTypes.L1 && !v.lossTypes.L2 && !v.lossTypes.L3 && !v.lossTypes.L4) {
       ctx.addIssue({ code: "custom", path: ["lossTypes"], message: "Vyberte alespoň jeden druh ztráty" });
+    }
+    // Sousední objekty se uvažují jen na konci připojeného vedení (NDJ); max. 5 (shodně s praxí Prozik).
+    const adjacentCount = v.lines.filter((l) => l.adjacentStructure != null).length;
+    if (adjacentCount > MAX_ADJACENT_STRUCTURES) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["lines"],
+        message: `Lze uvažovat nejvýše ${MAX_ADJACENT_STRUCTURES} sousedních objektů připojených vedením (zadáno ${adjacentCount}).`,
+      });
     }
     const lineIds = new Set<string>();
     v.lines.forEach((l, i) => {

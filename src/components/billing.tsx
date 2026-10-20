@@ -25,8 +25,14 @@ const REASON: Record<string, string> = { PURCHASE: "nákup", UNLOCK: "odemčení
 const czk = (h: number) => `${(h / 100).toLocaleString("cs-CZ")} Kč`;
 
 /** Zahájí platbu a přesměruje na platební bránu. */
-export async function startPayment(productCode: string, projectId?: string | null) {
-  const r = await api<{ gwUrl: string }>("/api/billing/order", { body: { productCode, projectId: projectId ?? null } });
+export async function startPayment(
+  productCode: string,
+  projectId?: string | null,
+  extra?: { email?: string; acceptLiability?: boolean },
+) {
+  const r = await api<{ gwUrl: string }>("/api/billing/order", {
+    body: { productCode, projectId: projectId ?? null, ...(extra ?? {}) },
+  });
   window.location.href = r.gwUrl;
 }
 

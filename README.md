@@ -9,7 +9,7 @@
 
 > ⚠️ **Stav výpočetního jádra:** normové tabulky a vzorce zatím **nejsou odborně ověřeny** proti textu normy (0 / 73 položek). Dokumenty jsou označeny „Neověřený výpočet“ a v produkci jsou platby a export zablokovány (`REQUIRE_VERIFIED_CORE=true`). Postup ověření: [docs/verification-checklist.md](docs/verification-checklist.md).
 >
-> Metodiku **ČSN EN IEC 62305-2 ed. 3** (účinná od 1. 11. 2025) aplikace zatím **neumí**, protože vzorce nejsou veřejně dostupné. Ed. 2 lze podle dostupných informací používat do 31. 10. 2027. Viz [docs/research.md](docs/research.md).
+> Aplikace počítá podle **ČSN EN 62305-2 ed. 2**, kterou lze používat do 31. 10. 2027. Výpočet podle **ed. 3** bude nasazen od 10/2027 (rozhodnutí provozovatele – do té doby se ed. 3 v aplikaci nepočítá ani podrobně nepopisuje).
 
 ## Dokumentace
 

@@ -184,7 +184,7 @@ export function defaultCalc(typeKey: BuildingTypeKey | string): Partial<Ed2Input
       totalPersons: t.typicalPersons,
       totalServedUsers: t.l2 ? 1000 : null,
     },
-    lightning: { mode: "ng", ng: null, td: null, source: "" },
+    lightning: { mode: "td", ng: null, td: null, source: "" },
     lossTypes: { ...t.lossTypes },
     options: { ...t.options },
     tolerableL4: null,

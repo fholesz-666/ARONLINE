@@ -1,13 +1,16 @@
 import { requireMember } from "@/server/auth/session";
 import { handler, json } from "@/server/http";
-import { listOrders, paymentsAvailable } from "@/server/payments/service";
+import { GUEST_PRODUCT_CODE, listOrders, paymentsAvailable } from "@/server/payments/service";
 import { activeSubscription, creditBalance, ledgerHistory, listProducts, subscriptionUnlocksUsed } from "@/server/services/billing";
 
 export const GET = handler(async () => {
   const c = await requireMember();
   const sub = await activeSubscription(c.workspaceId);
+  const all = await listProducts();
   return json({
-    products: await listProducts(),
+    isGuest: c.user.isGuest,
+    // Host vidí jen jednorázovou analýzu; balíčky a předplatné vyžadují registraci.
+    products: c.user.isGuest ? all.filter((p) => p.code === GUEST_PRODUCT_CODE) : all,
     balance: await creditBalance(c.workspaceId),
     subscription: sub
       ? {

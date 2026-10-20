@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { GuestStart } from "@/components/guest";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Notice, TextInput } from "@/components/ui";
@@ -52,8 +53,11 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense>
-      <LoginForm />
-    </Suspense>
+    <div className="space-y-6">
+      <Suspense>
+        <LoginForm />
+      </Suspense>
+      <GuestStart />
+    </div>
   );
 }

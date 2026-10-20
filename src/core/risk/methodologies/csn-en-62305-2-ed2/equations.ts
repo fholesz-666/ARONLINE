@@ -36,6 +36,14 @@ function eq(
 
 export const EQUATIONS = {
   NG_FROM_TD: eq("ED2.EQ.A.1", "NG", "NG ≈ 0,1 · TD", "příloha A, rov. (A.1)", P_DEHN, [DEHN_LPG]),
+  NG_FROM_TD_443: eq(
+    "CSN.332000-4-443.EQ.NG",
+    "NG",
+    "NG = 0,04 · TD^1,25",
+    "ČSN 33 2000-4-443 ed. 2, čl. 443.3.2.1",
+    "Vztah uvedený v nápovědě programu OEZ Prozik 2.60 (odkaz na ČSN 33 2000-4-443 ed. 2, čl. 443.3.2.1); číselně ověřeno na protokolech Prozik (Td 24 → NG 2,12; Td 25 → NG 2,24). Proti textu ČSN 33 2000-4-443 neověřeno.",
+    [],
+  ),
   AD: eq(
     "ED2.EQ.A.2",
     "AD",

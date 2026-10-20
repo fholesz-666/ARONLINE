@@ -3,6 +3,7 @@
  * Veškeré texty závěru se odvozují výhradně z vypočtených hodnot.
  */
 import { buildingType } from "@/catalog";
+import { LIABILITY_DOCUMENT_TEXT } from "@/config/liability";
 import type { Ed2CalculationResult } from "@/core/risk/methodologies/csn-en-62305-2-ed2";
 import { COMPONENTS, UNPROTECTED_DESCRIPTION, type Component, type Ed2ScenarioResult } from "@/core/risk/methodologies/csn-en-62305-2-ed2/calculate";
 import type { Ed2Input, LossValueInput } from "@/core/risk/methodologies/csn-en-62305-2-ed2/schema";
@@ -422,9 +423,16 @@ export function buildReport(run: RunRecord): ReportModel {
       text: `Nepotvrzené předvyplněné údaje (${unconfirmed.length}): ${unconfirmed.map(([k]) => k.replace(/^calc\./, "")).join(", ")}. Zpracovatel je musí ověřit.`,
     });
   }
+  blocks.push({ type: "heading", level: 2, text: "Odpovědnost zpracovatele" });
+  for (const t of LIABILITY_DOCUMENT_TEXT) blocks.push({ type: "paragraph", text: t });
   blocks.push({
     type: "paragraph",
-    text: "Zpracovatel analýzy odpovídá za správnost, úplnost a aktuálnost zadaných a převzatých vstupních údajů. Před použitím výsledku je povinen ověřit jejich správnost, zejména údaje automaticky získané z externích databází, mapových podkladů a dalších zdrojů. Aplikace provádí výpočet podle zvolené metodiky ze zadaných údajů; výsledek je nutné posoudit v kontextu konkrétní stavby a příslušných normových požadavků. Analýza rizika neobsahuje návrh vnější ani vnitřní ochrany před bleskem – ten je předmětem samostatné projektové dokumentace.",
+    text: "Analýza rizika neobsahuje návrh vnější ani vnitřní ochrany před bleskem – ten je předmětem samostatné projektové dokumentace.",
+  });
+  blocks.push({
+    type: "paragraph",
+    style: "note",
+    text: "Návrh hromosvodu (LPS), přepěťových ochran nebo kompletní projektovou dokumentaci fotovoltaické elektrárny vám zpracuje FVSOL – https://fvsol.cz",
   });
 
   /* 10. Identifikace výpočtu -------------------------------------- */
@@ -466,7 +474,7 @@ export function buildReport(run: RunRecord): ReportModel {
   blocks.push({
     type: "paragraph",
     style: "small",
-    text: "Potřebujete kompletní projektovou dokumentaci fotovoltaické elektrárny (FVE) nebo ochrany před bleskem (LPS)? Více informací naleznete na fvsol.cz.",
+    text: "Potřebujete kompletní projektovou dokumentaci fotovoltaické elektrárny (FVE) nebo ochrany před bleskem (LPS) – návrh hromosvodu, přepěťových ochran, technickou zprávu a výkresy? Více informací naleznete na fvsol.cz.",
   });
   blocks.push({ type: "link", text: "https://fvsol.cz", url: "https://fvsol.cz" });
 

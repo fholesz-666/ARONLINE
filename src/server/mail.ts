@@ -19,6 +19,8 @@ let transporter: Transporter | null = null;
 
 export async function sendMail(mail: Mail): Promise<boolean> {
   const c = getConfig();
+  // Zástupné adresy hostů (*.invalid) nejsou doručitelné – nic neposíláme.
+  if (/\.invalid$/i.test(mail.to.trim())) return false;
   if (c.APP_ENV === "test") {
     testOutbox.push(mail);
     return true;

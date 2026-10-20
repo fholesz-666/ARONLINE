@@ -232,7 +232,7 @@ export async function renderDocx(model: ReportModel, logo?: { data: Buffer; mime
   const footerChildren: ParagraphChild[] = [
     new TextRun({ text: model.footerText ? `${model.footerText}   |   ` : "", size: 15, color: "66748B", font: FONT }),
     new TextRun({ children: ["Strana ", PageNumber.CURRENT, " z ", PageNumber.TOTAL_PAGES], size: 15, color: "66748B", font: FONT }),
-    new TextRun({ text: `   |   ID výpočtu ${model.meta.runId.slice(0, 8)}`, size: 15, color: "66748B", font: FONT }),
+    new TextRun({ text: `   |   ID výpočtu ${model.meta.runId.slice(0, 8)}   |   Projekce FVE a LPS: fvsol.cz`, size: 15, color: "66748B", font: FONT }),
   ];
   const footer = new Footer({
     children: [new Paragraph({ border: { top: { style: BorderStyle.SINGLE, size: 4, color: LINE, space: 4 } }, children: footerChildren })],

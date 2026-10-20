@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Brand } from "@/components/brand";
+import { GuestBanner } from "@/components/guest";
 import { AppNav, LogoutButton, VerifyEmailBanner, WorkspaceSwitcher } from "@/components/app-chrome";
 import { getCurrent } from "@/server/auth/session";
 import { listWorkspaces } from "@/server/services/workspace";
@@ -17,16 +18,16 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-2.5">
           <div className="flex items-center gap-5">
             <Brand href="/app" />
-            <AppNav isAdmin={c.user.role === "ADMIN"} />
+            <AppNav isAdmin={c.user.role === "ADMIN"} isGuest={c.user.isGuest} />
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <WorkspaceSwitcher workspaces={workspaces} current={c.workspaceId} />
+            {!c.user.isGuest && <WorkspaceSwitcher workspaces={workspaces} current={c.workspaceId} />}
             <span className="hidden text-muted md:inline">{c.user.name}</span>
             <LogoutButton />
           </div>
         </div>
       </header>
-      {!c.user.emailVerified && <VerifyEmailBanner />}
+      {c.user.isGuest ? <GuestBanner /> : !c.user.emailVerified && <VerifyEmailBanner />}
       <main className="flex-1">{children}</main>
       <footer className="border-t border-line bg-sheet">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-2 px-4 py-4 text-xs text-muted">

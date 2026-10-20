@@ -9,6 +9,7 @@
  * - Kontroluje se shoda částky, měny, čísla objednávky a GoID příjemce.
  */
 import { randomInt } from "node:crypto";
+import { GUEST_EMAIL_DOMAIN } from "../services/auth";
 import { and, eq, inArray } from "drizzle-orm";
 import { audit } from "../audit";
 import { getConfig } from "../config";
@@ -79,14 +80,29 @@ export interface CreateOrderInput {
   userId: string;
   userEmail: string;
   emailVerified: boolean;
+  /** Host bez registrace – smí koupit jen jednorázovou analýzu ke konkrétnímu projektu. */
+  isGuest?: boolean;
   productCode: string;
   projectId?: string | null;
 }
 
+/** Jediný produkt dostupný bez registrace. */
+export const GUEST_PRODUCT_CODE = "SINGLE";
+
 export async function createOrder(input: CreateOrderInput): Promise<{ orderId: string; gwUrl: string }> {
   const avail = paymentsAvailable();
   if (!avail.available) throw forbidden(avail.reason);
-  if (!input.emailVerified) throw forbidden("Před platbou prosím potvrďte svůj e-mail (odkaz v registračním e-mailu).");
+  if (input.isGuest) {
+    if (input.productCode !== GUEST_PRODUCT_CODE) {
+      throw forbidden("Balíčky a předplatné vyžadují registraci. Jako host lze zakoupit jen jednorázovou analýzu.");
+    }
+    if (!input.projectId) throw badRequest("Jednorázová analýza se kupuje ke konkrétnímu projektu.");
+    if (!input.userEmail || input.userEmail.endsWith("@" + GUEST_EMAIL_DOMAIN)) {
+      throw badRequest("Zadejte e-mail pro doklad o platbě.", [{ path: "email", message: "Zadejte e-mail" }]);
+    }
+  } else if (!input.emailVerified) {
+    throw forbidden("Před platbou prosím potvrďte svůj e-mail (odkaz v registračním e-mailu).");
+  }
   const product = await getProduct(input.productCode);
   if (!product || !product.active) throw notFound("Produkt není dostupný.");
   const c = getConfig();

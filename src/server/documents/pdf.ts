@@ -189,7 +189,12 @@ export async function renderPdf(model: ReportModel, logo?: { data: Buffer; mime:
       margin: [50, 14, 50, 0],
       columns: [
         { text: model.footerText, fontSize: 7.5, color: "#66748b" },
-        { text: `Strana ${currentPage} z ${pageCount}   |   ID výpočtu ${model.meta.runId.slice(0, 8)}`, fontSize: 7.5, color: "#66748b", alignment: "right" },
+        {
+          stack: [
+            { text: `Strana ${currentPage} z ${pageCount}   |   ID výpočtu ${model.meta.runId.slice(0, 8)}`, fontSize: 7.5, color: "#66748b", alignment: "right" },
+            { text: "Projekce FVE a LPS: fvsol.cz", link: "https://fvsol.cz", fontSize: 7, color: "#66748b", alignment: "right" },
+          ],
+        },
       ],
     }),
     // nadpis nesmí zůstat osamocen na konci stránky

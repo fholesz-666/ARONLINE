@@ -39,7 +39,7 @@ Seznam je seřazený podle důležitosti. Bez bodů A1–A3 nelze aplikaci komer
 ## D. Odborná data, která aplikace nemá
 
 - **Hustota výbojů NG pro ČR** – žádný otevřený komerčně použitelný zdroj. Projektant zadává ručně se zdrojem. Možnost: licence na data detekční sítě.
-- **Ed. 3 (NSG, F, FT, nové sběrné plochy)** – implementace vyžaduje text normy ČSN EN IEC 62305-2 ed. 3. Doporučení: po ověření ed. 2 zahájit implementaci ed. 3 jako samostatný modul `methodologies/csn-en-iec-62305-2-ed3`. Do 31. 10. 2027 musí být hotová, jinak aplikace přestane počítat.
+- **Ed. 3** – nasazení plánováno na **10/2027** (rozhodnutí provozovatele 20. 10. 2026). Do té doby se v aplikaci ani v dokumentech nepopisuje. Implementace jako samostatný modul `methodologies/csn-en-iec-62305-2-ed3`; musí být hotová do 31. 10. 2027, jinak aplikace přestane počítat.
 - **Inženýrské sítě** – nelze získat automaticky. Případně integrace na službu pro hromadné žádosti o vyjádření (MawisUtility) – mimo rozsah.
 
 ## E. Doporučená vylepšení (nepovinná)

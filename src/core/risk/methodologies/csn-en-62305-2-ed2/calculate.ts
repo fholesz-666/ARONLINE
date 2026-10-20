@@ -218,16 +218,18 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
   let NG: number;
   if (input.lightning.mode === "td") {
     const TD = input.lightning.td as number;
+    const by443 = input.lightning.tdMethod === "csn_332000_4_443";
+    const eqNg = by443 ? E.NG_FROM_TD_443 : E.NG_FROM_TD;
     NG = step({
       key: prefix + "NG",
       symbol: "NG",
       label: "Hustota výbojů do země (z počtu bouřkových dnů)",
-      value: 0.1 * TD,
+      value: by443 ? 0.04 * Math.pow(TD, 1.25) : 0.1 * TD,
       unit: "1/(km²·rok)",
-      formula: E.NG_FROM_TD.formula,
-      substituted: `NG = 0,1 · ${f(TD)}`,
-      equationId: E.NG_FROM_TD.id,
-      normRef: E.NG_FROM_TD.normRef,
+      formula: eqNg.formula,
+      substituted: by443 ? `NG = 0,04 · ${f(TD)}^1,25` : `NG = 0,1 · ${f(TD)}`,
+      equationId: eqNg.id,
+      normRef: eqNg.normRef,
       inputs: [{ symbol: "TD", value: TD, unit: "dny/rok", source: { kind: "user", note: input.lightning.source } }],
     });
     messages.push({
@@ -256,7 +258,7 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
     unit: "1/(km²·rok)",
     source:
       input.lightning.mode === "td"
-        ? { kind: "computed", equationId: E.NG_FROM_TD.id }
+        ? { kind: "computed", equationId: input.lightning.tdMethod === "csn_332000_4_443" ? E.NG_FROM_TD_443.id : E.NG_FROM_TD.id }
         : { kind: "user", note: input.lightning.source },
   };
 
@@ -939,17 +941,23 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
         RW: lineSubst((zl) => zl.PW, nLDs, Ls.LW),
         RZ: lineSubst((zl) => zl.PZ, (lr) => f(lr.NI), Ls.LZ),
       };
+      // Zóna vně stavby (např. LPZ 0): uvažuje se jen úraz osob dotykovým a krokovým napětím RA.
+      // Hmotná škoda a poruchy vnitřních systémů vznikají uvnitř stavby (shodně s programem Prozik – ověřit v textu normy).
+      const outside = zone.location === "outside";
+      if (outside) {
+        for (const c of COMPONENTS) if (c !== "RA") vals[c] = 0;
+      }
       const included = includedComponents(loss, input);
       for (const c of COMPONENTS) {
         const eqDef = E[c];
         trace.push({
           key: `${zp}${loss}.${c}`,
           symbol: `${c}${lossTag}`,
-          label: `Složka ${c} pro ${loss} – zóna „${zone.name}“${included.includes(c) ? "" : " (do rizika se nezahrnuje)"}`,
+          label: `Složka ${c} pro ${loss} – zóna „${zone.name}“${included.includes(c) ? "" : " (do rizika se nezahrnuje)"}${outside && c !== "RA" ? " (zóna vně stavby – neuvažuje se)" : ""}`,
           value: vals[c],
           unit: "1/rok",
           formula: eqDef.formula,
-          substituted: `${c} = ${subst[c]}`,
+          substituted: outside && c !== "RA" ? `${c} = 0 (zóna vně stavby)` : `${c} = ${subst[c]}`,
           equationId: eqDef.id,
           normRef: eqDef.normRef,
           inputs: [],

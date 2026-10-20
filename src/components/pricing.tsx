@@ -46,6 +46,9 @@ export function PricingTable({ products, ctaHref = "/registrace" }: { products: 
             {p.type === "SUBSCRIPTION" && <span className="text-muted"> / měsíc</span>}
           </p>
           <p className="mt-2 text-sm text-ink-soft">{p.description}</p>
+          <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-muted">
+            {p.code === "SINGLE" ? "Bez registrace – jako host" : "Vyžaduje registraci"}
+          </p>
           <ul className="mt-4 flex-1 space-y-1.5 text-sm">
             {p.features.map((f) => (
               <li key={f} className="flex gap-2">
@@ -54,7 +57,7 @@ export function PricingTable({ products, ctaHref = "/registrace" }: { products: 
               </li>
             ))}
           </ul>
-          <Link href={ctaHref} className="btn btn-secondary mt-5">
+          <Link href={p.code === "SINGLE" ? "/prihlaseni" : ctaHref} className="btn btn-secondary mt-5">
             {p.type === "SUBSCRIPTION" ? "Začít s předplatným" : "Začít analýzu"}
           </Link>
         </div>

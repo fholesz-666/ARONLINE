@@ -2,7 +2,7 @@
  * Uživatelské účty, relace, ověření e-mailu a obnova hesla.
  * Funkce nepracují s cookies – to dělá vrstva src/server/auth/session.ts.
  */
-import { and, eq, gt, isNull } from "drizzle-orm";
+import { and, eq, gt, isNull, sql } from "drizzle-orm";
 import { z } from "zod";
 import { audit } from "../audit";
 import { hashPassword, passwordProblem, randomToken, sha256, verifyPassword } from "../auth/crypto";
@@ -31,10 +31,98 @@ export const zRegister = z.object({
   acceptTerms: z.literal(true, { errorMap: () => ({ message: "Je nutný souhlas s obchodními podmínkami" }) }),
 });
 
-export type PublicUser = { id: string; email: string; name: string; role: "USER" | "ADMIN"; emailVerified: boolean };
+export type PublicUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: "USER" | "ADMIN";
+  emailVerified: boolean;
+  isGuest: boolean;
+};
 
 export function toPublicUser(u: typeof users.$inferSelect): PublicUser {
-  return { id: u.id, email: u.email, name: u.name, role: u.role, emailVerified: u.emailVerifiedAt != null };
+  return {
+    id: u.id,
+    email: u.isGuest ? "" : u.email,
+    name: u.name,
+    role: u.role,
+    emailVerified: u.emailVerifiedAt != null,
+    isGuest: u.isGuest,
+  };
+}
+
+/** Technická doména zástupných e-mailů hostů (RFC 2606 – nikdy nedoručitelná). */
+export const GUEST_EMAIL_DOMAIN = "host.aronline.invalid";
+
+export const zGuest = z.object({
+  acceptTerms: z.literal(true, { errorMap: () => ({ message: "Je nutný souhlas s obchodními podmínkami" }) }),
+});
+
+/**
+ * Host bez registrace: vytvoří anonymní účet s vlastním pracovním prostorem.
+ * Host smí koupit jen jednorázovou analýzu (viz payments/service.ts). Přístup je vázán
+ * na relaci v prohlížeči; host si může účet kdykoli dokončit (upgradeGuest).
+ */
+export async function createGuestUser() {
+  const db = getDb();
+  const c = getConfig();
+  const suffix = randomToken().slice(0, 16).toLowerCase().replace(/[^a-z0-9]/g, "x");
+  const passwordHash = await hashPassword(randomToken()); // heslo nikdo nezná – přihlášení jen relací
+  const { user, workspace } = await db.transaction(async (tx) => {
+    const [user] = await tx
+      .insert(users)
+      .values({
+        email: `host-${suffix}@${GUEST_EMAIL_DOMAIN}`,
+        name: "Host",
+        passwordHash,
+        isGuest: true,
+        termsVersion: c.TERMS_VERSION,
+        termsAcceptedAt: new Date(),
+      })
+      .returning();
+    const [workspace] = await tx.insert(workspaces).values({ name: "Host", type: "PERSONAL" }).returning();
+    await tx.insert(memberships).values({ userId: user.id, workspaceId: workspace.id, role: "OWNER" });
+    await tx.insert(processorProfiles).values({ workspaceId: workspace.id, isDefault: true, data: {} });
+    return { user, workspace };
+  });
+  await audit("user.guest_created", { userId: user.id, workspaceId: workspace.id });
+  return { user, workspace };
+}
+
+export const zUpgradeGuest = z.object({
+  email: zEmail,
+  password: z.string().min(1).max(200),
+  name: z.string().trim().min(2, "Zadejte jméno").max(120),
+});
+
+/** Dokončení registrace hosta – projekty, odemčení a objednávky zůstávají zachovány. */
+export async function upgradeGuest(userId: string, rawInput: z.infer<typeof zUpgradeGuest>) {
+  const input = { ...rawInput, email: rawInput.email.trim().toLowerCase(), name: rawInput.name.trim() };
+  const problem = passwordProblem(input.password);
+  if (problem) throw badRequest(problem, [{ path: "password", message: problem }]);
+  const db = getDb();
+  const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
+  if (!user || !user.isGuest) throw badRequest("Účet už je zaregistrovaný.");
+  const existing = await db.query.users.findFirst({ where: eq(users.email, input.email) });
+  if (existing) throw conflict("Účet s tímto e-mailem již existuje. Přihlaste se nebo obnovte heslo.");
+  const c = getConfig();
+  const passwordHash = await hashPassword(input.password);
+  const [updated] = await db
+    .update(users)
+    .set({
+      email: input.email,
+      name: input.name,
+      passwordHash,
+      isGuest: false,
+      role: c.adminEmails.includes(input.email) ? "ADMIN" : "USER",
+    })
+    .where(eq(users.id, userId))
+    .returning();
+  const ws = await defaultWorkspaceId(userId);
+  if (ws) await db.update(workspaces).set({ name: input.name }).where(eq(workspaces.id, ws));
+  await audit("user.guest_upgraded", { userId });
+  await sendVerificationEmail(updated.id, updated.email);
+  return updated;
 }
 
 export async function registerUser(rawInput: z.infer<typeof zRegister>) {
@@ -77,7 +165,7 @@ export async function authenticate(emailRaw: string, password: string) {
   const email = emailRaw.trim().toLowerCase();
   const db = getDb();
   const user = await db.query.users.findFirst({ where: eq(users.email, email) });
-  if (!user || user.disabledAt) {
+  if (!user || user.disabledAt || user.isGuest) {
     await verifyPassword(await getDummyHash(), password); // vyrovnání časování
     return null;
   }
@@ -172,7 +260,7 @@ export async function verifyEmail(token: string): Promise<boolean> {
 export async function requestPasswordReset(emailRaw: string) {
   const email = emailRaw.trim().toLowerCase();
   const user = await getDb().query.users.findFirst({ where: eq(users.email, email) });
-  if (!user || user.disabledAt) return; // neprozrazujeme existenci účtu
+  if (!user || user.disabledAt || user.isGuest) return; // neprozrazujeme existenci účtu
   const token = await createEmailToken(user.id, "RESET_PASSWORD", 3600 * 1000);
   const link = `${getConfig().APP_URL}/obnova-hesla?token=${encodeURIComponent(token)}`;
   await sendMail(mails.resetPassword(user.email, link));
@@ -203,4 +291,37 @@ export async function changePassword(userId: string, currentPassword: string, ne
   if (problem) throw badRequest(problem, [{ path: "newPassword", message: problem }]);
   await db.update(users).set({ passwordHash: await hashPassword(newPassword) }).where(eq(users.id, userId));
   await audit("user.password_changed", { userId });
+}
+
+/** Doba, po které se maže nedokončený účet hosta bez jakékoli objednávky (viz Zásady ochrany OÚ). */
+export const GUEST_RETENTION_DAYS = 60;
+
+/**
+ * Smaže účty hostů bez objednávky, kteří nebyli aktivní GUEST_RETENTION_DAYS dní.
+ * Hosté s objednávkou (zaplacenou i nezaplacenou) zůstávají kvůli účetní evidenci.
+ */
+export async function purgeStaleGuests(now = new Date()): Promise<number> {
+  const db = getDb();
+  const cutoff = new Date(now.getTime() - GUEST_RETENTION_DAYS * 24 * 3600 * 1000);
+  const rows = await db.execute<{ id: string }>(sql`
+    select u.id from users u
+    where u.is_guest = true and u.created_at < ${cutoff}
+      and not exists (select 1 from sessions s where s.user_id = u.id and s.last_seen_at >= ${cutoff})
+      and not exists (select 1 from orders o where o.user_id = u.id)
+    limit 500`);
+  let n = 0;
+  for (const { id } of rows.rows) {
+    try {
+      await db.transaction(async (tx) => {
+        const ws = await tx.select({ id: memberships.workspaceId }).from(memberships).where(eq(memberships.userId, id));
+        for (const w of ws) await tx.delete(workspaces).where(and(eq(workspaces.id, w.id), eq(workspaces.type, "PERSONAL")));
+        await tx.delete(users).where(and(eq(users.id, id), eq(users.isGuest, true)));
+      });
+      n++;
+    } catch {
+      // projekt s vazbou, kterou nelze smazat – necháme na ruční kontrolu
+    }
+  }
+  if (n) await audit("user.guests_purged", { meta: { count: n } });
+  return n;
 }

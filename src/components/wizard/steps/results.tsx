@@ -6,7 +6,9 @@ import { fmtRisk } from "@/core/util/format";
 import { api, ApiError } from "@/lib/api";
 import type { ResultView } from "@/server/services/preview";
 import { startPayment } from "../../billing";
-import { Notice, Spinner } from "../../ui";
+import { LIABILITY_CONFIRMATION } from "@/config/liability";
+import { FvsolPromo } from "../../fvsol";
+import { Checkbox, Notice, Spinner, TextInput } from "../../ui";
 import { STEPS, stepForPath, type StepProps } from "../wizard";
 
 const LOSS: Record<string, string> = {
@@ -27,6 +29,7 @@ const COMP: Record<string, string> = {
 };
 
 interface Billing {
+  isGuest?: boolean;
   balance: number;
   subscription: { unlocksUsed: number; unlocksPerPeriod: number | null; productName: string } | null;
   payments: { available: boolean; reason?: string };
@@ -43,6 +46,8 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
   const [busy, setBusy] = useState<string | null>(null);
   const [billing, setBilling] = useState<Billing | null>(null);
   const [unlocked, setUnlocked] = useState(project.unlocked);
+  const [liability, setLiability] = useState(false);
+  const [guestEmail, setGuestEmail] = useState("");
 
   const run = useCallback(async () => {
     setBusy("Počítám…");
@@ -197,7 +202,13 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
                   </a>
                 </div>
               </>
-            ) : billing && !billing.payments.available ? (
+            ) : null}
+            {!unlocked && (
+              <div className="rounded-md border border-signal bg-signal-soft p-3">
+                <Checkbox checked={liability} onChange={setLiability} label={<span className="text-sm">{LIABILITY_CONFIRMATION}</span>} />
+              </div>
+            )}
+            {unlocked ? null : billing && !billing.payments.available ? (
               <Notice tone="warning">{billing.payments.reason}</Notice>
             ) : canUnlockFree ? (
               <>
@@ -207,11 +218,11 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
                 </p>
                 <button
                   className="btn btn-primary"
-                  disabled={busy != null}
+                  disabled={busy != null || !liability}
                   onClick={async () => {
                     setBusy("Odemykám…");
                     try {
-                      await api(`/api/projects/${project.id}/unlock`, { body: {} });
+                      await api(`/api/projects/${project.id}/unlock`, { body: { acceptLiability: true } });
                       setUnlocked(true);
                       onUnlocked();
                     } catch (e) {
@@ -226,16 +237,33 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
               </>
             ) : (
               <>
-                <p className="text-sm">Pro stažení PDF a DOCX zaplaťte analýzu, nebo použijte balíček či předplatné.</p>
+                <p className="text-sm">
+                  {billing?.isGuest
+                    ? "Jako host zaplatíte jednorázově tuto analýzu. Balíčky a předplatné vyžadují registraci."
+                    : "Pro stažení PDF a DOCX zaplaťte analýzu, nebo použijte balíček či předplatné."}
+                </p>
+                {billing?.isGuest && (
+                  <TextInput
+                    label="E-mail pro doklad o platbě"
+                    type="email"
+                    autoComplete="email"
+                    value={guestEmail}
+                    onChange={setGuestEmail}
+                    help="Použijeme jen pro doklad a případnou reklamaci. Registrace není nutná."
+                  />
+                )}
                 <div className="flex flex-wrap gap-2">
                   <button
                     className="btn btn-primary"
-                    disabled={busy != null || !single}
+                    disabled={busy != null || !single || !liability || (billing?.isGuest === true && !guestEmail.includes("@"))}
                     onClick={async () => {
                       setBusy("Přesměrovávám na platební bránu…");
                       try {
                         await saveNow();
-                        await startPayment("SINGLE", project.id);
+                        await startPayment("SINGLE", project.id, {
+                          acceptLiability: true,
+                          ...(billing?.isGuest ? { email: guestEmail } : {}),
+                        });
                       } catch (e) {
                         setError(e instanceof ApiError ? e.message : "Platbu se nepodařilo zahájit.");
                         setBusy(null);
@@ -244,8 +272,8 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
                   >
                     Zaplatit analýzu{single ? ` (${(single.priceHaler / 100).toLocaleString("cs-CZ")} Kč)` : ""}
                   </button>
-                  <Link className="btn btn-secondary" href="/app/predplatne">
-                    Balíčky a předplatné
+                  <Link className="btn btn-secondary" href={billing?.isGuest ? "/app/profil" : "/app/predplatne"}>
+                    {billing?.isGuest ? "Zaregistrovat se (balíčky a předplatné)" : "Balíčky a předplatné"}
                   </Link>
                 </div>
               </>
@@ -257,6 +285,8 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
               Přepočítat
             </button>
           </div>
+
+          <FvsolPromo variant="results" context="vysledky" />
         </>
       )}
     </div>

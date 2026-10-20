@@ -25,20 +25,17 @@ export const METHODOLOGIES: Record<string, MethodologyInfo> = {
     effectiveFrom: "2013-03-01",
     usableUntil: "2027-10-31",
     notes: [
-      "Nahrazena ČSN EN IEC 62305-2 ed. 3 (účinnost 1. 11. 2025). Podle dostupných informací ji lze souběžně používat do 31. 10. 2027 (dow EN IEC 62305-2:2024) – přesné přechodné ustanovení ČSN je nutné ověřit.",
+      "Souběžně platí ČSN EN IEC 62305-2 ed. 3; ed. 2 lze používat do 31. 10. 2027. Výpočet podle ed. 3 bude v aplikaci nasazen od 10/2027.",
       "Tabulkové hodnoty a vzorce v jádře zatím nejsou odborně ověřeny proti textu normy.",
     ],
   },
   CSN_EN_IEC_62305_2_ED3: {
     id: "CSN_EN_IEC_62305_2_ED3",
     title: "ČSN EN IEC 62305-2 ed. 3:2025",
-    norm: "ČSN EN IEC 62305-2 ed. 3 (říjen 2025), IEC 62305-2:2024 – Ochrana před bleskem – Část 2: Management rizika",
+    norm: "ČSN EN IEC 62305-2 ed. 3 (IEC 62305-2:2024)",
     status: "not_implemented",
     effectiveFrom: "2025-11-01",
-    notes: [
-      "Neimplementováno: vzorce, tabulky a přípustné hodnoty RT a FT nejsou veřejně dostupné. Implementace vyžaduje legálně pořízený text normy a odborné ověření.",
-      "Hlavní změny: společné riziko R (L1 + L2), četnost poškození F vnitřních systémů, hustota úderů NSG místo NG, opatření s TWS, riziko osob ve volném prostoru.",
-    ],
+    notes: ["Výpočet podle ed. 3 bude v aplikaci nasazen od 10/2027. Do 31. 10. 2027 se analýza zpracovává podle ed. 2."],
   },
 };
 

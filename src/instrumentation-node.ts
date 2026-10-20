@@ -20,6 +20,14 @@ export async function runStartupTasks() {
     await migrate(drizzle(client), { migrationsFolder: path.join(process.cwd(), "drizzle") });
     await seedProducts(false);
     console.log(JSON.stringify({ level: "info", event: "startup_migrations_done" }));
+    // úklid nedokončených účtů hostů – při startu a pak jednou denně
+    const { purgeStaleGuests } = await import("./server/services/auth");
+    const purge = () =>
+      purgeStaleGuests().catch((err) =>
+        console.error(JSON.stringify({ level: "error", event: "guest_purge_failed", message: err instanceof Error ? err.message : String(err) })),
+      );
+    void purge();
+    setInterval(purge, 24 * 3600 * 1000).unref();
   } catch (e) {
     console.error(JSON.stringify({ level: "error", event: "startup_migrations_failed", message: e instanceof Error ? e.message : String(e) }));
     throw e;

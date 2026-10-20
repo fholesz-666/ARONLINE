@@ -48,6 +48,8 @@ export const users = pgTable("users", {
   passwordHash: text("password_hash").notNull(),
   name: text("name").notNull(),
   role: userRole("role").notNull().default("USER"),
+  /** Host bez registrace – smí koupit jen jednorázovou analýzu; e-mail je technický zástupný. */
+  isGuest: boolean("is_guest").notNull().default(false),
   emailVerifiedAt: ts("email_verified_at"),
   termsVersion: text("terms_version"),
   termsAcceptedAt: ts("terms_accepted_at"),

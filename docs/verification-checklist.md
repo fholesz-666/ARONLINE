@@ -2,9 +2,9 @@
 
 > Soubor je generován skriptem `npm run verification:checklist`. Neupravujte ho ručně.
 
-Metodika: **ČSN EN 62305-2 ed. 2:2013** · otisk normativních dat: `74735c123fc9968d`
+Metodika: **ČSN EN 62305-2 ed. 2:2013** · otisk normativních dat: `009e964664c0a030`
 
-Stav: ověřeno **0 / 73**, neověřeno 73, zamítnuto 0.
+Stav: ověřeno **0 / 74**, neověřeno 74, zamítnuto 0.
 
 ## Postup ověření
 
@@ -358,6 +358,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | ID | Vzorec | Odkaz | Stav | Původ |
 |---|---|---|---|---|---|
 | ☐ | `ED2.EQ.A.1` | NG ≈ 0,1 · TD | příloha A, rov. (A.1) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG. Proti textu ČSN neověřeno. |
+| ☐ | `CSN.332000-4-443.EQ.NG` | NG = 0,04 · TD^1,25 | ČSN 33 2000-4-443 ed. 2, čl. 443.3.2.1 | unverified | Vztah uvedený v nápovědě programu OEZ Prozik 2.60 (odkaz na ČSN 33 2000-4-443 ed. 2, čl. 443.3.2.1); číselně ověřeno na protokolech Prozik (Td 24 → NG 2,12; Td 25 → NG 2,24). Proti textu ČSN 33 2000-4-443 neověřeno. |
 | ☐ | `ED2.EQ.A.2` | AD = L · W + 2 · (3 · H) · (L + W) + π · (3 · H)² | příloha A, rov. (A.2) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
 | ☐ | `ED2.EQ.A.3` | AD' = π · (3 · Hp)² | příloha A, rov. (A.3) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
 | ☐ | `ED2.EQ.A.4` | ND = NG · AD · CD · 10⁻⁶ | příloha A, rov. (A.4) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |

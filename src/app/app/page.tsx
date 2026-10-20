@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { NewProjectForm, ProjectRowActions } from "@/components/dashboard";
+import { FvsolPromo } from "@/components/fvsol";
 import { BUILDING_TYPES } from "@/catalog";
 import { requireMember } from "@/server/auth/session";
 import { HttpError } from "@/server/http";
@@ -104,6 +105,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
             <Link href="/app/predplatne" className="link mt-2 inline-block">
               Koupit analýzy
             </Link>
+          </div>
+          <div className="panel p-4">
+            <FvsolPromo variant="inline" context="dashboard" />
           </div>
         </aside>
       </div>

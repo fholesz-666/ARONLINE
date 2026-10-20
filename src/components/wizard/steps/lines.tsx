@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { LINE_PRESETS, NON_METALLIC_NOTE, SYSTEM_PRESETS } from "@/catalog";
-import type { LineInput } from "@/core/risk/methodologies/csn-en-62305-2-ed2/schema";
+import { MAX_ADJACENT_STRUCTURES, type LineInput } from "@/core/risk/methodologies/csn-en-62305-2-ed2/schema";
+import { localFrame, minAreaRect } from "@/domain/geometry";
 import type { FieldMeta } from "@/domain/project";
 import { api, ApiError } from "@/lib/api";
 import { Checkbox, Notice, NumberInput, SelectInput, TextInput } from "../../ui";
@@ -30,6 +31,29 @@ export function StepLines({ data, update, issues }: StepProps) {
   const lines = calc.lines ?? [];
   const [templates, setTemplates] = useState<{ id: string; name: string; data: Omit<LineInput, "id"> }[]>([]);
   const [msg, setMsg] = useState<string | null>(null);
+  const adjacentCount = lines.filter((l) => l.adjacentStructure != null).length;
+  const neighbourDims = useMemo(() => {
+    const nb = data.site.neighbours ?? [];
+    if (nb.length === 0) return [];
+    const [lon0, lat0] = nb[0].footprint[0] ?? [0, 0];
+    const frame = localFrame(lon0, lat0);
+    return nb
+      .slice()
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 30)
+      .map((n) => {
+        const r = minAreaRect(n.footprint.map((p) => frame.toXY(p as [number, number])));
+        const h = n.heightManual ?? n.heightEstimate ?? null;
+        return {
+          id: n.id,
+          distance: Math.round(n.distance),
+          L: Math.round(r.length * 10) / 10,
+          W: Math.round(r.width * 10) / 10,
+          H: h != null ? Math.round(h * 10) / 10 : null,
+        };
+      })
+      .filter((n) => n.L > 0 && n.W > 0);
+  }, [data.site.neighbours]);
   useEffect(() => {
     api<{ templates: { id: string; name: string; data: Omit<LineInput, "id"> }[] }>("/api/templates?kind=LINE")
       .then((r) => setTemplates(r.templates))
@@ -153,10 +177,35 @@ export function StepLines({ data, update, issues }: StepProps) {
               )}
             </div>
             <Checkbox
-              label="Na druhém konci vedení je sousední objekt (započítat údery do něj – NDJ)"
+              label="Vedení končí v sousední budově (započítat údery do ní – NDJ)"
+              help={`Sousední budova ovlivňuje riziko jen tehdy, je-li s chráněnou stavbou propojena vedením. Ostatní okolní budovy se projeví pouze v součiniteli polohy CD. Nejvýše ${MAX_ADJACENT_STRUCTURES} sousedních budov.`}
               checked={l.adjacentStructure != null}
-              onChange={(v) => setLine(i, { adjacentStructure: v ? { L: 10, W: 10, H: 6, cd: "surrounded_same_or_lower" } : null })}
+              onChange={(v) => {
+                if (v && adjacentCount >= MAX_ADJACENT_STRUCTURES) {
+                  setMsg(`Lze zadat nejvýše ${MAX_ADJACENT_STRUCTURES} sousedních budov připojených vedením.`);
+                  return;
+                }
+                setLine(i, { adjacentStructure: v ? { L: 10, W: 10, H: 6, cd: "surrounded_same_or_lower" } : null });
+              }}
             />
+            {l.adjacentStructure && neighbourDims.length > 0 && (
+              <SelectInput
+                label="Převzít rozměry z budovy v mapě"
+                value=""
+                onChange={(id) => {
+                  const n = neighbourDims.find((x) => x.id === id);
+                  if (n) setLine(i, { adjacentStructure: { ...l.adjacentStructure!, L: n.L, W: n.W, ...(n.H != null ? { H: n.H } : {}) } });
+                }}
+                options={[
+                  { value: "", label: "— vyberte budovu z okolí —" },
+                  ...neighbourDims.map((n) => ({
+                    value: n.id,
+                    label: `${n.distance} m od objektu · ${n.L} × ${n.W} m${n.H != null ? ` · výška ≈ ${n.H} m` : ""}`,
+                  })),
+                ]}
+                help="Rozměry jsou odhad z obrysu budovy v mapě – ověřte je."
+              />
+            )}
             {l.adjacentStructure && (
               <div className="grid gap-3 sm:grid-cols-4">
                 <NumberInput label="LJ" unit="m" value={l.adjacentStructure.L} onChange={(v) => setLine(i, { adjacentStructure: { ...l.adjacentStructure!, L: v ?? 0 } })} />

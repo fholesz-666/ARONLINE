@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FvsolPromo } from "@/components/fvsol";
 import { getPublicProducts, PricingTable } from "@/components/pricing";
 import { getVerificationSummary } from "@/core/risk/methodologies/csn-en-62305-2-ed2/verification";
 
@@ -66,11 +67,14 @@ export default async function HomePage() {
           <div>
             <h1 className="text-[2.1rem] sm:text-[2.6rem]">Analýza rizika ochrany před bleskem bez přepisování podkladů</h1>
             <p className="mt-5 max-w-[60ch] text-lg text-ink-soft">
-              Budovu a okolí načte z katastru, výpočet podle ČSN EN 62305-2 vede krok za krokem a dokumentaci vydá s vaším razítkem v PDF i ve Wordu.
+              Ověření rizika podle ČSN EN 62305-2 ed. 2 (výpočet podle ed. 3 nasadíme od 10/2027). Budovu a okolí načte z katastru, bouřkové dny z mapy ČR, výpočet vede krok za krokem a dokumentaci vydá s vaším razítkem v PDF i ve Wordu.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/registrace" className="btn btn-primary px-5 py-2.5">
                 Založit účet zdarma
+              </Link>
+              <Link href="/prihlaseni" className="btn btn-secondary px-5 py-2.5">
+                Jedna analýza bez registrace
               </Link>
               <Link href="/cenik" className="btn btn-secondary px-5 py-2.5">
                 Prohlédnout ceník
@@ -105,13 +109,14 @@ export default async function HomePage() {
               <li>Orientační výšku budovy z digitálního modelu povrchu</li>
               <li>Okolní budovy, vzdálenosti a návrh součinitele polohy CD</li>
               <li>Nadmořskou výšku terénu</li>
+              <li>Počet bouřkových dnů Td z izokeraunické mapy ČR</li>
             </ul>
             <p className="mt-4 text-sm text-muted">Každá převzatá hodnota nese zdroj a datum. Dokud ji nepotvrdíte, je v kontrole označená.</p>
           </div>
           <div>
             <h2 className="text-2xl">Co musíte doplnit vy</h2>
             <ul className="mt-5 space-y-2 text-ink-soft">
-              <li>Hustotu výbojů NG nebo počet bouřkových dnů se zdrojem</li>
+              <li>Kontrolu počtu bouřkových dnů – předvyplní se z mapy ČR podle polohy</li>
               <li>Provedení přípojek – údaje od správce sítě nebo z projektu</li>
               <li>Požární riziko a počty osob podle PBŘ a provozu</li>
               <li>Navržená ochranná opatření: třídu LPS, SPD, stínění</li>
@@ -119,6 +124,10 @@ export default async function HomePage() {
             <p className="mt-4 text-sm text-muted">Tyto údaje nelze spolehlivě získat z veřejných dat. Aplikace je nedomýšlí.</p>
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pt-12">
+        <FvsolPromo context="home" />
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16" id="cenik">

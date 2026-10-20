@@ -68,6 +68,13 @@ export async function requireMember(minRole: "MEMBER" | "ADMIN" | "OWNER" = "MEM
   return { ...c, workspaceId: c.workspaceId, membership };
 }
 
+/** Registrovaný uživatel (ne host) – pro týmy, pozvánky a nákup balíčků/předplatného. */
+export async function requireRegistered(): Promise<Current> {
+  const c = await requireUser();
+  if (c.user.isGuest) throw forbidden("Tato funkce vyžaduje registraci. Dokončete prosím účet v profilu.");
+  return c;
+}
+
 export async function requireAdmin(): Promise<Current> {
   const c = await requireUser();
   if (c.user.role !== "ADMIN") throw forbidden();

@@ -13,9 +13,13 @@ const NAV = [
   { href: "/app/tym", label: "Tým" },
 ];
 
-export function AppNav({ isAdmin }: { isAdmin: boolean }) {
+/** Položky, které host nevidí (vyžadují registraci). */
+const REGISTERED_ONLY = new Set(["/app/predplatne", "/app/sablony", "/app/tym"]);
+
+export function AppNav({ isAdmin, isGuest = false }: { isAdmin: boolean; isGuest?: boolean }) {
   const path = usePathname();
-  const items = isAdmin ? [...NAV, { href: "/app/admin", label: "Správa" }] : NAV;
+  const base = isGuest ? NAV.filter((i) => !REGISTERED_ONLY.has(i.href)) : NAV;
+  const items = isAdmin ? [...base, { href: "/app/admin", label: "Správa" }] : base;
   return (
     <nav className="flex flex-wrap gap-0.5 text-sm" aria-label="Aplikace">
       {items.map((i) => {

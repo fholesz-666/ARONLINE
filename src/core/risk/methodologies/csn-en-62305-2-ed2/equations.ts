@@ -1,10 +1,13 @@
 /**
  * Rovnice metodiky ČSN EN 62305-2 ed. 2:2013 (IEC 62305-2:2010).
  *
- * Číslování rovnic odpovídá znalosti implementátora a musí se ověřit
- * proti textu normy (docs/verification-checklist.md).
+ * Vzorce a čísla rovnic ověřeny 20. 10. 2026 proti textu ČSN EN 62305-2 ed. 2 (únor 2013)
+ * včetně změny Z1 (říjen 2025). Zápis je vlastní, nejde o citaci textu normy.
  */
 import type { NormEquation, PublicSource } from "../../types";
+
+/** Ověřeno 20. 10. 2026 proti textu ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS. */
+const P_CSN = "Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě.";
 
 const DEHN_LPG: PublicSource = {
   title: "DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2",
@@ -18,10 +21,9 @@ const NVB_REPORT: PublicSource = {
   checkedAt: "2026-10-20",
 };
 
-const P_DEHN = "Vzorec odpovídá veřejnému zdroji DEHN LPG. Proti textu ČSN neověřeno.";
-const P_DEHN_NVB =
-  "Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno.";
-const P_MEM = "Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno.";
+const P_DEHN = P_CSN;
+const P_DEHN_NVB = P_CSN;
+const P_MEM = P_CSN;
 
 function eq(
   id: string,
@@ -85,55 +87,61 @@ export const EQUATIONS = {
 
   PA: eq("ED2.EQ.B.1", "PA", "PA = PTA · PB", "příloha B, rov. (B.1)", P_DEHN, [DEHN_LPG]),
   PC: eq("ED2.EQ.B.2", "PC", "PC = PSPD · CLD", "příloha B, rov. (B.2)", P_DEHN, [DEHN_LPG]),
-  PC_MULTI: eq("ED2.EQ.B.3", "PC", "PC = 1 − Π (1 − PCi)", "příloha B, rov. (B.3)", P_MEM),
-  PM: eq("ED2.EQ.B.4", "PM", "PM = PSPD · PMS", "příloha B, rov. (B.4)", P_MEM),
-  PMS: eq("ED2.EQ.B.5", "PMS", "PMS = (KS1 · KS2 · KS3 · KS4)²", "příloha B, rov. (B.5)", P_MEM),
-  KS1: eq("ED2.EQ.B.6", "KS1", "KS1 = 0,12 · wm1 (max. 1)", "příloha B, rov. (B.6)", P_MEM),
-  KS2: eq("ED2.EQ.B.7", "KS2", "KS2 = 0,12 · wm2 (max. 1)", "příloha B, rov. (B.7)", P_MEM),
-  KS4: eq("ED2.EQ.B.8", "KS4", "KS4 = 1 / UW", "příloha B, rov. (B.8)", P_MEM),
-  PU: eq("ED2.EQ.B.9", "PU", "PU = PTU · PEB · PLD · CLD", "příloha B, rov. (B.9)", P_MEM),
-  PV: eq("ED2.EQ.B.10", "PV", "PV = PEB · PLD · CLD", "příloha B, rov. (B.10)", P_MEM),
-  PW: eq("ED2.EQ.B.11", "PW", "PW = PSPD · PLD · CLD", "příloha B, rov. (B.11)", P_MEM),
-  PZ: eq("ED2.EQ.B.12", "PZ", "PZ = PSPD · PLI · CLI", "příloha B, rov. (B.12)", P_MEM),
+  PC_MULTI: eq("ED2.EQ.B.3", "PC", "PC = 1 − Π (1 − PCi)", "čl. 6.9.1, rov. (14)", P_MEM),
+  PM: eq("ED2.EQ.B.4", "PM", "PM = PSPD · PMS (PM = 1 u zařízení nevyhovujících výrobkovým normám)", "příloha B, rov. (B.3)", P_MEM),
+  PM_MULTI: eq("ED2.EQ.6.9.1.PM", "PM", "PM = 1 − Π (1 − PMi)", "čl. 6.9.1, rov. (15)", P_MEM),
+  PMS: eq("ED2.EQ.B.5", "PMS", "PMS = (KS1 · KS2 · KS3 · KS4)²", "příloha B, rov. (B.4)", P_MEM),
+  KS1: eq("ED2.EQ.B.6", "KS1", "KS1 = 0,12 · wm1 (max. 1)", "příloha B, rov. (B.5)", P_MEM),
+  KS2: eq("ED2.EQ.B.7", "KS2", "KS2 = 0,12 · wm2 (max. 1)", "příloha B, rov. (B.6)", P_MEM),
+  KS4: eq("ED2.EQ.B.8", "KS4", "KS4 = 1 / UW", "příloha B, rov. (B.7)", P_MEM),
+  PU: eq("ED2.EQ.B.9", "PU", "PU = PTU · PEB · PLD · CLD", "příloha B, rov. (B.8)", P_MEM),
+  PV: eq("ED2.EQ.B.10", "PV", "PV = PEB · PLD · CLD", "příloha B, rov. (B.9)", P_MEM),
+  PW: eq("ED2.EQ.B.11", "PW", "PW = PSPD · PLD · CLD", "příloha B, rov. (B.10)", P_MEM),
+  PZ: eq("ED2.EQ.B.12", "PZ", "PZ = PSPD · PLI · CLI", "příloha B, rov. (B.11)", P_MEM),
 
   L1_LA: eq("ED2.EQ.C.1", "LA", "LA = rt · LT · nz/nt · tz/8 760", "příloha C, rov. (C.1)", P_MEM),
   L1_LU: eq("ED2.EQ.C.2", "LU", "LU = rt · LT · nz/nt · tz/8 760", "příloha C, rov. (C.2)", P_MEM),
   L1_LB: eq("ED2.EQ.C.3", "LB = LV", "LB = LV = rp · rf · hz · LF · nz/nt · tz/8 760", "příloha C, rov. (C.3)", P_MEM),
   L1_LC: eq("ED2.EQ.C.4", "LC = LM = LW = LZ", "LC = LM = LW = LZ = LO · nz/nt · tz/8 760", "příloha C, rov. (C.4)", P_MEM),
-  L2_LB: eq("ED2.EQ.C.5", "LB = LV", "LB = LV = rp · rf · LF · nz/nt", "příloha C, rov. (C.5)", P_MEM),
-  L2_LC: eq("ED2.EQ.C.6", "LC = LM = LW = LZ", "LC = LM = LW = LZ = LO · nz/nt", "příloha C, rov. (C.6)", P_MEM),
-  L3_LB: eq("ED2.EQ.C.7", "LB = LV", "LB = LV = rp · rf · LF · cz/ct", "příloha C, rov. (C.7)", P_MEM),
-  L4_LA: eq("ED2.EQ.C.8", "LA = LU", "LA = LU = rt · LT · ca/ct", "příloha C, rov. (C.8)", P_MEM),
-  L4_LB: eq("ED2.EQ.C.9", "LB = LV", "LB = LV = rp · rf · LF · (ca + cb + cc + cs)/ct", "příloha C, rov. (C.9)", P_MEM),
-  L4_LC: eq("ED2.EQ.C.10", "LC = LM = LW = LZ", "LC = LM = LW = LZ = LO · cs/ct", "příloha C, rov. (C.10)", P_MEM),
+  L2_LB: eq("ED2.EQ.C.5", "LB = LV", "LB = LV = rp · rf · LF · nz/nt", "příloha C, rov. (C.7)", P_MEM),
+  L2_LC: eq("ED2.EQ.C.6", "LC = LM = LW = LZ", "LC = LM = LW = LZ = LO · nz/nt", "příloha C, rov. (C.8)", P_MEM),
+  L3_LB: eq("ED2.EQ.C.7", "LB = LV", "LB = LV = rp · rf · LF · cz/ct", "příloha C, rov. (C.9)", P_MEM),
+  L4_LA: eq("ED2.EQ.C.8", "LA = LU", "LA = LU = rt · LT · ca/ct", "příloha C, rov. (C.10) a (C.11)", P_MEM),
+  L4_LB: eq("ED2.EQ.C.9", "LB = LV", "LB = LV = rp · rf · LF · (ca + cb + cc + cs)/ct", "příloha C, rov. (C.12)", P_MEM),
+  L4_LC: eq("ED2.EQ.C.10", "LC = LM = LW = LZ", "LC = LM = LW = LZ = LO · cs/ct", "příloha C, rov. (C.13)", P_MEM),
 
-  RX: eq("ED2.EQ.6.1", "RX", "RX = NX · PX · LX", "kap. 6.1 (základní rovnice)", P_DEHN, [DEHN_LPG]),
-  RA: eq("ED2.EQ.6.2.RA", "RA", "RA = ND · PA · LA", "kap. 6.2", P_MEM),
-  RB: eq("ED2.EQ.6.2.RB", "RB", "RB = ND · PB · LB", "kap. 6.2", P_MEM),
-  RC: eq("ED2.EQ.6.2.RC", "RC", "RC = ND · PC · LC", "kap. 6.2", P_MEM),
-  RM: eq("ED2.EQ.6.3.RM", "RM", "RM = NM · PM · LM", "kap. 6.3", P_MEM),
-  RU: eq("ED2.EQ.6.4.RU", "RU", "RU = (NL + NDJ) · PU · LU", "kap. 6.4", P_MEM),
-  RV: eq("ED2.EQ.6.4.RV", "RV", "RV = (NL + NDJ) · PV · LV", "kap. 6.4", P_MEM),
-  RW: eq("ED2.EQ.6.4.RW", "RW", "RW = (NL + NDJ) · PW · LW", "kap. 6.4", P_MEM),
-  RZ: eq("ED2.EQ.6.5.RZ", "RZ", "RZ = NI · PZ · LZ", "kap. 6.5", P_MEM),
+  RX: eq("ED2.EQ.6.1", "RX", "RX = NX · PX · LX", "čl. 6.1, rov. (5)", P_DEHN, [DEHN_LPG]),
+  RA: eq("ED2.EQ.6.2.RA", "RA", "RA = ND · PA · LA", "čl. 6.2, rov. (6)", P_MEM),
+  RB: eq("ED2.EQ.6.2.RB", "RB", "RB = ND · PB · LB", "čl. 6.2, rov. (7)", P_MEM),
+  RC: eq("ED2.EQ.6.2.RC", "RC", "RC = ND · PC · LC", "čl. 6.2, rov. (8)", P_MEM),
+  RM: eq("ED2.EQ.6.3.RM", "RM", "RM = NM · PM · LM", "čl. 6.3, rov. (9)", P_MEM),
+  RU: eq("ED2.EQ.6.4.RU", "RU", "RU = (NL + NDJ) · PU · LU", "čl. 6.4, rov. (10)", P_MEM),
+  RV: eq("ED2.EQ.6.4.RV", "RV", "RV = (NL + NDJ) · PV · LV", "čl. 6.4, rov. (11)", P_MEM),
+  RW: eq("ED2.EQ.6.4.RW", "RW", "RW = (NL + NDJ) · PW · LW", "čl. 6.4, rov. (12)", P_MEM),
+  RZ: eq("ED2.EQ.6.5.RZ", "RZ", "RZ = NI · PZ · LZ", "čl. 6.5, rov. (13)", P_MEM),
 
   R1: eq(
     "ED2.EQ.4.3.R1",
     "R1",
     "R1 = RA1 + RB1 + RC1* + RM1* + RU1 + RV1 + RW1* + RZ1*  (* jen u objektů s nebezpečím výbuchu, nemocnic se životně důležitými zařízeními a objektů, kde porucha vnitřních systémů přímo ohrožuje život)",
-    "kap. 4.3",
+    "čl. 4.3, rov. (1)",
     P_MEM,
   ),
-  R2: eq("ED2.EQ.4.3.R2", "R2", "R2 = RB2 + RC2 + RM2 + RV2 + RW2 + RZ2", "kap. 4.3", P_MEM),
-  R3: eq("ED2.EQ.4.3.R3", "R3", "R3 = RB3 + RV3", "kap. 4.3", P_MEM),
+  R2: eq("ED2.EQ.4.3.R2", "R2", "R2 = RB2 + RC2 + RM2 + RV2 + RW2 + RZ2", "čl. 4.3, rov. (2)", P_MEM),
+  R3: eq("ED2.EQ.4.3.R3", "R3", "R3 = RB3 + RV3", "čl. 4.3, rov. (3)", P_MEM),
   R4: eq(
     "ED2.EQ.4.3.R4",
     "R4",
     "R4 = RA4** + RB4 + RC4 + RM4 + RU4** + RV4 + RW4 + RZ4  (** jen kde může dojít ke ztrátě zvířat)",
-    "kap. 4.3",
+    "čl. 4.3, rov. (4)",
     P_MEM,
   ),
 } satisfies Record<string, NormEquation>;
 
 export type EquationKey = keyof typeof EQUATIONS;
-export const ALL_EQUATIONS: NormEquation[] = Object.values(EQUATIONS);
+/**
+ * Rovnice metodiky ČSN EN 62305-2 ed. 2 (podléhají ověření). Volitelný přepočet NG podle
+ * ČSN 33 2000-4-443 (alternativa používaná programem Prozik) do ověření nepatří – při jeho
+ * použití výpočet vydá upozornění.
+ */
+export const ALL_EQUATIONS: NormEquation[] = Object.values(EQUATIONS).filter((e) => e.id !== EQUATIONS.NG_FROM_TD_443.id);

@@ -1,3 +1,5 @@
+import { OPERATOR } from "@/config/operator";
+
 export function LegalDraftNotice() {
   return (
     <p className="mt-4 border-l-4 border-signal bg-signal-soft px-3 py-2 text-sm">
@@ -7,13 +9,19 @@ export function LegalDraftNotice() {
 }
 
 export function Operator() {
-  const name = process.env.OPERATOR_NAME || "[jméno / název provozovatele]";
-  const ico = process.env.OPERATOR_ICO || "[IČO]";
-  const addr = process.env.OPERATOR_ADDRESS || "[sídlo]";
-  const email = process.env.OPERATOR_EMAIL || "[kontaktní e-mail]";
+  const { name, ico, address, email, web } = OPERATOR;
   return (
     <>
-      {name}, IČO {ico}, se sídlem {addr}, e-mail {email}
+      {name}
+      {ico ? `, IČO ${ico}` : ", IČO [doplnit]"}
+      {address ? `, se sídlem ${address}` : ", sídlo [doplnit]"} (FVSOL –{" "}
+      <a className="link" href={web} rel="noopener">
+        fvsol.cz
+      </a>
+      ), e-mail{" "}
+      <a className="link" href={`mailto:${email}`}>
+        {email}
+      </a>
     </>
   );
 }

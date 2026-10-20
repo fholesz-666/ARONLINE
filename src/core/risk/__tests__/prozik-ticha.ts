@@ -2,8 +2,8 @@
  * Referenční případ z protokolu OEZ Prozik 2.60 – SO102 MŠ Tichá, Jablonec n. N. (protokol 17. 6. 2026,
  * zpracovatel Filip Holesz). Vstupy přepsány z protokolu (.doc) a souboru projektu (.vyr).
  *
- * Vynechán systém „Datové vedení“ na vedení NN – ARONLINE dovoluje jen jeden systém na vedení
- * (viz docs/prozik-comparison.md). Proto se srovnávají jen složky, které tento systém neovlivňuje.
+ * Rozdíl zůstává jen v RZ: Prozik u silového vedení s vícenásobně uzemněnou nulou bere CLI = 1,
+ * tab. B.4 ČSN EN 62305-2 ed. 2 uvádí CLI = 0,2 (viz docs/prozik-comparison.md).
  */
 import type { Ed2Input } from "../methodologies/csn-en-62305-2-ed2/schema";
 
@@ -43,7 +43,8 @@ export const TICHA: Ed2Input = {
       l4: { lt: T("animals"), lf: T("hotel_school_office_church_entertainment_commercial"), lo: T("museum_agriculture_school_church_entertainment"), shareAnimals: 1, shareTotal: 1, shareSystems: 1 },
       internalSystems: [
         { id: "nn", name: "Vedení NN", lineId: "nn", uw: "2.5", ks3: "unshielded_avoid_large_loops", pspd: "lpl_iii_iv" },
-        // { id: "data", ... } – ARONLINE nepovoluje 2 systémy na jednom vedení
+        // Prozik: „stíněný kabel nepospojovaný“ → KS3 = 0,0001 (dle tab. B.5, pozn. d patří jen stínění pospojenému na obou koncích)
+        { id: "data", name: "Datové vedení", lineId: "nn", uw: "1.5", ks3: "shielded_bonded", pspd: "none" },
         { id: "fve", name: "FVE", lineId: "fve", uw: "4", ks3: "unshielded_no_precaution", pspd: "lpl_iii_iv" },
       ],
     },

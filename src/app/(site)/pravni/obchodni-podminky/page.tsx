@@ -77,8 +77,12 @@ export default function TermsPage() {
         </li>
       </ol>
 
-      <h2>5. Povaha služby</h2>
+      <h2>5. Povaha služby a výsledků</h2>
       <ol>
+        <li>
+          <strong>Výsledek výpočtu je orientační odhad</strong> vypočtený ze zadaných a převzatých údajů. Nejde o odborné posouzení, znalecký posudek ani
+          garantovaný normově správný výsledek. Provozovatel nezaručuje, že výsledek odpovídá skutečným poměrům stavby ani požadavkům normy v konkrétním případě.
+        </li>
         <li>
           Služba provádí výpočet ze zadaných a převzatých údajů podle zvolené metodiky a zpracovává z něj dokument. Služba nenahrazuje odbornou činnost zpracovatele ani
           autorizaci projektové dokumentace.
@@ -103,8 +107,18 @@ export default function TermsPage() {
           příslušných norem a předpisů. Zpracovatel tuto kvalifikaci potvrzuje před odemčením každé analýzy.
         </li>
         <li>
-          <strong>Provozovatel neručí za správnost výsledků výpočtu, vstupních údajů, převzatých dat ani dokumentace</strong> a nenese odpovědnost za škody vzniklé jejich
-          použitím, zejména za škody na stavbách, zařízeních, zdraví nebo za sankce uložené zpracovateli či investorovi.
+          <strong>Provozovatel neručí za správnost, úplnost ani použitelnost výsledků výpočtu, vstupních údajů, převzatých dat ani dokumentace</strong> a nenese
+          odpovědnost za škody vzniklé jejich použitím, zejména za škody na stavbách, zařízeních, zdraví, ušlý zisk, náklady na přepracování dokumentace nebo
+          za sankce uložené zpracovateli či investorovi.
+        </li>
+        <li>
+          Služba je poskytována „tak, jak je“. Provozovatel nezaručuje nepřetržitou dostupnost služby, bezchybnost výpočetního jádra ani shodu výsledků
+          s jinými výpočetními programy.
+        </li>
+        <li>
+          Kontrolu výpočtu, zadaných hodnot, převzatých údajů i závěrů provádí výhradně zpracovatel. Použitím výsledku v projektové dokumentaci jej zpracovatel
+          přebírá za vlastní a odpovídá za něj vůči investorovi i třetím osobám. Zpracovatel odškodní provozovatele, pokud by vůči němu třetí osoba uplatnila
+          nárok vzniklý z použití výsledku.
         </li>
         <li>
           Před odemčením dokumentace zpracovatel potvrzuje toto prohlášení: <em>„{LIABILITY_CONFIRMATION}“</em>

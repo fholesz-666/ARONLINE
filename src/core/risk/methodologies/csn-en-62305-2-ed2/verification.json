@@ -1,224 +1,449 @@
 {
-  "$comment": "Stav odborného ověření tabulek a rovnic. Upravuje odborník podle docs/verification-checklist.md. Změna mění otisk normativeDataHash.",
+  "$comment": "Stav ověření tabulek a rovnic proti textu ČSN EN 62305-2 ed. 2 vč. Z1. Postup: docs/verification-checklist.md. Změna mění otisk normativeDataHash. Doporučeno doplnit nezávislé lidské ověření (autorizovaná osoba).",
   "items": {
     "ED2.TAB.A.1": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.A.2": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.A.3": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.A.4": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.1": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.2": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.3": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.4": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.5": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.6": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.7": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.8": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.B.9": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.2.LT": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.2.LF": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.2.LO": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.3": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.4": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.5": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.6": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.8.LF": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.8.LO": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.10": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.12.LT": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.12.LF": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.C.12.LO": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.TAB.T4": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.1": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.2": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.3": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.4": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.5": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.6": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.7": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.8": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.9": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.10": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.A.11": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.1": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.2": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.3": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.4": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.5": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.6": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.7": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.8": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.9": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.10": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.11": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.B.12": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.1": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.2": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.3": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.4": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.5": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.6": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.7": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.8": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.9": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.C.10": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.1": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.2.RA": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.2.RB": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.2.RC": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.3.RM": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.4.RU": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.4.RV": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.4.RW": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.6.5.RZ": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.4.3.R1": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.4.3.R2": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.4.3.R3": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     },
     "ED2.EQ.4.3.R4": {
-      "status": "unverified"
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
+    },
+    "ED2.EQ.6.9.1.PM": {
+      "status": "verified",
+      "verifiedBy": "Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy",
+      "verifiedAt": "2026-10-20",
+      "verifiedAgainst": "ČSN EN 62305-2 ed. 2 (únor 2013) vč. změny Z1 (říjen 2025), sponzorovaný přístup ČAS"
     }
   }
 }

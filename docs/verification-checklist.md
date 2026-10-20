@@ -2,9 +2,9 @@
 
 > Soubor je generován skriptem `npm run verification:checklist`. Neupravujte ho ručně.
 
-Metodika: **ČSN EN 62305-2 ed. 2:2013** · otisk normativních dat: `009e964664c0a030`
+Metodika: **ČSN EN 62305-2 ed. 2:2013** · otisk normativních dat: `8dfe709cd3124502`
 
-Stav: ověřeno **0 / 74**, neověřeno 74, zamítnuto 0.
+Stav: ověřeno **74 / 74**, neověřeno 0, zamítnuto 0.
 
 ## Postup ověření
 
@@ -24,8 +24,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.A.1 – Součinitel polohy objektu CD
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. A.1** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010; shodují se s veřejným zdrojem DEHN LPG. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. A.1** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 - Veřejný zdroj: [DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2](https://www.dehn-international.com/sites/default/files/media/files/lpg_en_complete.pdf), tab. 3.2.3.1
 
 | ☐ | Klíč | Popis | Hodnota |
@@ -37,8 +37,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.A.2 – Součinitel instalace vedení CI
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. A.2** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010; shodují se s veřejným zdrojem DEHN LPG. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. A.2** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 - Veřejný zdroj: [DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2](https://www.dehn-international.com/sites/default/files/media/files/lpg_en_complete.pdf), tab. 3.2.3.2
 
 | ☐ | Klíč | Popis | Hodnota |
@@ -49,8 +49,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.A.3 – Součinitel typu vedení CT
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. A.3** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010; shodují se s veřejným zdrojem DEHN LPG. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. A.3** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 - Veřejný zdroj: [DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2](https://www.dehn-international.com/sites/default/files/media/files/lpg_en_complete.pdf), tab. 3.2.3.3
 
 | ☐ | Klíč | Popis | Hodnota |
@@ -60,8 +60,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.A.4 – Součinitel prostředí vedení CE
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. A.4** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010; shodují se s veřejným zdrojem DEHN LPG. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. A.4** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 - Veřejný zdroj: [DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2](https://www.dehn-international.com/sites/default/files/media/files/lpg_en_complete.pdf), tab. 3.2.3.4
 
 | ☐ | Klíč | Popis | Hodnota |
@@ -73,8 +73,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.1 – Pravděpodobnost PTA úrazu dotykovým a krokovým napětím (úder do objektu)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.1** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010; shodují se s veřejným zdrojem DEHN LPG. Proti textu ČSN neověřeno. Při více opatřeních se hodnoty násobí (pravidlo uvedené u tabulky – ověřit).
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.1** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě. Při více opatřeních se hodnoty násobí (text pod tab. B.1). Opatření jsou účinná jen ve stavbách chráněných LPS nebo s náhodným LPS (pozn. 1).
 - Veřejný zdroj: [DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2](https://www.dehn-international.com/sites/default/files/media/files/lpg_en_complete.pdf), tab. 3.2.4.1
 
 | ☐ | Klíč | Popis | Hodnota |
@@ -87,8 +87,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.2 – Pravděpodobnost PB hmotné škody podle ochranných opatření (LPS)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.2** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010; shodují se s veřejným zdrojem DEHN LPG. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.2** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 - Veřejný zdroj: [DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2](https://www.dehn-international.com/sites/default/files/media/files/lpg_en_complete.pdf), tab. 3.2.4.2
 
 | ☐ | Klíč | Popis | Hodnota |
@@ -103,8 +103,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.3 – Pravděpodobnost PSPD podle LPL, pro kterou je navržen koordinovaný systém SPD
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.3** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010; shodují se s veřejným zdrojem DEHN LPG. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.3** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 - Veřejný zdroj: [DEHN – Lightning Protection Guide, 3. vyd. (2014), kap. 3.2](https://www.dehn-international.com/sites/default/files/media/files/lpg_en_complete.pdf), tab. 3.2.4.3
 
 | ☐ | Klíč | Popis | Hodnota |
@@ -118,8 +118,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.4 – Součinitele CLD a CLI podle stínění, uzemnění a izolace vedení
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.4** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.4** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -136,8 +136,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.5 – Součinitel KS3 podle provedení vnitřní kabeláže
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.5** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.5** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -148,8 +148,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.6 – Pravděpodobnost PTU úrazu dotykovým napětím (úder do vedení)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.6** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.6** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -160,8 +160,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.7 – Pravděpodobnost PEB podle LPL, pro kterou jsou navrženy SPD pro vyrovnání potenciálů
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.7** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.7** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -174,8 +174,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.8 – Pravděpodobnost PLD podle odporu stínění RS a výdržného napětí UW
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.8** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.8** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -186,8 +186,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.B.9 – Pravděpodobnost PLI podle typu vedení a výdržného napětí UW
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.9** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. B.9** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -196,8 +196,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.2.LT – L1 – typická střední hodnota LT (úraz dotykovým a krokovým napětím)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.2** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.2** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -205,8 +205,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.2.LF – L1 – typická střední hodnota LF (fyzická škoda)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.2** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.2** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -218,8 +218,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.2.LO – L1 – typická střední hodnota LO (porucha vnitřních systémů)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.2** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.2** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -229,8 +229,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.3 – Redukční součinitel rt podle povrchu země nebo podlahy
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.3** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.3** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -241,8 +241,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.4 – Redukční součinitel rp podle opatření ke zmírnění následků požáru
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.4** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno. Při více opatřeních se použije nejnižší hodnota (pravidlo u tabulky – ověřit).
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.4** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě. Při více opatřeních se použije nejnižší hodnota; ve stavbách s rizikem výbuchu je vždy rp = 1 (text pod tab. C.4).
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -252,8 +252,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.5 – Redukční součinitel rf podle nebezpečí požáru nebo výbuchu
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.5** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.5** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -267,8 +267,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.6 – Součinitel hz zvyšující ztrátu při zvláštním nebezpečí
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.6** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.6** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -280,8 +280,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.8.LF – L2 – typická střední hodnota LF (ztráta veřejné služby, fyzická škoda)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.8** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.8** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -290,8 +290,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.8.LO – L2 – typická střední hodnota LO (ztráta veřejné služby, porucha systémů)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.8** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.8** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -300,8 +300,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.10 – L3 – typická střední hodnota LF (ztráta kulturního dědictví)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.10** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.10** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -309,8 +309,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.12.LT – L4 – typická střední hodnota LT (ztráta zvířat)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.12** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.12** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -318,8 +318,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.12.LF – L4 – typická střední hodnota LF (ekonomická ztráta, fyzická škoda)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.12** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.12** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -330,8 +330,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.C.12.LO – L4 – typická střední hodnota LO (ekonomická ztráta, porucha systémů)
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.12** · stav: **unverified**
-- Původ: Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. C.12** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
@@ -342,8 +342,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 ### ED2.TAB.T4 – Typické hodnoty přípustného rizika RT
 
-- Odkaz: **ČSN EN 62305-2 ed. 2, tab. 4 a předmluva** · stav: **unverified**
-- Původ: Hodnoty pro L3 a L4 podle veřejné předmluvy IEC 62305-2:2010. Hodnoty pro L1 a L2 podle znalosti implementátora. Proti textu ČSN neověřeno.
+- Odkaz: **ČSN EN 62305-2 ed. 2, tab. 4 a předmluva** · stav: **verified** (Claude (AI) na žádost provozovatele Filipa Holesze – kontrola každé hodnoty a rovnice proti textu normy, 2026-10-20)
+- Původ: L1, L2, L3 ověřeno proti tab. 4 ČSN EN 62305-2 ed. 2. L4 není v ČSN uvedena (čl. 5.3 – analýza nákladů, příloha D); 10⁻³ je informativní hodnota z předmluvy IEC 62305-2:2010.
 - Veřejný zdroj: [IEC 62305-2:2010 – veřejný náhled (předmluva): RT pro L3 sníženo na 10⁻⁴, zavedeno RT = 10⁻³ pro L4](https://webstore.ansi.org/preview-pages/IEC/preview_iec62305-2%7Bed2.0%7Den.pdf)
 
 | ☐ | Klíč | Popis | Hodnota |
@@ -351,59 +351,59 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | `L1` | Ztráta lidského života nebo trvalé zranění | 0.00001 |
 | ☐ | `L2` | Ztráta veřejné služby | 0.001 |
 | ☐ | `L3` | Ztráta kulturního dědictví | 0.0001 |
-| ☐ | `L4` | Ztráta ekonomické hodnoty (není-li k dispozici analýza nákladů) | 0.001 |
+| ☐ | `L4` | Ztráta ekonomické hodnoty – informativně (ČSN tab. 4 hodnotu neuvádí) | 0.001 |
 
 ## Rovnice
 
 | ☐ | ID | Vzorec | Odkaz | Stav | Původ |
 |---|---|---|---|---|---|
-| ☐ | `ED2.EQ.A.1` | NG ≈ 0,1 · TD | příloha A, rov. (A.1) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG. Proti textu ČSN neověřeno. |
-| ☐ | `CSN.332000-4-443.EQ.NG` | NG = 0,04 · TD^1,25 | ČSN 33 2000-4-443 ed. 2, čl. 443.3.2.1 | unverified | Vztah uvedený v nápovědě programu OEZ Prozik 2.60 (odkaz na ČSN 33 2000-4-443 ed. 2, čl. 443.3.2.1); číselně ověřeno na protokolech Prozik (Td 24 → NG 2,12; Td 25 → NG 2,24). Proti textu ČSN 33 2000-4-443 neověřeno. |
-| ☐ | `ED2.EQ.A.2` | AD = L · W + 2 · (3 · H) · (L + W) + π · (3 · H)² | příloha A, rov. (A.2) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.3` | AD' = π · (3 · Hp)² | příloha A, rov. (A.3) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.4` | ND = NG · AD · CD · 10⁻⁶ | příloha A, rov. (A.4) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.5` | NDJ = NG · ADJ · CDJ · CT · 10⁻⁶ | příloha A, rov. (A.5) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.6` | NM = NG · AM · 10⁻⁶ | příloha A, rov. (A.6) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.7` | AM = 2 · 500 · (L + W) + π · 500² | příloha A, rov. (A.7) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.8` | NL = NG · AL · CI · CE · CT · 10⁻⁶ | příloha A, rov. (A.8) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.9` | AL = 40 · LL | příloha A, rov. (A.9) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.10` | NI = NG · AI · CI · CE · CT · 10⁻⁶ | příloha A, rov. (A.10) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.A.11` | AI = 4 000 · LL | příloha A, rov. (A.11) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG a číselně se shoduje s veřejnou zprávou (test v src/core/risk/__tests__). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.1` | PA = PTA · PB | příloha B, rov. (B.1) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG. Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.2` | PC = PSPD · CLD | příloha B, rov. (B.2) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG. Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.3` | PC = 1 − Π (1 − PCi) | příloha B, rov. (B.3) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.4` | PM = PSPD · PMS | příloha B, rov. (B.4) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.5` | PMS = (KS1 · KS2 · KS3 · KS4)² | příloha B, rov. (B.5) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.6` | KS1 = 0,12 · wm1 (max. 1) | příloha B, rov. (B.6) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.7` | KS2 = 0,12 · wm2 (max. 1) | příloha B, rov. (B.7) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.8` | KS4 = 1 / UW | příloha B, rov. (B.8) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.9` | PU = PTU · PEB · PLD · CLD | příloha B, rov. (B.9) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.10` | PV = PEB · PLD · CLD | příloha B, rov. (B.10) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.11` | PW = PSPD · PLD · CLD | příloha B, rov. (B.11) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.B.12` | PZ = PSPD · PLI · CLI | příloha B, rov. (B.12) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.1` | LA = rt · LT · nz/nt · tz/8 760 | příloha C, rov. (C.1) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.2` | LU = rt · LT · nz/nt · tz/8 760 | příloha C, rov. (C.2) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.3` | LB = LV = rp · rf · hz · LF · nz/nt · tz/8 760 | příloha C, rov. (C.3) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.4` | LC = LM = LW = LZ = LO · nz/nt · tz/8 760 | příloha C, rov. (C.4) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.5` | LB = LV = rp · rf · LF · nz/nt | příloha C, rov. (C.5) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.6` | LC = LM = LW = LZ = LO · nz/nt | příloha C, rov. (C.6) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.7` | LB = LV = rp · rf · LF · cz/ct | příloha C, rov. (C.7) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.8` | LA = LU = rt · LT · ca/ct | příloha C, rov. (C.8) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.9` | LB = LV = rp · rf · LF · (ca + cb + cc + cs)/ct | příloha C, rov. (C.9) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.C.10` | LC = LM = LW = LZ = LO · cs/ct | příloha C, rov. (C.10) | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.1` | RX = NX · PX · LX | kap. 6.1 (základní rovnice) | unverified | Vzorec odpovídá veřejnému zdroji DEHN LPG. Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.2.RA` | RA = ND · PA · LA | kap. 6.2 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.2.RB` | RB = ND · PB · LB | kap. 6.2 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.2.RC` | RC = ND · PC · LC | kap. 6.2 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.3.RM` | RM = NM · PM · LM | kap. 6.3 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.4.RU` | RU = (NL + NDJ) · PU · LU | kap. 6.4 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.4.RV` | RV = (NL + NDJ) · PV · LV | kap. 6.4 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.4.RW` | RW = (NL + NDJ) · PW · LW | kap. 6.4 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.6.5.RZ` | RZ = NI · PZ · LZ | kap. 6.5 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.4.3.R1` | R1 = RA1 + RB1 + RC1* + RM1* + RU1 + RV1 + RW1* + RZ1*  (* jen u objektů s nebezpečím výbuchu, nemocnic se životně důležitými zařízeními a objektů, kde porucha vnitřních systémů přímo ohrožuje život) | kap. 4.3 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.4.3.R2` | R2 = RB2 + RC2 + RM2 + RV2 + RW2 + RZ2 | kap. 4.3 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.4.3.R3` | R3 = RB3 + RV3 | kap. 4.3 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
-| ☐ | `ED2.EQ.4.3.R4` | R4 = RA4** + RB4 + RC4 + RM4 + RU4** + RV4 + RW4 + RZ4  (** jen kde může dojít ke ztrátě zvířat) | kap. 4.3 | unverified | Vzorec podle metodiky IEC 62305-2:2010 (znalost implementátora). Proti textu ČSN neověřeno. |
+| ☐ | `ED2.EQ.A.1` | NG ≈ 0,1 · TD | příloha A, rov. (A.1) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.2` | AD = L · W + 2 · (3 · H) · (L + W) + π · (3 · H)² | příloha A, rov. (A.2) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.3` | AD' = π · (3 · Hp)² | příloha A, rov. (A.3) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.4` | ND = NG · AD · CD · 10⁻⁶ | příloha A, rov. (A.4) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.5` | NDJ = NG · ADJ · CDJ · CT · 10⁻⁶ | příloha A, rov. (A.5) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.6` | NM = NG · AM · 10⁻⁶ | příloha A, rov. (A.6) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.7` | AM = 2 · 500 · (L + W) + π · 500² | příloha A, rov. (A.7) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.8` | NL = NG · AL · CI · CE · CT · 10⁻⁶ | příloha A, rov. (A.8) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.9` | AL = 40 · LL | příloha A, rov. (A.9) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.10` | NI = NG · AI · CI · CE · CT · 10⁻⁶ | příloha A, rov. (A.10) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.A.11` | AI = 4 000 · LL | příloha A, rov. (A.11) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.1` | PA = PTA · PB | příloha B, rov. (B.1) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.2` | PC = PSPD · CLD | příloha B, rov. (B.2) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.3` | PC = 1 − Π (1 − PCi) | čl. 6.9.1, rov. (14) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.4` | PM = PSPD · PMS (PM = 1 u zařízení nevyhovujících výrobkovým normám) | příloha B, rov. (B.3) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.9.1.PM` | PM = 1 − Π (1 − PMi) | čl. 6.9.1, rov. (15) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.5` | PMS = (KS1 · KS2 · KS3 · KS4)² | příloha B, rov. (B.4) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.6` | KS1 = 0,12 · wm1 (max. 1) | příloha B, rov. (B.5) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.7` | KS2 = 0,12 · wm2 (max. 1) | příloha B, rov. (B.6) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.8` | KS4 = 1 / UW | příloha B, rov. (B.7) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.9` | PU = PTU · PEB · PLD · CLD | příloha B, rov. (B.8) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.10` | PV = PEB · PLD · CLD | příloha B, rov. (B.9) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.11` | PW = PSPD · PLD · CLD | příloha B, rov. (B.10) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.B.12` | PZ = PSPD · PLI · CLI | příloha B, rov. (B.11) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.1` | LA = rt · LT · nz/nt · tz/8 760 | příloha C, rov. (C.1) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.2` | LU = rt · LT · nz/nt · tz/8 760 | příloha C, rov. (C.2) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.3` | LB = LV = rp · rf · hz · LF · nz/nt · tz/8 760 | příloha C, rov. (C.3) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.4` | LC = LM = LW = LZ = LO · nz/nt · tz/8 760 | příloha C, rov. (C.4) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.5` | LB = LV = rp · rf · LF · nz/nt | příloha C, rov. (C.7) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.6` | LC = LM = LW = LZ = LO · nz/nt | příloha C, rov. (C.8) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.7` | LB = LV = rp · rf · LF · cz/ct | příloha C, rov. (C.9) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.8` | LA = LU = rt · LT · ca/ct | příloha C, rov. (C.10) a (C.11) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.9` | LB = LV = rp · rf · LF · (ca + cb + cc + cs)/ct | příloha C, rov. (C.12) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.C.10` | LC = LM = LW = LZ = LO · cs/ct | příloha C, rov. (C.13) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.1` | RX = NX · PX · LX | čl. 6.1, rov. (5) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.2.RA` | RA = ND · PA · LA | čl. 6.2, rov. (6) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.2.RB` | RB = ND · PB · LB | čl. 6.2, rov. (7) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.2.RC` | RC = ND · PC · LC | čl. 6.2, rov. (8) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.3.RM` | RM = NM · PM · LM | čl. 6.3, rov. (9) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.4.RU` | RU = (NL + NDJ) · PU · LU | čl. 6.4, rov. (10) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.4.RV` | RV = (NL + NDJ) · PV · LV | čl. 6.4, rov. (11) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.4.RW` | RW = (NL + NDJ) · PW · LW | čl. 6.4, rov. (12) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.6.5.RZ` | RZ = NI · PZ · LZ | čl. 6.5, rov. (13) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.4.3.R1` | R1 = RA1 + RB1 + RC1* + RM1* + RU1 + RV1 + RW1* + RZ1*  (* jen u objektů s nebezpečím výbuchu, nemocnic se životně důležitými zařízeními a objektů, kde porucha vnitřních systémů přímo ohrožuje život) | čl. 4.3, rov. (1) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.4.3.R2` | R2 = RB2 + RC2 + RM2 + RV2 + RW2 + RZ2 | čl. 4.3, rov. (2) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.4.3.R3` | R3 = RB3 + RV3 | čl. 4.3, rov. (3) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
+| ☐ | `ED2.EQ.4.3.R4` | R4 = RA4** + RB4 + RC4 + RM4 + RU4** + RV4 + RW4 + RZ4  (** jen kde může dojít ke ztrátě zvířat) | čl. 4.3, rov. (4) | verified | Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – vzorec i číslo rovnice odpovídají normě. |
 
 ## Další body k ověření (mimo tabulky)
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { OPERATOR } from "@/config/operator";
 import { getCurrent } from "@/server/auth/session";
 import { Brand } from "./brand";
 
@@ -11,6 +12,14 @@ export async function SiteHeader() {
   }
   return (
     <header className="border-b border-line bg-sheet">
+      <div className="bg-ink text-white">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-1.5 text-xs">
+          <span>Projekce hromosvodů (LPS) a fotovoltaických elektráren na klíč – DSP, DPS, analýza rizika, přepěťové ochrany.</span>
+          <a className="font-semibold text-white underline underline-offset-2" href="https://fvsol.cz/?utm_source=aronline&utm_medium=web&utm_campaign=lista" rel="noopener">
+            Poptat na fvsol.cz →
+          </a>
+        </div>
+      </div>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Brand />
         <nav className="flex items-center gap-1 text-[0.9375rem]" aria-label="Hlavní navigace">
@@ -20,6 +29,9 @@ export async function SiteHeader() {
           <Link href="/metodika" className="btn btn-ghost hidden sm:inline-flex">
             Metodika
           </Link>
+          <a href="https://fvsol.cz/?utm_source=aronline&utm_medium=web&utm_campaign=menu" rel="noopener" className="btn btn-ghost hidden md:inline-flex">
+            Projekce FVE a LPS
+          </a>
           {loggedIn ? (
             <Link href="/app" className="btn btn-primary">
               Moje analýzy
@@ -41,9 +53,9 @@ export async function SiteHeader() {
 }
 
 export function SiteFooter() {
-  const operator = process.env.OPERATOR_NAME ?? "";
-  const ico = process.env.OPERATOR_ICO ?? "";
-  const email = process.env.OPERATOR_EMAIL ?? "";
+  const operator = OPERATOR.name;
+  const ico = OPERATOR.ico;
+  const email = OPERATOR.email;
   return (
     <footer className="mt-16 border-t border-line bg-sheet">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-ink-soft md:grid-cols-3">

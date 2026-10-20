@@ -137,6 +137,7 @@ export async function renderPdf(model: ReportModel, logo?: { data: Buffer; mime:
     } as Content);
   }
   for (const [k, v] of model.coverFacts) cover.push({ text: [{ text: `${k}: `, bold: true }, v], margin: [0, 0, 0, 4] });
+  cover.push({ text: model.disclaimer, fontSize: 8.5, italics: true, color: "#3d4a63", margin: [0, 10, 0, 0] });
   // Razítko
   cover.push({
     table: {

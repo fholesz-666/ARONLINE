@@ -19,7 +19,7 @@ Seznam je seřazený podle důležitosti. Bez bodů A1–A3 nelze aplikaci komer
 |---|---|---|
 | B1 | **GoPay**: smlouva, sandbox klíče, test, produkční klíče, **aktivace opakovaných plateb** | Integrace hotová a otestovaná proti simulované bráně a simulovaným odpovědím API. **Proti skutečnému GoPay sandboxu netestováno** (chybí přístupové údaje) |
 | B2 | **Hosting**: účet Render (nebo VPS), import `render.yaml`, proměnné prostředí | **Nenasazeno.** Připraveno |
-| B3 | **Push do GitHubu**: nainstalovat Claude GitHub App pro repozitář `aronline` (nebo kód nahrát ručně) | Kód je zatím jen v lokálních commitech v pracovním prostředí |
+| B3 | **GitHub** | Hotovo: kód je v repozitáři `fholesz-666/ARONLINE`, CI (lint, typy, testy, build, E2E) prochází. Workflow Deploy běží po úspěšném CI, ale bez tajemství `RENDER_DEPLOY_HOOK_URL` nic nenasazuje |
 | B4 | **SMTP** pro e-maily (ověření e-mailu, obnova hesla, pozvánky) + SPF/DKIM | Nenastaveno. Ve vývoji se e-maily vypisují do konzole |
 | B5 | **Doména** a `APP_URL` | Nenastaveno |
 | B6 | Deploy hook Renderu jako tajemství `RENDER_DEPLOY_HOOK_URL` v GitHubu | Nenastaveno |

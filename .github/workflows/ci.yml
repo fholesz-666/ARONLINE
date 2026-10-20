@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:16
@@ -29,8 +29,8 @@ jobs:
       REQUIRE_VERIFIED_CORE: "false"
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -52,11 +52,23 @@ jobs:
           APP_ENV: development
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/aronline_test
         run: |
-          sudo apt-get update && sudo apt-get install -y postgresql-client
-          npx playwright install --with-deps chromium
+          set -o pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client > /dev/null
+          npx playwright install --with-deps chromium > /dev/null
           npm start > server.log 2>&1 &
-          npx wait-on -t 60000 http://localhost:3000/api/health
-          npx playwright test
-      - name: Log serveru při chybě
+          npx --yes wait-on -t 60000 http://localhost:3000/api/health
+          npx playwright test 2>&1 | tee e2e.log
+      - name: Diagnostika při chybě
         if: failure()
-        run: cat server.log || true
+        run: |
+          # výstup jako anotace (čitelné i přes API bez stahování logů)
+          enc() { tail -c 2500 "$1" 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | awk '{printf "%s%%0A", $0}'; }
+          echo "::error title=E2E výstup::$(enc e2e.log)"
+          echo "::error title=Log serveru::$(enc server.log)"
+      - name: Výsledky E2E (snímky při chybě)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: test-results/
+          retention-days: 7

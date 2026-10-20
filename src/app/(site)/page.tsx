@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { FvsolPromo } from "@/components/fvsol";
+import { RESULT_DISCLAIMER } from "@/config/liability";
+import { OPERATOR } from "@/config/operator";
 import { getPublicProducts, PricingTable } from "@/components/pricing";
 import { getVerificationSummary } from "@/core/risk/methodologies/csn-en-62305-2-ed2/verification";
 
@@ -81,6 +83,13 @@ export default async function HomePage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-muted">Platíte až za stažení hotové dokumentace. Rozpracované analýzy se ukládají automaticky.</p>
+            <p className="mt-2 text-sm text-muted">
+              Nechcete počítat sami? Analýzu rizika i celý projekt hromosvodu nebo FVE vám zpracujeme –{" "}
+              <a className="link" href="https://fvsol.cz/?utm_source=aronline&utm_medium=web&utm_campaign=hero" rel="noopener">
+                fvsol.cz
+              </a>
+              .
+            </p>
           </div>
           <SampleSheet />
         </div>
@@ -97,6 +106,31 @@ export default async function HomePage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pb-16">
+        <div className="grid gap-6 border border-ink bg-sheet p-6 md:grid-cols-[1.4fr_1fr] md:items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted">FVSOL · projekce elektro</p>
+            <h2 className="mt-1 text-2xl">Analýza ukázala, že ochrana je potřeba? Navrhneme ji.</h2>
+            <ul className="mt-4 grid gap-1.5 text-ink-soft sm:grid-cols-2">
+              <li>Návrh hromosvodu (LPS) a uzemnění</li>
+              <li>Přepěťové ochrany a vyrovnání potenciálů</li>
+              <li>Projekty FVE – DSP, DPS, realizační</li>
+              <li>Technické zprávy, výkresy, výpočty</li>
+              <li>Analýza rizika zpracovaná projektantem</li>
+              <li>Audit a kontrola dokumentace</li>
+            </ul>
+          </div>
+          <div className="flex flex-col gap-3 md:items-end">
+            <a className="btn btn-primary px-5 py-2.5" href="https://fvsol.cz/?utm_source=aronline&utm_medium=web&utm_campaign=sluzby" rel="noopener">
+              Nezávazná poptávka na fvsol.cz
+            </a>
+            <a className="link text-sm" href={`mailto:${OPERATOR.email}`}>
+              {OPERATOR.email}
+            </a>
+          </div>
+        </div>
       </section>
 
       <section className="border-y border-line bg-sheet">
@@ -150,12 +184,17 @@ export default async function HomePage() {
           <h2 className="text-xl">Stav ověření výpočtu</h2>
           <p className="mt-2 max-w-[75ch] text-ink-soft">
             Výpočet je dohledatelný: každý dokument obsahuje vzorce, dosazené hodnoty, odkazy na články normy, verzi výpočetního jádra a otisk vstupních dat.
-            Normové tabulky a vzorce procházejí nezávislým odborným ověřením — aktuálně ověřeno {v.verified} z {v.total} položek.
+            Normové tabulky a vzorce byly porovnány s textem ČSN EN 62305-2 ed. 2 včetně změny Z1 — ověřeno {v.verified} z {v.total} položek.
           </p>
+          <p className="mt-3 max-w-[75ch] text-sm text-ink-soft">{RESULT_DISCLAIMER}</p>
           <Link href="/metodika" className="link mt-3 inline-block">
             Podrobnosti o metodice a ověření
           </Link>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pt-10">
+        <FvsolPromo variant="results" context="home-konec" />
       </section>
     </>
   );

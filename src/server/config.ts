@@ -35,10 +35,10 @@ const envSchema = z.object({
   /** Verze obchodních podmínek, se kterou uživatel souhlasí při registraci. */
   TERMS_VERSION: z.string().default("2026-10-návrh"),
   /** Identifikace provozovatele pro patičku a doklady. */
-  OPERATOR_NAME: z.string().default("Provozovatel (doplnit)"),
+  OPERATOR_NAME: z.string().default("Filip Holesz"),
   OPERATOR_ICO: z.string().default(""),
   OPERATOR_ADDRESS: z.string().default(""),
-  OPERATOR_EMAIL: z.string().default(""),
+  OPERATOR_EMAIL: z.string().default("projekce@fvsol.cz"),
   /** E-maily správců (role ADMIN se přidělí při registraci). */
   ADMIN_EMAILS: z.string().default(""),
 });

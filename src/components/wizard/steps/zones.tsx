@@ -227,7 +227,7 @@ export function StepZones({ data, update, issues }: StepProps) {
 
             <div className="space-y-3 border-t border-line-soft pt-4">
               <p className="font-semibold">Vnitřní systémy v zóně</p>
-              <p className="text-sm text-ink-soft">Ke každému vedení, které do zóny vstupuje, zadejte jeden systém. Rozhoduje zařízení s nejnižší odolností UW.</p>
+              <p className="text-sm text-ink-soft">Zadejte vnitřní systémy a vedení, ke kterým jsou připojeny. Na jedno vedení může být připojeno více systémů – pro složky z vedení se pak bere nejvyšší PSPD a nejnižší UW (čl. 6.9.1), PC a PM se kombinují.</p>
               {z.internalSystems.map((s, si) => (
                 <div key={s.id} className="grid gap-3 border border-line-soft p-3 sm:grid-cols-[1.4fr_1fr_0.7fr_1.4fr_auto] sm:items-end">
                   <TextInput label="Systém" value={s.name} onChange={(v) => setZone(i, (zz) => (zz.internalSystems[si].name = v))} />
@@ -240,6 +240,12 @@ export function StepZones({ data, update, issues }: StepProps) {
                   />
                   <SelectInput label="UW" value={s.uw} onChange={(v) => setZone(i, (zz) => (zz.internalSystems[si].uw = v))} options={UW_OPTIONS} />
                   <SelectInput label="Vedení kabeláže (KS3)" value={s.ks3} onChange={(v) => setZone(i, (zz) => (zz.internalSystems[si].ks3 = v))} options={KS3_OPTIONS} />
+                  <Checkbox
+                    label="Zařízení nevyhovuje výrobkovým normám (PM = 1)"
+                    checked={s.nonCompliant === true}
+                    onChange={(v) => setZone(i, (zz) => (zz.internalSystems[si].nonCompliant = v || undefined))}
+                    help="Čl. B.5: u zařízení nevyhovujících z hlediska odolnosti nebo výdržného napětí se uvažuje PM = 1."
+                  />
                   <button className="btn btn-ghost px-2 py-1.5 text-sm text-bad" onClick={() => setZone(i, (zz) => zz.internalSystems.splice(si, 1))}>
                     Odebrat
                   </button>

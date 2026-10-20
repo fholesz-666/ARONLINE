@@ -140,6 +140,15 @@ export function StepLines({ data, update, issues }: StepProps) {
               />
               <SelectInput label="Typ vedení (CT)" value={l.lineType} onChange={(v) => setLine(i, { lineType: v })} options={CT_OPTIONS} />
               <SelectInput label="Uložení (CI)" value={l.installation} onChange={(v) => setLine(i, { installation: v })} options={CI_OPTIONS} />
+              {l.installation !== "aerial" && (
+                <NumberInput
+                  label="Měrný odpor půdy ρ (nepovinné)"
+                  unit="Ω·m"
+                  value={l.soilResistivity ?? null}
+                  onChange={(v) => setLine(i, { soilResistivity: v && v > 0 ? v : null })}
+                  help="Pozn. 2 k čl. A.4: AL je úměrná √ρ, tabulka vychází z 400 Ω·m. Prázdné = bez korekce (AL = 40·LL)."
+                />
+              )}
               <SelectInput
                 label="Prostředí (CE)"
                 value={l.environment}

@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { familyHouse } from "@/core/risk/__tests__/fixtures";
+import { getVerificationSummary as getVerificationSummaryForTest } from "@/core/risk/methodologies/csn-en-62305-2-ed2/verification";
 import { setupTestDb, teardownTestDb } from "./setup";
 
 type Mods = {
@@ -308,7 +309,7 @@ describe("vrácení platby", () => {
   });
 });
 
-describe("blokace bez ověřeného jádra", () => {
+describe.skipIf(getVerificationSummaryForTest().fullyVerified)("blokace bez ověřeného jádra", () => {
   it("s REQUIRE_VERIFIED_CORE=true nelze platit ani odemknout", async () => {
     process.env.REQUIRE_VERIFIED_CORE = "true";
     m.config.resetConfigForTests();
@@ -344,7 +345,7 @@ describe("výpočet projektu", () => {
     const run = await m.projects.latestRun(p.id);
     expect(run?.coreVersion).toBeTruthy();
     expect(run?.inputHash).toHaveLength(64);
-    expect(run?.verifiedCore).toBe(false);
+    expect(run?.verifiedCore).toBe(true);
   });
 
   it("neúplný vstup vrátí srozumitelné chyby", async () => {
@@ -352,5 +353,18 @@ describe("výpočet projektu", () => {
     const res = await m.projects.runCalculation(alice.id, alice.workspaceId, p.id);
     expect(res.ok).toBe(false);
     if (!res.ok) expect(res.issues.length).toBeGreaterThan(0);
+  });
+});
+
+describe("ověřené jádro", () => {
+  it("s REQUIRE_VERIFIED_CORE=true a ověřeným jádrem jsou platby povoleny", async () => {
+    process.env.REQUIRE_VERIFIED_CORE = "true";
+    m.config.resetConfigForTests();
+    try {
+      expect(m.billing.commerceAllowed().allowed).toBe(true);
+    } finally {
+      process.env.REQUIRE_VERIFIED_CORE = "false";
+      m.config.resetConfigForTests();
+    }
   });
 });

@@ -95,9 +95,9 @@ describe("Výpočet – rodinný dům (ruční kontrola vzorců)", () => {
     expect(d.trace.length).toBeGreaterThan(20);
   });
 
-  it("výsledek obsahuje upozornění na neověřená normová data", () => {
-    expect(out.result.messages.some((m) => m.code === "NORMATIVE_DATA_UNVERIFIED")).toBe(true);
-    expect(out.result.verification.fullyVerified).toBe(false);
+  it("normová data jsou ověřena proti ČSN – bez upozornění na neověřená data", () => {
+    expect(out.result.messages.some((m) => m.code === "NORMATIVE_DATA_UNVERIFIED")).toBe(false);
+    expect(out.result.verification.fullyVerified).toBe(true);
   });
 });
 
@@ -256,10 +256,33 @@ describe("Validace vstupů", () => {
     const out = runEd2(a);
     expect(out.ok).toBe(false);
   });
-  it("dva systémy na stejném vedení v jedné zóně", () => {
+  it("dva systémy na stejném vedení: PW a PZ z nejhorších parametrů (čl. 6.9.1), PC a PM kombinací", () => {
     const a = familyHouse();
-    a.zones[0].internalSystems.push({ ...a.zones[0].internalSystems[0], id: "s2" });
-    expect(runEd2(a).ok).toBe(false);
+    a.zones[0].internalSystems[0].pspd = "lpl_iii_iv";
+    a.zones[0].internalSystems.push({ ...a.zones[0].internalSystems[0], id: "s2", name: "Data", uw: "1", pspd: "none" });
+    const out = runEd2(a);
+    expect(out.ok).toBe(true);
+    if (!out.ok || !("result" in out)) return;
+    const z = out.result.designed.zones[0];
+    expect(z.lines).toHaveLength(1);
+    expect(z.lines[0].PW).toBeCloseTo(1 * 1 * 1); // PSPD 1 (Data), PLD 1 (UW 1 kV)
+    expect(z.lines[0].PZ).toBeCloseTo(1 * 1 * 1); // PLI pro 1 kV = 1, CLI = 1
+    expect(z.PC).toBeCloseTo(1 - (1 - 0.05) * (1 - 1));
+  });
+  it("zařízení nevyhovující výrobkovým normám → PM = 1 (čl. B.5)", () => {
+    const a = familyHouse();
+    a.zones[0].internalSystems[0].nonCompliant = true;
+    const out = runEd2(a);
+    if (!out.ok || !("result" in out)) throw new Error("výpočet selhal");
+    expect(out.result.designed.zones[0].PM).toBe(1);
+  });
+  it("korekce AL na měrný odpor půdy: ρ = 400 → beze změny, ρ = 500 → ×√1,25 (shodně s Prozik)", () => {
+    const a = familyHouse();
+    a.lines[0].lengthM = 1000;
+    a.lines[0].soilResistivity = 500;
+    const out = runEd2(a);
+    if (!out.ok || !("result" in out)) throw new Error("výpočet selhal");
+    expect(out.result.designed.lines[0].AL).toBeCloseTo(44721.36, 1);
   });
   it("chybí RS u stínění spojeného s přípojnicí", () => {
     const a = familyHouse();

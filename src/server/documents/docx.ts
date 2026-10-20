@@ -191,6 +191,12 @@ export async function renderDocx(model: ReportModel, logo?: { data: Buffer; mime
   for (const [k, v] of model.coverFacts) {
     cover.push(new Paragraph({ children: [new TextRun({ text: `${k}: `, bold: true, font: FONT }), new TextRun({ text: v, font: FONT })] }));
   }
+  cover.push(
+    new Paragraph({
+      spacing: { before: 200 },
+      children: [new TextRun({ text: model.disclaimer, italics: true, size: 17, color: "3D4A63", font: FONT })],
+    }),
+  );
   cover.push(new Paragraph({ spacing: { before: 1200 }, text: "" }));
   cover.push(
     new Table({

@@ -6,7 +6,7 @@ import { fmtRisk } from "@/core/util/format";
 import { api, ApiError } from "@/lib/api";
 import type { ResultView } from "@/server/services/preview";
 import { startPayment } from "../../billing";
-import { LIABILITY_CONFIRMATION } from "@/config/liability";
+import { LIABILITY_CONFIRMATION, RESULT_DISCLAIMER } from "@/config/liability";
 import { FvsolPromo } from "../../fvsol";
 import { Checkbox, Notice, Spinner, TextInput } from "../../ui";
 import { STEPS, stepForPath, type StepProps } from "../wizard";
@@ -36,7 +36,7 @@ interface Billing {
   products: { code: string; priceHaler: number }[];
 }
 
-type RiskRow = { loss: string; total: number; tolerable: number; exceeds: boolean; dominant: { component: string; share: number }[] };
+type RiskRow = { loss: string; total: number; tolerable: number; tolerableSource?: string; exceeds: boolean; dominant: { component: string; share: number }[] };
 
 export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepProps & { saveNow: () => Promise<void>; onUnlocked: () => void }) {
   const [view, setView] = useState<ResultView | null>(null);
@@ -142,7 +142,10 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
                       <td>{LOSS[l]}</td>
                       <td className="num">{fmtRisk(u.risks[l].total)}</td>
                       <td className="num font-semibold">{fmtRisk(r.total)}</td>
-                      <td className="num">{fmtRisk(r.tolerable)}</td>
+                      <td className="num">
+                        {fmtRisk(r.tolerable)}
+                        {l === "L4" && r.tolerableSource !== "user" && <span className="block text-xs font-normal text-muted">informativně</span>}
+                      </td>
                       <td className="font-semibold">{r.exceeds ? "R > RT – nevyhovuje" : "R ≤ RT – vyhovuje"}</td>
                     </tr>
                   );
@@ -187,6 +190,10 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
           {view.level === "summary" && (
             <p className="text-sm text-muted">Podrobný rozpis složek rizika po zónách a úplná stopa výpočtu jsou součástí dokumentace.</p>
           )}
+
+          <Notice tone="warning" title="Orientační výsledek">
+            {RESULT_DISCLAIMER}
+          </Notice>
 
           <section className="panel space-y-3 p-5">
             <h3 className="text-lg">Dokumentace</h3>

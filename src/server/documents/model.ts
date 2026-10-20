@@ -3,7 +3,7 @@
  * Veškeré texty závěru se odvozují výhradně z vypočtených hodnot.
  */
 import { buildingType } from "@/catalog";
-import { LIABILITY_DOCUMENT_TEXT } from "@/config/liability";
+import { LIABILITY_DOCUMENT_TEXT, RESULT_DISCLAIMER } from "@/config/liability";
 import type { Ed2CalculationResult } from "@/core/risk/methodologies/csn-en-62305-2-ed2";
 import { COMPONENTS, UNPROTECTED_DESCRIPTION, type Component, type Ed2ScenarioResult } from "@/core/risk/methodologies/csn-en-62305-2-ed2/calculate";
 import type { Ed2Input, LossValueInput } from "@/core/risk/methodologies/csn-en-62305-2-ed2/schema";
@@ -26,6 +26,8 @@ export interface ReportModel {
   subtitle: string;
   projectName: string;
   unverified: boolean;
+  /** Upozornění na orientační povahu výsledku – titulní strana. */
+  disclaimer: string;
   accentColor: string;
   headerText: string;
   footerText: string;
@@ -350,7 +352,8 @@ export function buildReport(run: RunRecord): ReportModel {
       `${l.replace("L", "R")} – ${LOSS_NAMES[l]}`,
       fmtRisk(u.risks[l]!.total),
       fmtRisk(d.risks[l]!.total),
-      fmtRisk(d.risks[l]!.tolerable) + (d.risks[l]!.tolerableSource === "user" ? " (stanoveno)" : ""),
+      fmtRisk(d.risks[l]!.tolerable) +
+        (d.risks[l]!.tolerableSource === "user" ? " (stanoveno)" : l === "L4" ? " (informativně, příl. D)" : ""),
       d.risks[l]!.exceeds ? "R > RT – nevyhovuje" : "R ≤ RT – vyhovuje",
     ]),
     highlightRows: losses.map((l, i) => ({ index: i, tone: d.risks[l]!.exceeds ? "bad" : "ok" })),
@@ -501,9 +504,10 @@ export function buildReport(run: RunRecord): ReportModel {
 
   return {
     title: "Analýza rizika ochrany před bleskem",
-    subtitle: `Řízení rizika podle ${ctx.methodology.title}`,
+    subtitle: `Ověření rizika podle ${ctx.methodology.title}`,
     projectName: id.projectName || "Projekt",
     unverified,
+    disclaimer: RESULT_DISCLAIMER,
     accentColor: p.appearance.accentColor,
     headerText: p.appearance.headerText || `${id.projectName || "Analýza rizika"} – analýza rizika LPS`,
     footerText: p.appearance.footerText || [p.company || p.fullName, p.email].filter(Boolean).join(" | "),

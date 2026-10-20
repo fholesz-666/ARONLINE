@@ -39,9 +39,9 @@ export default function MethodologyPage() {
       <section className="mt-10">
         <h2 className="text-xl">Ověření normových tabulek a vzorců</h2>
         <p className="mt-2 max-w-[75ch] text-ink-soft">
-          Hodnoty součinitelů a pravděpodobností pocházejí z placené normy. Do aplikace je přepsal implementátor a u každé tabulky je uveden veřejný zdroj, se kterým se
-          hodnoty shodují (pokud existuje). Dokud všechny položky nepotvrdí nezávislý odborník s legálně pořízeným textem normy, dokumenty nesou označení
-          „Neověřený výpočet“ a placené exporty jsou v produkčním provozu vypnuté.
+          Hodnoty součinitelů a pravděpodobností i čísla rovnic byly 20. 10. 2026 porovnány s textem ČSN EN 62305-2 ed. 2 (únor 2013) včetně změny Z1
+          (říjen 2025). Výpočet byl dále porovnán s protokoly programu OEZ Prozik. Výsledek aplikace je přesto orientační odhad – kontrolu vstupů a výsledku
+          provádí zpracovatel s odpovídající kvalifikací (viz obchodní podmínky).
         </p>
         <p className="mt-3 text-sm">
           Ověřeno <strong>{s.verified}</strong> z {s.total} · verze jádra {CORE_VERSION} · otisk normativních dat <code>{NORMATIVE_DATA_HASH}</code>

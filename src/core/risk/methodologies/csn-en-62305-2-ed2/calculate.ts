@@ -2,7 +2,7 @@
  * Výpočet rizika podle ČSN EN 62305-2 ed. 2:2013 (IEC 62305-2:2010).
  *
  * Čistá funkce: vstup → výsledek se stopou výpočtu. Žádné I/O.
- * Vzorce viz ./equations.ts, tabulky viz ./tables.ts – vše NEOVĚŘENO proti textu ČSN.
+ * Vzorce viz ./equations.ts, tabulky viz ./tables.ts – ověřeno proti textu ČSN EN 62305-2 ed. 2 vč. Z1 (20. 10. 2026).
  */
 import type { CalcMessage, NormTable, TraceInput, TraceStep, ValueSource } from "../../types";
 import { fmtNum } from "../../../util/format";
@@ -232,6 +232,15 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
       normRef: eqNg.normRef,
       inputs: [{ symbol: "TD", value: TD, unit: "dny/rok", source: { kind: "user", note: input.lightning.source } }],
     });
+    if (by443) {
+      messages.push({
+        severity: "warning",
+        code: "NG_FROM_TD_443",
+        message:
+          "NG je přepočteno podle ČSN 33 2000-4-443 (0,04·Td^1,25), jak to dělá program Prozik. ČSN EN 62305-2 ed. 2 v příloze A uvádí NG ≈ 0,1·Td – volbu zdůvodní zpracovatel.",
+        path: "lightning.tdMethod",
+      });
+    }
     messages.push({
       severity: "warning",
       code: "NG_FROM_TD",
@@ -307,7 +316,7 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
       substituted: `AD = max(${f(ADrect)}; ${f(ADprominent)})`,
       inputs: [],
       notes: [
-        "Pro objekt složitého tvaru se uvažuje větší z ploch – postup pro složité tvary ověřit podle přílohy A normy.",
+        "Pro objekt složitého tvaru se uvažuje větší z ploch AD (rov. A.2 s minimální výškou HMIN) a AD' (rov. A.3) – čl. A.2.1.2. Zadejte H jako minimální výšku stavby.",
       ],
     });
     if (Hp <= H) {
@@ -403,17 +412,20 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
       unit: "m",
       source: lengthAssumed ? { kind: "default", note: "neznámá délka – uvažuje se 1 000 m" } : { kind: "user" },
     };
+    const rho = line.installation !== "aerial" && line.soilResistivity != null ? line.soilResistivity : null;
+    const rhoFactor = rho != null ? Math.sqrt(rho / 400) : 1;
     const AL = step({
       key: lp + "AL",
       symbol: "AL",
       label: `Sběrná plocha úderů do vedení „${line.name}“`,
-      value: 40 * LL,
+      value: 40 * LL * rhoFactor,
       unit: "m²",
-      formula: E.AL.formula,
-      substituted: `AL = 40 · ${f(LL)}`,
+      formula: rho != null ? "AL = 40 · LL · √(ρ / 400)" : E.AL.formula,
+      substituted: rho != null ? `AL = 40 · ${f(LL)} · √(${f(rho)} / 400)` : `AL = 40 · ${f(LL)}`,
       equationId: E.AL.id,
-      normRef: E.AL.normRef,
-      inputs: [llInput],
+      normRef: rho != null ? `${E.AL.normRef}; pozn. 2 k čl. A.4` : E.AL.normRef,
+      inputs: rho != null ? [llInput, { symbol: "ρ", value: rho, unit: "Ω·m", source: { kind: "user" } }] : [llInput],
+      notes: rho != null ? ["Korekce na měrný odpor půdy podle pozn. 2 k čl. A.4 (AL úměrná √ρ, tab. A.2 vychází z ρ = 400 Ω·m)."] : undefined,
     });
     const AI = step({
       key: lp + "AI",
@@ -615,27 +627,35 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
           { symbol: "KS4", value: KS4, source: { kind: "computed", equationId: E.KS4.id } },
         ],
       });
+      // Tab. B.4, pozn. 3: hodnoty CLD platí pro stíněné vnitřní systémy; pro nestíněné se uvažuje CLD = 1.
+      const shieldedInternal = sys.ks3 === "shielded_bonded";
+      const CLDpc = shieldedInternal ? CLD : 1;
       const PCi = step({
         key: sp + "PC",
         symbol: "PCi",
         label: `Pravděpodobnost poruchy vnitřního systému (úder do objektu) – „${sys.name}“`,
-        value: PSPD * CLD,
+        value: PSPD * CLDpc,
         formula: E.PC.formula,
-        substituted: `PC = ${f(PSPD)} · ${f(CLD)}`,
+        substituted: `PC = ${f(PSPD)} · ${f(CLDpc)}`,
         equationId: E.PC.id,
         normRef: E.PC.normRef,
         inputs: [
           { symbol: "PSPD", value: PSPD, source: tableSource(T.TABLE_PSPD, sys.pspd), label: T.TABLE_PSPD.rows[sys.pspd].label },
-          { symbol: "CLD", value: CLD, source: tableSource(T.TABLE_CLD_CLI, clRow), label: T.TABLE_CLD_CLI.rows[clRow].label },
+          shieldedInternal
+            ? { symbol: "CLD", value: CLD, source: tableSource(T.TABLE_CLD_CLI, clRow), label: T.TABLE_CLD_CLI.rows[clRow].label }
+            : { symbol: "CLD", value: 1, source: { kind: "default", note: "nestíněný vnitřní systém – tab. B.4, pozn. 3" } },
         ],
+        notes: shieldedInternal || CLD === 1 ? undefined : ["Nestíněný vnitřní systém: pro PC se uvažuje CLD = 1 (tab. B.4, pozn. 3)."],
       });
+      // Čl. B.5: u zařízení nevyhovujících výrobkovým normám (odolnost, výdržné napětí) se uvažuje PM = 1.
+      const nonCompliant = sys.nonCompliant === true;
       const PMi = step({
         key: sp + "PM",
         symbol: "PMi",
         label: `Pravděpodobnost poruchy vnitřního systému (úder v blízkosti) – „${sys.name}“`,
-        value: PSPD * PMS,
+        value: nonCompliant ? 1 : PSPD * PMS,
         formula: E.PM.formula,
-        substituted: `PM = ${f(PSPD)} · ${f(PMS)}`,
+        substituted: nonCompliant ? "PM = 1 (zařízení nevyhovuje výrobkovým normám, čl. B.5)" : `PM = ${f(PSPD)} · ${f(PMS)}`,
         equationId: E.PM.id,
         normRef: E.PM.normRef,
         inputs: [
@@ -643,70 +663,94 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
           { symbol: "PMS", value: PMS, source: { kind: "computed", equationId: E.PMS.id } },
         ],
       });
-      systems.push({ id: sys.id, name: sys.name, lineId: sys.lineId, UW, PSPD, CLD, CLI, KS3, KS4, PMS, PCi, PMi });
-
-      if (line && lineRes) {
-        const pldRow = pldRowFor(line);
-        const uwKey = sys.uw as UwKey;
-        const PLD = T.TABLE_PLD.rows[pldRow].value[uwKey];
-        const PLI = T.TABLE_PLI.rows[line.service].value[uwKey];
-        const lineInputs: TraceInput[] = [
-          { symbol: "PEB", value: lineRes.PEB, source: tableSource(T.TABLE_PEB, line.peb), label: T.TABLE_PEB.rows[line.peb].label },
-          { symbol: "PLD", value: PLD, source: tableSource(T.TABLE_PLD, `${pldRow}@${uwKey}kV`), label: T.TABLE_PLD.rows[pldRow].label },
-          { symbol: "CLD", value: CLD, source: tableSource(T.TABLE_CLD_CLI, clRow) },
-        ];
-        const lp = `${sp}line:${line.id}.`;
-        const PU = step({
-          key: lp + "PU",
-          symbol: "PU",
-          label: `Pravděpodobnost úrazu (úder do vedení „${line.name}“) – zóna „${zone.name}“`,
-          value: PTU * lineRes.PEB * PLD * CLD,
-          formula: E.PU.formula,
-          substituted: `PU = ${f(PTU)} · ${f(lineRes.PEB)} · ${f(PLD)} · ${f(CLD)}`,
-          equationId: E.PU.id,
-          normRef: E.PU.normRef,
-          inputs: [{ symbol: "PTU", value: PTU, source: tableSource(T.TABLE_PTU, zone.ptu), label: T.TABLE_PTU.rows[zone.ptu].label }, ...lineInputs],
-        });
-        const PV = step({
-          key: lp + "PV",
-          symbol: "PV",
-          label: `Pravděpodobnost hmotné škody (úder do vedení „${line.name}“) – zóna „${zone.name}“`,
-          value: lineRes.PEB * PLD * CLD,
-          formula: E.PV.formula,
-          substituted: `PV = ${f(lineRes.PEB)} · ${f(PLD)} · ${f(CLD)}`,
-          equationId: E.PV.id,
-          normRef: E.PV.normRef,
-          inputs: lineInputs,
-        });
-        const PW = step({
-          key: lp + "PW",
-          symbol: "PW",
-          label: `Pravděpodobnost poruchy systémů (úder do vedení „${line.name}“) – zóna „${zone.name}“`,
-          value: PSPD * PLD * CLD,
-          formula: E.PW.formula,
-          substituted: `PW = ${f(PSPD)} · ${f(PLD)} · ${f(CLD)}`,
-          equationId: E.PW.id,
-          normRef: E.PW.normRef,
-          inputs: [{ symbol: "PSPD", value: PSPD, source: tableSource(T.TABLE_PSPD, sys.pspd) }, lineInputs[1], lineInputs[2]],
-        });
-        const PZ = step({
-          key: lp + "PZ",
-          symbol: "PZ",
-          label: `Pravděpodobnost poruchy systémů (úder v blízkosti vedení „${line.name}“) – zóna „${zone.name}“`,
-          value: PSPD * PLI * CLI,
-          formula: E.PZ.formula,
-          substituted: `PZ = ${f(PSPD)} · ${f(PLI)} · ${f(CLI)}`,
-          equationId: E.PZ.id,
-          normRef: E.PZ.normRef,
-          inputs: [
-            { symbol: "PSPD", value: PSPD, source: tableSource(T.TABLE_PSPD, sys.pspd) },
-            { symbol: "PLI", value: PLI, source: tableSource(T.TABLE_PLI, `${line.service}@${uwKey}kV`), label: T.TABLE_PLI.rows[line.service].label },
-            { symbol: "CLI", value: CLI, source: tableSource(T.TABLE_CLD_CLI, clRow) },
-          ],
-        });
-        zoneLines.push({ lineId: line.id, systemId: sys.id, PLD, PLI, PU, PV, PW, PZ });
-      }
+      systems.push({ id: sys.id, name: sys.name, lineId: sys.lineId, UW, PSPD, CLD: CLDpc, CLI, KS3, KS4, PMS, PCi, PMi });
     });
+
+    // Vedení připojená k vnitřním systémům zóny. Na jedno vedení může být připojeno více systémů;
+    // pro RU, RV, RW, RZ se pak bere pro každý parametr hodnota vedoucí k nejvyššímu riziku
+    // (ČSN EN 62305-2 ed. 2, čl. 6.9.1): nejvyšší PSPD a nejnižší UW (→ nejvyšší PLD a PLI).
+    const byLine = new Map<string, InternalSystemInput[]>();
+    for (const sys of zone.internalSystems) {
+      if (!sys.lineId) continue;
+      byLine.set(sys.lineId, [...(byLine.get(sys.lineId) ?? []), sys]);
+    }
+    for (const [lineId, syss] of byLine) {
+      const line = lineById.get(lineId)!;
+      const lineRes = lineResById.get(lineId)!;
+      const clRow = line.shielding;
+      const CLD = T.TABLE_CLD_CLI.rows[clRow].value.cld;
+      const CLI = T.TABLE_CLD_CLI.rows[clRow].value.cli;
+      const worstSpd = syss.reduce((a, s) => (rowValue(T.TABLE_PSPD, s.pspd) > rowValue(T.TABLE_PSPD, a.pspd) ? s : a));
+      const worstUw = syss.reduce((a, s) => (parseFloat(s.uw) < parseFloat(a.uw) ? s : a));
+      const PSPD = rowValue(T.TABLE_PSPD, worstSpd.pspd);
+      const uwKey = worstUw.uw as UwKey;
+      const names = syss.map((s) => s.name).join(", ");
+      const multi = syss.length > 1;
+      const multiNote = multi
+        ? [`Na vedení je připojeno více systémů (${names}) – použita nejvyšší PSPD (${worstSpd.name}) a nejnižší UW = ${worstUw.uw} kV (${worstUw.name}), čl. 6.9.1.`]
+        : undefined;
+      const pldRow = pldRowFor(line);
+      const PLD = T.TABLE_PLD.rows[pldRow].value[uwKey];
+      const PLI = T.TABLE_PLI.rows[line.service].value[uwKey];
+      const lineInputs: TraceInput[] = [
+        { symbol: "PEB", value: lineRes.PEB, source: tableSource(T.TABLE_PEB, line.peb), label: T.TABLE_PEB.rows[line.peb].label },
+        { symbol: "PLD", value: PLD, source: tableSource(T.TABLE_PLD, `${pldRow}@${uwKey}kV`), label: T.TABLE_PLD.rows[pldRow].label },
+        { symbol: "CLD", value: CLD, source: tableSource(T.TABLE_CLD_CLI, clRow) },
+      ];
+      const lp = `${zp}line:${line.id}.`;
+      const PU = step({
+        key: lp + "PU",
+        symbol: "PU",
+        label: `Pravděpodobnost úrazu (úder do vedení „${line.name}“) – zóna „${zone.name}“`,
+        value: PTU * lineRes.PEB * PLD * CLD,
+        formula: E.PU.formula,
+        substituted: `PU = ${f(PTU)} · ${f(lineRes.PEB)} · ${f(PLD)} · ${f(CLD)}`,
+        equationId: E.PU.id,
+        normRef: E.PU.normRef,
+        inputs: [{ symbol: "PTU", value: PTU, source: tableSource(T.TABLE_PTU, zone.ptu), label: T.TABLE_PTU.rows[zone.ptu].label }, ...lineInputs],
+        notes: multiNote,
+      });
+      const PV = step({
+        key: lp + "PV",
+        symbol: "PV",
+        label: `Pravděpodobnost hmotné škody (úder do vedení „${line.name}“) – zóna „${zone.name}“`,
+        value: lineRes.PEB * PLD * CLD,
+        formula: E.PV.formula,
+        substituted: `PV = ${f(lineRes.PEB)} · ${f(PLD)} · ${f(CLD)}`,
+        equationId: E.PV.id,
+        normRef: E.PV.normRef,
+        inputs: lineInputs,
+      });
+      const PW = step({
+        key: lp + "PW",
+        symbol: "PW",
+        label: `Pravděpodobnost poruchy systémů (úder do vedení „${line.name}“) – zóna „${zone.name}“`,
+        value: PSPD * PLD * CLD,
+        formula: E.PW.formula,
+        substituted: `PW = ${f(PSPD)} · ${f(PLD)} · ${f(CLD)}`,
+        equationId: E.PW.id,
+        normRef: E.PW.normRef,
+        inputs: [{ symbol: "PSPD", value: PSPD, source: tableSource(T.TABLE_PSPD, worstSpd.pspd) }, lineInputs[1], lineInputs[2]],
+        notes: multiNote,
+      });
+      const PZ = step({
+        key: lp + "PZ",
+        symbol: "PZ",
+        label: `Pravděpodobnost poruchy systémů (úder v blízkosti vedení „${line.name}“) – zóna „${zone.name}“`,
+        value: PSPD * PLI * CLI,
+        formula: E.PZ.formula,
+        substituted: `PZ = ${f(PSPD)} · ${f(PLI)} · ${f(CLI)}`,
+        equationId: E.PZ.id,
+        normRef: E.PZ.normRef,
+        inputs: [
+          { symbol: "PSPD", value: PSPD, source: tableSource(T.TABLE_PSPD, worstSpd.pspd) },
+          { symbol: "PLI", value: PLI, source: tableSource(T.TABLE_PLI, `${line.service}@${uwKey}kV`), label: T.TABLE_PLI.rows[line.service].label },
+          { symbol: "CLI", value: CLI, source: tableSource(T.TABLE_CLD_CLI, clRow) },
+        ],
+        notes: multiNote,
+      });
+      zoneLines.push({ lineId: line.id, systemId: syss.map((s) => s.id).join("+"), PLD, PLI, PU, PV, PW, PZ });
+    }
 
     const PC = systems.length
       ? step({
@@ -727,24 +771,28 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
           symbol: "PM",
           label: `Pravděpodobnost poruchy vnitřních systémů (úder v blízkosti) – zóna „${zone.name}“`,
           value: 1 - systems.reduce((acc, s) => acc * (1 - s.PMi), 1),
-          formula: "PM = 1 − Π (1 − PMi)",
+          formula: E.PM_MULTI.formula,
           substituted: "PM = 1 − " + systems.map((s) => `(1 − ${f(s.PMi)})`).join(" · "),
-          equationId: E.PM.id,
-          normRef: E.PM.normRef,
+          equationId: E.PM_MULTI.id,
+          normRef: E.PM_MULTI.normRef,
           inputs: systems.map((s) => ({ symbol: `PM(${s.name})`, value: s.PMi, source: { kind: "computed", equationId: E.PM.id } })),
-          notes: ["Kombinace více vnitřních systémů obdobně jako u PC – ověřit postup v příloze B."],
+
         })
       : 0;
 
     /* --- Ztráty ----------------------------------------------------- */
     const losses: Partial<Record<LossType, ZoneLosses>> = {};
     const rt = rowValue(T.TABLE_RT_FLOOR, zone.floor);
-    const rp = rowValue(T.TABLE_RP, zone.fireProvisions);
+    // Čl. C.3 pod tab. C.4: ve stavbách s rizikem výbuchu je vždy rp = 1.
+    const explosive = zone.fireRisk.startsWith("explosion");
+    const rp = explosive ? 1 : rowValue(T.TABLE_RP, zone.fireProvisions);
     const rf = rowValue(T.TABLE_RF, zone.fireRisk);
     const hz = rowValue(T.TABLE_HZ, zone.specialHazard);
     const rInputs = {
       rt: { symbol: "rt", value: rt, source: tableSource(T.TABLE_RT_FLOOR, zone.floor), label: T.TABLE_RT_FLOOR.rows[zone.floor].label } as TraceInput,
-      rp: { symbol: "rp", value: rp, source: tableSource(T.TABLE_RP, zone.fireProvisions), label: T.TABLE_RP.rows[zone.fireProvisions].label } as TraceInput,
+      rp: (explosive
+        ? { symbol: "rp", value: 1, source: { kind: "default", note: "stavba s rizikem výbuchu – rp = 1 (čl. C.3)" } }
+        : { symbol: "rp", value: rp, source: tableSource(T.TABLE_RP, zone.fireProvisions), label: T.TABLE_RP.rows[zone.fireProvisions].label }) as TraceInput,
       rf: { symbol: "rf", value: rf, source: tableSource(T.TABLE_RF, zone.fireRisk), label: T.TABLE_RF.rows[zone.fireRisk].label } as TraceInput,
       hz: { symbol: "hz", value: hz, source: tableSource(T.TABLE_HZ, zone.specialHazard), label: T.TABLE_HZ.rows[zone.specialHazard].label } as TraceInput,
     };
@@ -942,7 +990,7 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
         RZ: lineSubst((zl) => zl.PZ, (lr) => f(lr.NI), Ls.LZ),
       };
       // Zóna vně stavby (např. LPZ 0): uvažuje se jen úraz osob dotykovým a krokovým napětím RA.
-      // Hmotná škoda a poruchy vnitřních systémů vznikají uvnitř stavby (shodně s programem Prozik – ověřit v textu normy).
+      // Hmotná škoda a poruchy vnitřních systémů vznikají uvnitř stavby (čl. 4.2.2–4.2.5; shodně s programem Prozik).
       const outside = zone.location === "outside";
       if (outside) {
         for (const c of COMPONENTS) if (c !== "RA") vals[c] = 0;
@@ -1033,6 +1081,35 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
   }
 
   /* --- Kontroly vstupů -------------------------------------------- */
+  if (input.structure.lps === "none") {
+    input.zones.forEach((z, zi) => {
+      if (z.pta.some((k) => k !== "none")) {
+        messages.push({
+          severity: "warning",
+          code: "PTA_WITHOUT_LPS",
+          message: `Zóna „${z.name}“: opatření snižující PA jsou podle tab. B.1, pozn. 1 účinná jen ve stavbách chráněných LPS nebo se souvislou kovovou / železobetonovou konstrukcí jako náhodným LPS.`,
+          path: `zones[${zi}].pta`,
+        });
+      }
+      if (z.internalSystems.some((s) => s.pspd !== "none")) {
+        messages.push({
+          severity: "warning",
+          code: "PSPD_WITHOUT_LPS",
+          message: `Zóna „${z.name}“: koordinovaný systém SPD snižuje PC podle tab. B.3, pozn. 1 jen ve stavbách chráněných LPS nebo se souvislou kovovou / železobetonovou konstrukcí jako náhodným LPS.`,
+          path: `zones[${zi}].internalSystems`,
+        });
+      }
+    });
+  }
+  if (input.lossTypes.L4 && input.tolerableL4 == null) {
+    messages.push({
+      severity: "info",
+      code: "L4_RT_INFORMATIVE",
+      message:
+        "ČSN EN 62305-2 ed. 2 (tab. 4, čl. 5.3) neuvádí přípustné riziko pro L4 – o ekonomické ztrátě se rozhoduje porovnáním nákladů (příloha D). Porovnání R4 s hodnotou 10⁻³ je pouze informativní (IEC 62305-2:2010, předmluva; stejně postupuje program Prozik). Potřebu ochrany určují rizika R1 až R3 (čl. 5.4).",
+      path: "lossTypes.L4",
+    });
+  }
   if (input.lossTypes.L1) {
     const sumNz = input.zones.reduce((a, z) => a + z.persons, 0);
     if (sumNz > input.structure.totalPersons) {

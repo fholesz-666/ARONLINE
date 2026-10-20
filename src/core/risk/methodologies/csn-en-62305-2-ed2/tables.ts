@@ -1,15 +1,11 @@
 /**
  * Normové tabulky – ČSN EN 62305-2 ed. 2:2013 (IEC 62305-2:2010).
  *
- * DŮLEŽITÉ – PŮVOD HODNOT
- * -----------------------
- * Hodnoty přepsal implementátor podle metodiky IEC 62305-2:2010. Text normy nebyl
- * k dispozici, protože norma je placená. Kde existuje veřejný sekundární zdroj se
- * shodnými hodnotami, je uveden v `publicSources`.
- *
- * Žádná hodnota NENÍ ověřena proti textu ČSN. Stav ověření se vede odděleně
- * v `verification.json` a vyplňuje ho odborník s legálně pořízeným textem normy.
- * Postup je popsán v docs/verification-checklist.md.
+ * PŮVOD HODNOT
+ * ------------
+ * Všechny hodnoty byly 20. 10. 2026 ověřeny proti textu ČSN EN 62305-2 ed. 2 (únor 2013)
+ * včetně změny Z1 (říjen 2025), zpřístupněnému sponzorovaným přístupem ČAS. Stav ověření
+ * se vede v `verification.json` (docs/verification-checklist.md).
  *
  * Popisy řádků (label/help) jsou vlastní parafráze, nikoliv citace normy.
  */
@@ -22,10 +18,9 @@ const DEHN_LPG: PublicSource = {
   checkedAt: "2026-10-20",
 };
 
-const PROVENANCE_DEHN =
-  "Hodnoty přepsány podle metodiky IEC 62305-2:2010; shodují se s veřejným zdrojem DEHN LPG. Proti textu ČSN neověřeno.";
-const PROVENANCE_MEMORY =
-  "Hodnoty přepsány podle metodiky IEC 62305-2:2010 (znalost implementátora). Veřejný zdroj s úplnou tabulkou nebyl nalezen. Proti textu ČSN neověřeno.";
+const PROVENANCE_CSN = "Ověřeno proti textu ČSN EN 62305-2 ed. 2 (2013) vč. Z1 (2025) – všechny řádky tabulky odpovídají normě.";
+const PROVENANCE_DEHN = PROVENANCE_CSN;
+const PROVENANCE_MEMORY = PROVENANCE_CSN;
 
 /* ------------------------------------------------------------------ */
 /* Příloha A – počet nebezpečných událostí                              */
@@ -137,7 +132,7 @@ export const TABLE_PTA: NormTable<PtaKey> = {
   publicSources: [{ ...DEHN_LPG, locator: "tab. 3.2.4.1" }],
   provenance:
     PROVENANCE_DEHN +
-    " Při více opatřeních se hodnoty násobí (pravidlo uvedené u tabulky – ověřit).",
+    " Při více opatřeních se hodnoty násobí (text pod tab. B.1). Opatření jsou účinná jen ve stavbách chráněných LPS nebo s náhodným LPS (pozn. 1).",
 };
 
 export type PbKey =
@@ -187,7 +182,7 @@ export const TABLE_PSPD: NormTable<SpdLplKey> = {
     better_0005: {
       label: "SPD s lepšími parametry než pro LPL I – horní mez rozsahu",
       value: 0.005,
-      help: "Poznámka k tabulce připouští rozsah 0,005–0,001 podle parametrů SPD (ověřit podmínky).",
+      help: "Pozn. 2 k tab. B.3 připouští 0,005–0,001 pro SPD s lepšími charakteristikami (vyšší In, nižší Up) – nutno doložit.",
     },
     better_0001: {
       label: "SPD s lepšími parametry než pro LPL I – dolní mez rozsahu",
@@ -249,6 +244,7 @@ export const TABLE_CLD_CLI: NormTable<ClKey, { cld: number; cli: number }> = {
     isolating_interface: {
       label: "Libovolné vedení s oddělovacím rozhraním podle ČSN EN 62305-4",
       value: { cld: 0, cli: 0 },
+      help: "V ČSN je v tab. B.4 pro CLI u tohoto řádku prázdné pole; uvažuje se 0 jako u IEC 62305-2.",
     },
   },
   publicSources: [],
@@ -459,7 +455,7 @@ export const TABLE_RP: NormTable<RpKey> = {
   },
   publicSources: [],
   provenance:
-    PROVENANCE_MEMORY + " Při více opatřeních se použije nejnižší hodnota (pravidlo u tabulky – ověřit).",
+    PROVENANCE_MEMORY + " Při více opatřeních se použije nejnižší hodnota; ve stavbách s rizikem výbuchu je vždy rp = 1 (text pod tab. C.4).",
 };
 
 export type RfKey =
@@ -482,17 +478,17 @@ export const TABLE_RF: NormTable<RfKey> = {
     fire_high: {
       label: "Požár – vysoké nebezpečí",
       value: 0.1,
-      help: "Orientačně měrné požární zatížení nad 800 MJ/m² (poznámka u tabulky – ověřit).",
+      help: "Např. stavby z hořlavých materiálů, s hořlavou střechou nebo s měrným požárním zatížením nad 800 MJ/m² (pozn. 5).",
     },
     fire_ordinary: {
       label: "Požár – běžné nebezpečí",
       value: 0.01,
-      help: "Orientačně měrné požární zatížení 400–800 MJ/m² (ověřit).",
+      help: "Měrné požární zatížení 400–800 MJ/m² (pozn. 6).",
     },
     fire_low: {
       label: "Požár – malé nebezpečí",
       value: 0.001,
-      help: "Orientačně měrné požární zatížení pod 400 MJ/m² (ověřit).",
+      help: "Měrné požární zatížení pod 400 MJ/m² nebo jen malé množství hořlavého materiálu (pozn. 7).",
     },
     none: { label: "Žádné nebezpečí požáru ani výbuchu", value: 0 },
   },
@@ -641,9 +637,9 @@ export const TABLE_RT: NormTable<LossType> = {
     L2: { label: "Ztráta veřejné služby", value: 1e-3 },
     L3: { label: "Ztráta kulturního dědictví", value: 1e-4 },
     L4: {
-      label: "Ztráta ekonomické hodnoty (není-li k dispozici analýza nákladů)",
+      label: "Ztráta ekonomické hodnoty – informativně (ČSN tab. 4 hodnotu neuvádí)",
       value: 1e-3,
-      help: "Hodnota uvedená v předmluvě IEC 62305-2:2010 pro případ bez dat pro analýzu nákladů a přínosů.",
+      help: "ČSN EN 62305-2 ed. 2 (čl. 5.3) řeší L4 porovnáním nákladů podle přílohy D. Hodnota 10⁻³ pochází z předmluvy IEC 62305-2:2010 a používá ji i program Prozik – porovnání je jen informativní.",
     },
   },
   publicSources: [
@@ -654,7 +650,7 @@ export const TABLE_RT: NormTable<LossType> = {
     },
   ],
   provenance:
-    "Hodnoty pro L3 a L4 podle veřejné předmluvy IEC 62305-2:2010. Hodnoty pro L1 a L2 podle znalosti implementátora. Proti textu ČSN neověřeno.",
+    "L1, L2, L3 ověřeno proti tab. 4 ČSN EN 62305-2 ed. 2. L4 není v ČSN uvedena (čl. 5.3 – analýza nákladů, příloha D); 10⁻³ je informativní hodnota z předmluvy IEC 62305-2:2010.",
 };
 
 /** Všechny tabulky metodiky – pro kontrolu ověření a otisk dat. */

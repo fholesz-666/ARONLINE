@@ -84,6 +84,11 @@ export const zLine = z.object({
   shieldResistance: zShieldResistance.nullable(),
   /** SPD pro vyrovnání potenciálů na vstupu vedení (tab. B.7 – PEB). */
   peb: zSpd,
+  /**
+   * Měrný odpor půdy ρ (Ω·m) u vedení v zemi – volitelná korekce AL = 40·LL·√(ρ/400)
+   * (pozn. 2 k čl. A.4: AL je úměrná √ρ, tabulka A.2 vychází z ρ = 400 Ω·m). null = bez korekce.
+   */
+  soilResistivity: z.number().finite().positive().max(100000).nullable().optional(),
   /** Sousední objekt na druhém konci vedení (pro NDJ); null = žádný / neuvažuje se. */
   adjacentStructure: zAdjacentStructure.nullable(),
 });
@@ -100,6 +105,8 @@ export const zInternalSystem = z.object({
   ks3: zKs3,
   /** Koordinovaný systém SPD (tab. B.3 – PSPD). */
   pspd: zSpd,
+  /** Zařízení nevyhovuje výrobkovým normám z hlediska odolnosti / výdržného napětí → PM = 1 (čl. B.5). */
+  nonCompliant: z.boolean().optional(),
 });
 export type InternalSystemInput = z.infer<typeof zInternalSystem>;
 
@@ -242,19 +249,7 @@ export const zEd2Input = z
       if (new Set(z.pta).size !== z.pta.length) {
         ctx.addIssue({ code: "custom", path: ["zones", zi, "pta"], message: "Opatření je vybráno vícekrát" });
       }
-      const sysLines = new Set<string>();
-      z.internalSystems.forEach((s, si) => {
-        if (s.lineId == null) return;
-        if (sysLines.has(s.lineId)) {
-          ctx.addIssue({
-            code: "custom",
-            path: ["zones", zi, "internalSystems", si, "lineId"],
-            message:
-              "Na jedno vedení v zóně zadejte jen jeden vnitřní systém (rozhoduje zařízení s nejnižším UW a nejhorším provedením)",
-          });
-        }
-        sysLines.add(s.lineId);
-      });
+      // Více systémů na jednom vedení je přípustné – pro RU, RV, RW, RZ se bere nejhorší hodnota parametru (čl. 6.9.1).
       if (zoneIds.has(z.id)) ctx.addIssue({ code: "custom", path: ["zones", zi, "id"], message: "Duplicitní ID zóny" });
       zoneIds.add(z.id);
       z.internalSystems.forEach((s, si) => {

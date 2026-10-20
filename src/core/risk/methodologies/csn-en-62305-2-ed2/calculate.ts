@@ -197,8 +197,8 @@ function pldRowFor(line: LineInput): PldKey {
 }
 
 function ksFromShield(shield: ZoneInput["shieldExternal"]): { value: number; formula: string } {
-  if (shield.continuous) return { value: 1e-4, formula: "spojité kovové stínění ≥ 0,1 mm → 10⁻⁴" };
-  if (shield.wm == null) return { value: 1, formula: "bez prostorového stínění → 1" };
+  if (shield.continuous) return { value: 1e-4, formula: "10⁻⁴ (spojité kovové stínění tloušťky ≥ 0,1 mm)" };
+  if (shield.wm == null) return { value: 1, formula: "1 (bez prostorového stínění)" };
   const v = Math.min(1, 0.12 * shield.wm);
   return { value: v, formula: `min(1; 0,12 · ${f(shield.wm)})` };
 }
@@ -399,7 +399,7 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
       symbol: "LL",
       value: LL,
       unit: "m",
-      source: lengthAssumed ? { kind: "default", note: "neznámá délka → 1 000 m" } : { kind: "user" },
+      source: lengthAssumed ? { kind: "default", note: "neznámá délka – uvažuje se 1 000 m" } : { kind: "user" },
     };
     const AL = step({
       key: lp + "AL",

@@ -2,7 +2,7 @@
 
 Běh: **20. 10. 2026**, Node.js 22, PostgreSQL 16 (lokální vývojové prostředí). Stejné testy spouští CI na GitHubu při každé změně. První úspěšný běh CI na GitHubu (Ubuntu 24.04, včetně E2E): run 39427396656, 20. 10. 2026.
 
-Poznámka: GitHub od 19. 10. 2026 převádí `ubuntu-latest` na Ubuntu 26. Na něm instalace Playwrightu v CI selhala, proto je runner pevně nastaven na `ubuntu-24.04`. Před přechodem na novější runner je nutné E2E krok znovu ověřit.
+Poznámka: GitHub od 19. 10. 2026 převádí `ubuntu-latest` na Ubuntu 26. Na něm E2E krok v CI selhal (přesnou příčinu nešlo z logů zjistit). Po pevném nastavení `ubuntu-24.04` prochází. Před přechodem na novější runner je nutné E2E krok znovu ověřit.
 
 ## Jednotkové a integrační testy (`npm test`, Vitest)
 

@@ -141,8 +141,8 @@ Analyzované vzory (pouze struktura, žádné převzaté texty):
 |---|---|---|
 | Vyhledání adresy | ArcGIS REST `https://ags.cuzk.gov.cz/arcgis/rest/services/RUIAN/MapServer/exts/GeocodeSOE` – `suggest`, `find`, `findAddressCandidates`, `tables/1/reverseGeocode` | [Rozhraní GeocodeSOE](https://geoportal.cuzk.gov.cz/Dokumenty/Rozhrani_GeocodeSOE.pdf), [Využití GeocodeSOE a QUERY](https://geoportal.cuzk.gov.cz/Dokumenty/Vyuziti_extenze_GeococeSOE_a_funkce_QUERY.pdf) |
 | Adresní místa, stavební objekty, parcely | `https://ags.cuzk.gov.cz/arcgis/rest/services/RUIAN/MapServer/{id}/query` (vrstva 1 = AdresniMisto; ostatní ID se zjišťují za běhu z popisu služby) | Polygon stavebního objektu je v RÚIAN pro budovy s digitalizovanou KM. Jinak jen definiční bod. |
-| Terén (DMR 5G) | `https://ags.cuzk.gov.cz/arcgis/rest/services/3D/dmr5g_wm/ImageServer` | Nadmořská výška terénu. [iteminfo](https://ags.cuzk.gov.cz/arcgis/rest/services/3D/dmr5g_wm/ImageServer/info/iteminfo) |
-| Povrch (DMP 1G) | ImageServer DMP 1G (metadata [CZ-CUZK-AGS-DMP1G](https://geoportal.gov.cz/php/micka/record/turtle/CZ-CUZK-AGS-DMP1G)) | Výška budovy ≈ DMP − DMR. **Jen orientační odhad.** |
+| Terén (DMR 5G) | `https://ags.cuzk.gov.cz/arcgis/rest/services/3D/dmr5g/ImageServer` (operace `identify`) | Nadmořská výška terénu. [iteminfo](https://ags.cuzk.gov.cz/arcgis/rest/services/3D/dmr5g_wm/ImageServer/info/iteminfo) |
+| Povrch (DMP 1G) | `https://ags.cuzk.gov.cz/arcgis/rest/services/3D/dmp/ImageServer` (operace `identify`) | Výška budovy ≈ DMP − DMR. **Jen orientační odhad.** Metadata [CZ-CUZK-AGS-DMP1G](https://geoportal.gov.cz/php/micka/record/turtle/CZ-CUZK-AGS-DMP1G) |
 | Ortofoto | `https://ags.cuzk.gov.cz/arcgis1/rest/services/ORTOFOTO_WM/MapServer` (EPSG:3857) | Podklad mapy |
 | Katastrální mapa | WMS ČÚZK | Podklad mapy (volitelné) |
 
@@ -157,6 +157,8 @@ Analyzované vzory (pouze struktura, žádné převzaté texty):
 - Detekční sítě nad ČR: EUCLID (komerční), Blitzortung (amatérská, nekomerční licence), WWLLN. Zdroj: [diplomová práce UK](https://dspace.cuni.cz/handle/20.500.11956/185459).
 - **Otevřený komerčně použitelný zdroj NG pro ČR nebyl nalezen.**
 - Ed. 3 pracuje s NSG. Převodní součinitel pro ČR není veřejný.
+
+> **Ověření služeb (20. 10. 2026, dotazy z prohlížeče):** vrstvy RUIAN MapServer: 1 AdresniMisto, 3 StavebniObjekt (polygony, číselník způsobu využití, počet podlaží), 5 Parcela, 7 KatastralniUzemi. GeocodeSOE `suggest` vrací adresy i parcely. Na výškopisu je `getSamples` zakázán (HTTP 403), `identify` funguje (např. DMR 516,09 m, DMP 525,56 m v Jablonci nad Nisou). Ortofoto a ZTM jsou dostupné jako dlaždice Web Mercator.
 
 > **Řešení v aplikaci:** povinné ruční zadání NG (nebo Td s přepočtem) a povinný popis zdroje hodnoty. Hodnota se nikdy nedoplní automaticky.
 

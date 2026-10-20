@@ -19,7 +19,7 @@
 │                                                                               │
 │  src/core/risk – ČISTÉ výpočetní jádro (bez I/O, bez DB, plně testované)      │
 └───────────────┬───────────────────────────────────────────────────────────────┘
-                │ Prisma
+                │ Drizzle
 ┌───────────────▼───────────────┐    ┌──────────────────────────────────────────┐
 │ PostgreSQL 16                 │    │ Externí: ČÚZK ArcGIS REST, GoPay REST,   │
 │ uživatelé, workspace, projekty│    │ SMTP (e-maily)                           │
@@ -33,7 +33,7 @@
 |---|---|---|
 | Frontend + server | **Next.js 15.5 (App Router), TypeScript strict** | Jeden projekt, SSR, Route Handlers, snadné nasazení z GitHubu |
 | Styly | Tailwind CSS 4 | Rychlý, konzistentní a čitelný vzhled bez knihovny komponent |
-| DB | **PostgreSQL 16 + Prisma 6** | Transakce a zámky pro platby a kredity, migrace ve verzovacím systému |
+| DB | **PostgreSQL 16 + Drizzle ORM** | Transakce a zámky pro platby a kredity, SQL migrace ve verzovacím systému, bez binárních enginů |
 | Validace | zod | Stejná schémata na klientu i serveru |
 | Hesla | Argon2id (`@node-rs/argon2`) | Doporučený algoritmus pro ukládání hesel |
 | Mapa | Leaflet + react-leaflet | Lehká, bez licenčních poplatků |
@@ -85,7 +85,7 @@ Serverové proxy s cache (`GeoCache`, TTL 30 dní) na služby ČÚZK. Každá au
 - Hlavičky: CSP, X-Frame-Options DENY, Referrer-Policy, Permissions-Policy.
 
 ## 4. Datový model
-Viz `prisma/schema.prisma`. Hlavní entity: User, Session, EmailToken, Workspace, Membership, Invitation, ProcessorProfile, Project, ProjectRevision, CalculationRun, ProjectUnlock, ExportLog, Product, Order, Payment, PaymentEvent, CreditLedger, Subscription, Template, GeoCache, RateLimit, AuditLog.
+Viz `src/server/db/schema.ts` a SQL migrace v `drizzle/`. Tabulky: users, sessions, email_tokens, workspaces, memberships, invitations, processor_profiles, projects, project_revisions, calculation_runs, project_unlocks, export_logs, products, orders, payments, payment_events, credit_ledger, subscriptions, templates, geo_cache, rate_limits, audit_logs.
 
 ## 5. Uživatelský průchod
 1. Úvod a ceník (veřejné), registrace nebo přihlášení.

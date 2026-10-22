@@ -11,7 +11,7 @@ const vfs: Record<string, string> = vfsModule.pdfMake?.vfs ?? vfsModule.vfs ?? v
 const font = (name: string) => Buffer.from(vfs[name], "base64");
 
 let printer: PdfPrinter | null = null;
-function getPrinter() {
+export function getPrinter() {
   printer ??= new PdfPrinter({
     Roboto: {
       normal: font("Roboto-Regular.ttf"),

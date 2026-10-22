@@ -7,7 +7,7 @@
 - vygenerovat dokumentaci s razítkem zpracovatele v **PDF** a editovatelném **DOCX**,
 - zpřístupnit dokumentaci až po **ověřené platbě** (GoPay), kreditu nebo předplatném.
 
-> ⚠️ **Stav výpočetního jádra:** normové tabulky a vzorce zatím **nejsou odborně ověřeny** proti textu normy (0 / 73 položek). Dokumenty jsou označeny „Neověřený výpočet“ a v produkci jsou platby a export zablokovány (`REQUIRE_VERIFIED_CORE=true`). Postup ověření: [docs/verification-checklist.md](docs/verification-checklist.md).
+> **Stav výpočetního jádra:** normové tabulky a vzorce byly porovnány s textem ČSN EN 62305-2 ed. 2 včetně Z1 (74 / 74 položek, viz [docs/verification-checklist.md](docs/verification-checklist.md)). Před ostrým provozem doporučujeme nezávislou kontrolu autorizovanou osobou.
 >
 > Aplikace počítá podle **ČSN EN 62305-2 ed. 2**, kterou lze používat do 31. 10. 2027. Výpočet podle **ed. 3** bude nasazen od 10/2027 (rozhodnutí provozovatele – do té doby se ed. 3 v aplikaci nepočítá ani podrobně nepopisuje).
 
@@ -22,6 +22,7 @@
 | [docs/data-availability.md](docs/data-availability.md) | Co se načítá automaticky a co musí zadat projektant |
 | [docs/deployment.md](docs/deployment.md) | GitHub, nasazení na Render nebo VPS, doména, přechod do produkce |
 | [docs/gopay.md](docs/gopay.md) | Nastavení platební brány GoPay, testovací a produkční režim |
+| [docs/admin.md](docs/admin.md) | Správa služby, doklady, platba převodem, podmínky opakovaných plateb |
 | [docs/external-apis.md](docs/external-apis.md) | Služby ČÚZK, mapové podklady, limity a cache |
 | [docs/backup.md](docs/backup.md) | Zálohování a obnova databáze |
 | [docs/costs.md](docs/costs.md) | Odhad měsíčních provozních nákladů |

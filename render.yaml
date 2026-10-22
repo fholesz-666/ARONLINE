@@ -21,7 +21,7 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_URL
-        sync: false # např. https://aronline.cz
+        sync: false # https://aronline.cz (po připojení domény)
       - key: PAYMENTS_MODE
         value: sandbox # po ověření přepnout na production
       - key: GOPAY_GOID
@@ -45,7 +45,7 @@ services:
       - key: SMTP_PASSWORD
         sync: false
       - key: MAIL_FROM
-        sync: false
+        value: "ARONLINE <info@aronline.cz>"
       - key: OPERATOR_NAME
         sync: false
       - key: OPERATOR_ICO
@@ -53,6 +53,8 @@ services:
       - key: OPERATOR_ADDRESS
         sync: false
       - key: OPERATOR_EMAIL
+        value: info@aronline.cz
+      - key: OPERATOR_PHONE
         sync: false
       - key: OPERATOR_VAT_PAYER
         value: "false"

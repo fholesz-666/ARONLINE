@@ -159,7 +159,7 @@ export async function subscriptionUnlocksUsed(sub: ActiveSubscription, tx?: Tx, 
  */
 export async function unlockProjectTx(
   tx: Tx,
-  p: { workspaceId: string; projectId: string; userId: string },
+  p: { workspaceId: string; projectId: string; userId: string; asAdmin?: boolean },
 ): Promise<typeof projectUnlocks.$inferSelect> {
   // serializace odemykání v rámci workspace
   await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${"unlock:" + p.workspaceId}))`);
@@ -174,8 +174,15 @@ export async function unlockProjectTx(
   });
   if (!project) throw notFound("Projekt nebyl nalezen.");
 
-  const sub = await activeSubscription(p.workspaceId, new Date(), tx);
   let unlock: typeof projectUnlocks.$inferSelect | undefined;
+  // Správce služby odemyká bez platby a bez odečtu kreditu (zdroj ADMIN, auditováno).
+  if (p.asAdmin) {
+    [unlock] = await tx
+      .insert(projectUnlocks)
+      .values({ projectId: p.projectId, workspaceId: p.workspaceId, source: "ADMIN", userId: p.userId })
+      .returning();
+  }
+  const sub = unlock ? null : await activeSubscription(p.workspaceId, new Date(), tx);
   if (sub) {
     const used = await subscriptionUnlocksUsed(sub, tx);
     const limit = sub.product.unlocksPerPeriod;
@@ -228,9 +235,9 @@ export async function unlockProjectTx(
   return unlock;
 }
 
-export async function unlockProject(p: { workspaceId: string; projectId: string; userId: string }) {
+export async function unlockProject(p: { workspaceId: string; projectId: string; userId: string; asAdmin?: boolean }) {
   const gate = commerceAllowed();
-  if (!gate.allowed) throw forbidden(gate.reason);
+  if (!gate.allowed && !p.asAdmin) throw forbidden(gate.reason);
   return getDb().transaction((tx) => unlockProjectTx(tx, p));
 }
 

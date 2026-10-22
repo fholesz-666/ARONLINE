@@ -30,6 +30,8 @@ const COMP: Record<string, string> = {
 
 interface Billing {
   isGuest?: boolean;
+  isAdmin?: boolean;
+  bank?: { available: boolean; reason?: string };
   balance: number;
   subscription: { unlocksUsed: number; unlocksPerPeriod: number | null; productName: string } | null;
   payments: { available: boolean; reason?: string };
@@ -95,7 +97,7 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
   const u = view?.unprotected as { risks: Record<string, RiskRow> } | undefined;
   const losses = d ? Object.keys(d.risks) : [];
   const failing = losses.filter((l) => d!.risks[l].exceeds);
-  const canUnlockFree = billing && (billing.balance > 0 || (billing.subscription && (billing.subscription.unlocksPerPeriod == null || billing.subscription.unlocksUsed < billing.subscription.unlocksPerPeriod)));
+  const canUnlockFree = billing && (billing.isAdmin || billing.balance > 0 || (billing.subscription && (billing.subscription.unlocksPerPeriod == null || billing.subscription.unlocksUsed < billing.subscription.unlocksPerPeriod)));
   const single = billing?.products.find((p) => p.code === "SINGLE");
 
   return (
@@ -213,15 +215,27 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
             {!unlocked && (
               <div className="rounded-md border border-signal bg-signal-soft p-3">
                 <Checkbox checked={liability} onChange={setLiability} label={<span className="text-sm">{LIABILITY_CONFIRMATION}</span>} />
+                <p className="mt-2 text-xs text-ink-soft">
+                  Odemčením žádáte o okamžité zpřístupnění dokumentace (digitální obsah) a berete na vědomí, že u odemčené analýzy zaniká právo odstoupit od smlouvy
+                  ve 14denní lhůtě (
+                  <Link className="link" href="/pravni/obchodni-podminky" target="_blank">
+                    obchodní podmínky
+                  </Link>
+                  ).
+                </p>
               </div>
             )}
-            {unlocked ? null : billing && !billing.payments.available ? (
+            {unlocked ? null : billing && !canUnlockFree && !billing.payments.available && !billing.bank?.available ? (
               <Notice tone="warning">{billing.payments.reason}</Notice>
             ) : canUnlockFree ? (
               <>
                 <p className="text-sm">
-                  {billing!.subscription ? `Odemčení proběhne v rámci předplatného ${billing!.subscription.productName}.` : `Odemčení spotřebuje 1 kredit (zůstatek ${billing!.balance}).`} Po odemčení už
-                  nelze měnit adresu a polohu objektu.
+                  {billing!.isAdmin
+                    ? "Účet správce – dokumentace se odemkne bez platby."
+                    : billing!.subscription
+                      ? `Odemčení proběhne v rámci předplatného ${billing!.subscription.productName}.`
+                      : `Odemčení spotřebuje 1 kredit (zůstatek ${billing!.balance}).`}{" "}
+                  Po odemčení už nelze měnit adresu a polohu objektu.
                 </p>
                 <button
                   className="btn btn-primary"
@@ -260,25 +274,50 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
                   />
                 )}
                 <div className="flex flex-wrap gap-2">
-                  <button
-                    className="btn btn-primary"
-                    disabled={busy != null || !single || !liability || (billing?.isGuest === true && !guestEmail.includes("@"))}
-                    onClick={async () => {
-                      setBusy("Přesměrovávám na platební bránu…");
-                      try {
-                        await saveNow();
-                        await startPayment("SINGLE", project.id, {
-                          acceptLiability: true,
-                          ...(billing?.isGuest ? { email: guestEmail } : {}),
-                        });
-                      } catch (e) {
-                        setError(e instanceof ApiError ? e.message : "Platbu se nepodařilo zahájit.");
-                        setBusy(null);
-                      }
-                    }}
-                  >
-                    Zaplatit analýzu{single ? ` (${(single.priceHaler / 100).toLocaleString("cs-CZ")} Kč)` : ""}
-                  </button>
+                  {billing?.payments.available && (
+                    <button
+                      className="btn btn-primary"
+                      disabled={busy != null || !single || !liability || (billing?.isGuest === true && !guestEmail.includes("@"))}
+                      onClick={async () => {
+                        setBusy("Přesměrovávám na platební bránu…");
+                        try {
+                          await saveNow();
+                          await startPayment("SINGLE", project.id, {
+                            method: "CARD",
+                            acceptLiability: true,
+                            ...(billing?.isGuest ? { email: guestEmail } : {}),
+                          });
+                        } catch (e) {
+                          setError(e instanceof ApiError ? e.message : "Platbu se nepodařilo zahájit.");
+                          setBusy(null);
+                        }
+                      }}
+                    >
+                      Zaplatit kartou{single ? ` (${(single.priceHaler / 100).toLocaleString("cs-CZ")} Kč)` : ""}
+                    </button>
+                  )}
+                  {billing?.bank?.available && (
+                    <button
+                      className={billing.payments.available ? "btn btn-secondary" : "btn btn-primary"}
+                      disabled={busy != null || !single || !liability || (billing?.isGuest === true && !guestEmail.includes("@"))}
+                      onClick={async () => {
+                        setBusy("Zakládám objednávku…");
+                        try {
+                          await saveNow();
+                          await startPayment("SINGLE", project.id, {
+                            method: "BANK",
+                            acceptLiability: true,
+                            ...(billing?.isGuest ? { email: guestEmail } : {}),
+                          });
+                        } catch (e) {
+                          setError(e instanceof ApiError ? e.message : "Objednávku se nepodařilo založit.");
+                          setBusy(null);
+                        }
+                      }}
+                    >
+                      Zaplatit převodem{single ? ` (${(single.priceHaler / 100).toLocaleString("cs-CZ")} Kč)` : ""}
+                    </button>
+                  )}
                   <Link className="btn btn-secondary" href={billing?.isGuest ? "/app/profil" : "/app/predplatne"}>
                     {billing?.isGuest ? "Zaregistrovat se (balíčky a předplatné)" : "Balíčky a předplatné"}
                   </Link>

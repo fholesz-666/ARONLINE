@@ -170,7 +170,17 @@ export async function authenticate(emailRaw: string, password: string) {
     return null;
   }
   const ok = await verifyPassword(user.passwordHash, password);
-  return ok ? user : null;
+  if (!ok) return null;
+  return promoteOwnerAdmin(user);
+}
+
+/** Účty uvedené v ADMIN_EMAILS (a vlastník služby) dostanou roli správce, jakmile mají ověřený e-mail. */
+async function promoteOwnerAdmin(user: typeof users.$inferSelect) {
+  if (user.role === "ADMIN" || !user.emailVerifiedAt || user.isGuest) return user;
+  if (!getConfig().adminEmails.includes(user.email.toLowerCase())) return user;
+  const [u] = await getDb().update(users).set({ role: "ADMIN" }).where(eq(users.id, user.id)).returning();
+  await audit("user.promoted_admin", { userId: user.id });
+  return u;
 }
 
 export async function defaultWorkspaceId(userId: string): Promise<string | null> {
@@ -252,8 +262,9 @@ export async function sendVerificationEmail(userId: string, email: string) {
 export async function verifyEmail(token: string): Promise<boolean> {
   const row = await consumeEmailToken(token, "VERIFY_EMAIL");
   if (!row) return false;
-  await getDb().update(users).set({ emailVerifiedAt: new Date() }).where(eq(users.id, row.userId));
+  const [u] = await getDb().update(users).set({ emailVerifiedAt: new Date() }).where(eq(users.id, row.userId)).returning();
   await audit("user.email_verified", { userId: row.userId });
+  if (u) await promoteOwnerAdmin(u);
   return true;
 }
 

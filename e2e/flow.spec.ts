@@ -98,9 +98,9 @@ test("kompletní průchod analýzou s platbou a exportem", async ({ page }) => {
   await shot(page, "09-vysledek");
 
   // Platba přes simulovanou bránu – bez potvrzení odpovědnosti zpracovatele nelze
-  await expect(page.getByRole("button", { name: /Zaplatit analýzu/ })).toBeDisabled();
+  await expect(page.getByRole("button", { name: /Zaplatit kartou/ })).toBeDisabled();
   await page.getByRole("checkbox", { name: /Potvrzuji, že jsem osobou/ }).check();
-  await page.getByRole("button", { name: /Zaplatit analýzu/ }).click();
+  await page.getByRole("button", { name: /Zaplatit kartou/ }).click();
   await expect(page).toHaveURL(/mock-brana/);
   await shot(page, "10-brana");
   await page.getByRole("button", { name: "Zaplatit (simulace)" }).click();

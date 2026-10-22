@@ -6,11 +6,11 @@ Seznam je seřazený podle důležitosti. Bez bodů A1–A3 nelze aplikaci komer
 
 | # | Úkol | Kdo | Jak |
 |---|---|---|---|
-| A1 | **Ověřit všech 73 normových tabulek a vzorců** jádra ed. 2 proti legálně pořízenému textu ČSN EN 62305-2 ed. 2:2013 | odborník LPS s normou (nezávislý na implementaci) | [verification-checklist.md](verification-checklist.md) → zapsat do `verification.json`, `npm test` |
+| A1 | ~~Ověřit normové tabulky a vzorce~~ – **hotovo** (74/74 proti textu ČSN vč. Z1, 20. 10. 2026). Doporučena nezávislá kontrola autorizovanou osobou | odborník LPS | [verification-checklist.md](verification-checklist.md) |
 | A2 | Doplnit **referenční příklady z přílohy E normy** (min. 2 případové studie) jako automatické testy | odborník | `src/core/risk/__tests__/reference/README.md` |
 | A3 | Posoudit **implementační volby** jádra (zóny, systémy na vedení, referenční stav bez opatření, LL, AD složitého objektu, L4 bez dat o hodnotách) | odborník | [calculations.md](calculations.md), kap. Implementační volby |
 | A4 | Ověřit **přechodné ustanovení** souběžné platnosti ed. 2 a ed. 3 v ČR (aplikace počítá s koncem ed. 2 k 31. 10. 2027) | odborník / ČAS | upravit `usableUntil` v `src/core/risk/registry.ts` |
-| A5 | **Právní kontrola** obchodních podmínek, zásad ochrany osobních údajů a reklamačního řádu. Doplnit provozovatele | právník | `src/app/(site)/pravni/*`, proměnné `OPERATOR_*` |
+| A5 | **Právní kontrola** obchodních podmínek (vč. čl. 3.1 Opakované platby a odstoupení od smlouvy), zásad ochrany osobních údajů a reklamačního řádu. Doplnit **sídlo a telefon** provozovatele | právník + provozovatel | `src/app/(site)/pravni/*`, Správa → Provozovatel a platby |
 | A6 | Znění **závěru a upozornění** v dokumentu (odpovědnost zpracovatele, rozsah) | odborník + právník | `src/server/documents/model.ts`, kap. 8 a 9 |
 
 ## B. Přístupy a integrace (čekají na údaje)
@@ -18,10 +18,12 @@ Seznam je seřazený podle důležitosti. Bez bodů A1–A3 nelze aplikaci komer
 | # | Úkol | Stav |
 |---|---|---|
 | B1 | **GoPay**: smlouva, sandbox klíče, test, produkční klíče, **aktivace opakovaných plateb** | Integrace hotová a otestovaná proti simulované bráně a simulovaným odpovědím API. **Proti skutečnému GoPay sandboxu netestováno** (chybí přístupové údaje) |
-| B2 | **Hosting**: účet Render (nebo VPS), import `render.yaml`, proměnné prostředí | **Nenasazeno.** Připraveno |
+| B2 | **Hosting**: Render | Nasazeno na https://aronline.onrender.com, nasazení po CI přes deploy hook |
 | B3 | **GitHub** | Hotovo: kód je v repozitáři `fholesz-666/ARONLINE`, CI (lint, typy, testy, build, E2E) prochází. Workflow Deploy běží po úspěšném CI, ale bez tajemství `RENDER_DEPLOY_HOOK_URL` nic nenasazuje |
-| B4 | **SMTP** pro e-maily (ověření e-mailu, obnova hesla, pozvánky) + SPF/DKIM | Nenastaveno. Ve vývoji se e-maily vypisují do konzole |
-| B5 | **Doména** a `APP_URL` | Nenastaveno |
+| B4 | **SMTP** pro e-maily z `info@aronline.cz` (ověření e-mailu, obnova hesla, platební údaje, doklady v příloze) + SPF/DKIM | Nenastaveno – schránka u hostingu domény nebo transakční služba (např. Brevo). EmailJS nevhodný (odesílá z prohlížeče) |
+| B5 | **Doména** `aronline.cz` → Render (Custom Domain), pak `APP_URL=https://aronline.cz` | Výchozí kanonická adresa v kódu už je aronline.cz |
+| B8 | **Loga platebních karet** z GoPay bannerů do patičky | Zatím textové označení VISA / Mastercard / 3-D Secure / GoPay |
+| B9 | **Účet správce** – registrace `fholesz@gmail.com` na webu a potvrzení e-mailu (vyžaduje SMTP) | Role ADMIN se přidělí automaticky po ověření |
 | B6 | Deploy hook Renderu jako tajemství `RENDER_DEPLOY_HOOK_URL` v GitHubu | Nenastaveno |
 | B7 | **Docker obraz** sestavit a otestovat (jen u varianty VPS) | Nesestaveno – vývojové prostředí nemělo přístup k Docker Hubu |
 

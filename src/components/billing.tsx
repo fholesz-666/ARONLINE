@@ -1,11 +1,25 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { PCI_NOTE, RECURRENCE_CONSENT, recurrenceTerms } from "@/config/recurrence";
 import { api, ApiError } from "@/lib/api";
-import { Notice, Spinner } from "./ui";
+import { Checkbox, Notice, Spinner } from "./ui";
+
+interface Product {
+  code: string;
+  name: string;
+  description: string;
+  type: "ONE_TIME" | "SUBSCRIPTION";
+  priceHaler: number;
+  periodMonths: number | null;
+  features: string[];
+}
 
 interface Billing {
-  products: { code: string; name: string; description: string; type: "ONE_TIME" | "SUBSCRIPTION"; priceHaler: number; features: string[] }[];
+  isAdmin?: boolean;
+  contactEmail: string;
+  products: Product[];
   balance: number;
   subscription: null | {
     productName: string;
@@ -15,31 +29,74 @@ interface Billing {
     unlocksUsed: number;
     unlocksPerPeriod: number | null;
   };
-  orders: { id: string; number: string; productName: string; amountHaler: number; status: string; createdAt: string; paidAt: string | null }[];
+  orders: { id: string; number: string; productName: string; amountHaler: number; status: string; createdAt: string; paidAt: string | null; paymentMethod: string }[];
+  invoices: { id: string; number: string; issuedAt: string; totalHaler: number; canceled: boolean }[];
   ledger: { id: string; delta: number; reason: string; note: string | null; createdAt: string }[];
   payments: { available: boolean; reason?: string };
+  bank: { available: boolean; reason?: string };
 }
 
 const ORDER_STATUS: Record<string, string> = { PENDING: "čeká na platbu", PAID: "zaplaceno", CANCELED: "zrušeno", FAILED: "chyba", REFUNDED: "vráceno" };
 const REASON: Record<string, string> = { PURCHASE: "nákup", UNLOCK: "odemčení analýzy", REFUND: "vrácení platby", ADJUSTMENT: "úprava" };
 const czk = (h: number) => `${(h / 100).toLocaleString("cs-CZ")} Kč`;
 
-/** Zahájí platbu a přesměruje na platební bránu. */
+/** Zahájí platbu: kartou → přesměrování na platební bránu, převodem → stránka s platebními údaji. */
 export async function startPayment(
   productCode: string,
   projectId?: string | null,
-  extra?: { email?: string; acceptLiability?: boolean },
+  extra?: { email?: string; acceptLiability?: boolean; method?: "CARD" | "BANK"; recurrenceConsent?: boolean },
 ) {
-  const r = await api<{ gwUrl: string }>("/api/billing/order", {
+  const r = await api<{ redirect: string }>("/api/billing/order", {
     body: { productCode, projectId: projectId ?? null, ...(extra ?? {}) },
   });
-  window.location.href = r.gwUrl;
+  window.location.href = r.redirect;
+}
+
+/** Parametry opakované platby + souhlas (požadavek GoPay – odděleně od obchodních podmínek). */
+export function RecurrenceConsentBox({
+  product,
+  contactEmail,
+  consent,
+  onConsent,
+}: {
+  product: Pick<Product, "name" | "priceHaler" | "periodMonths">;
+  contactEmail: string;
+  consent: boolean;
+  onConsent: (v: boolean) => void;
+}) {
+  const terms = recurrenceTerms({ productName: product.name, priceHaler: product.priceHaler, periodMonths: product.periodMonths ?? 1, contactEmail });
+  return (
+    <div className="rounded-md border border-ink bg-sheet p-4 text-sm" data-testid="recurrence-terms">
+      <p className="font-semibold">Parametry opakované platby</p>
+      <dl className="mt-2 grid gap-x-4 gap-y-1 sm:grid-cols-[11rem_1fr]">
+        {terms.map((t) => (
+          <div key={t.label} className="contents">
+            <dt className="text-ink-soft">{t.label}</dt>
+            <dd>{t.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-3 text-xs text-ink-soft">{PCI_NOTE}</p>
+      <p className="mt-1 text-xs text-ink-soft">
+        Podrobnosti v{" "}
+        <Link className="link" href="/pravni/obchodni-podminky#opakovane-platby" target="_blank">
+          obchodních podmínkách (čl. Opakované platby)
+        </Link>
+        .
+      </p>
+      <div className="mt-3">
+        <Checkbox checked={consent} onChange={onConsent} label={<span>{RECURRENCE_CONSENT}</span>} />
+      </div>
+    </div>
+  );
 }
 
 export function BillingPanel() {
   const [b, setB] = useState<Billing | null>(null);
   const [msg, setMsg] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [pendingSub, setPendingSub] = useState<string | null>(null);
+  const [recConsent, setRecConsent] = useState(false);
 
   const load = () => api<Billing>("/api/billing").then(setB);
   useEffect(() => {
@@ -51,7 +108,17 @@ export function BillingPanel() {
   return (
     <div className="mt-6 space-y-10">
       {msg && <Notice tone={msg.tone}>{msg.text}</Notice>}
-      {!b.payments.available && <Notice tone="warning" title="Platby jsou dočasně nedostupné">{b.payments.reason}</Notice>}
+      {b.isAdmin && (
+        <Notice tone="ok" title="Účet správce">
+          Jako správce služby odemykáte dokumentaci analýz bez platby a bez odečtu kreditů.
+        </Notice>
+      )}
+      {!b.payments.available && (
+        <Notice tone="warning" title="Platba kartou je dočasně nedostupná">
+          {b.payments.reason}
+          {b.bank.available ? " Analýzu i balíček můžete zaplatit bankovním převodem." : ""}
+        </Notice>
+      )}
 
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="panel p-5">
@@ -115,26 +182,88 @@ export function BillingPanel() {
                   <li key={f}>{f}</li>
                 ))}
               </ul>
-              <button
-                className="btn btn-primary mt-4"
-                disabled={!b.payments.available || busy != null || (p.type === "SUBSCRIPTION" && b.subscription != null)}
-                onClick={async () => {
-                  setBusy(p.code);
-                  setMsg(null);
-                  try {
-                    await startPayment(p.code);
-                  } catch (e) {
-                    setMsg({ tone: "error", text: e instanceof ApiError ? e.message : "Platbu se nepodařilo zahájit." });
-                    setBusy(null);
-                  }
-                }}
-              >
-                {busy === p.code ? "Přesměrovávám…" : p.type === "SUBSCRIPTION" ? "Předplatit" : "Koupit"}
-              </button>
+              {(
+                <div className="mt-4 flex flex-col gap-2">
+                  <button
+                    className="btn btn-primary"
+                    disabled={!b.payments.available || busy != null || (p.type === "SUBSCRIPTION" && b.subscription != null)}
+                    onClick={async () => {
+                      if (p.type === "SUBSCRIPTION") {
+                        setRecConsent(false);
+                        setPendingSub(p.code);
+                        setTimeout(() => document.getElementById("souhlas-opakovana-platba")?.scrollIntoView({ behavior: "smooth" }), 50);
+                        return;
+                      }
+                      setBusy(p.code);
+                      setMsg(null);
+                      try {
+                        await startPayment(p.code, null, { method: "CARD" });
+                      } catch (e) {
+                        setMsg({ tone: "error", text: e instanceof ApiError ? e.message : "Platbu se nepodařilo zahájit." });
+                        setBusy(null);
+                      }
+                    }}
+                  >
+                    {busy === p.code ? "Přesměrovávám…" : p.type === "SUBSCRIPTION" ? "Předplatit kartou" : "Zaplatit kartou"}
+                  </button>
+                  {p.type === "ONE_TIME" && b.bank.available && (
+                    <button
+                      className="btn btn-secondary"
+                      disabled={busy != null}
+                      onClick={async () => {
+                        setBusy(p.code + ":bank");
+                        setMsg(null);
+                        try {
+                          await startPayment(p.code, null, { method: "BANK" });
+                        } catch (e) {
+                          setMsg({ tone: "error", text: e instanceof ApiError ? e.message : "Objednávku se nepodařilo založit." });
+                          setBusy(null);
+                        }
+                      }}
+                    >
+                      {busy === p.code + ":bank" ? "Zakládám…" : "Zaplatit převodem"}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
-        <p className="mt-3 text-sm text-muted">Jednorázovou analýzu můžete koupit i přímo u konkrétního projektu – po zaplacení se odemkne automaticky.</p>
+        {pendingSub && (() => {
+          const p = b.products.find((x) => x.code === pendingSub);
+          if (!p) return null;
+          return (
+            <div className="mt-4 max-w-3xl space-y-3" id="souhlas-opakovana-platba">
+              <h3 className="text-lg">Objednávka předplatného – {p.name}</h3>
+              <RecurrenceConsentBox product={p} contactEmail={b.contactEmail} consent={recConsent} onConsent={setRecConsent} />
+              <div className="flex flex-wrap gap-2">
+                <button
+                  className="btn btn-primary"
+                  disabled={!recConsent || busy != null}
+                  onClick={async () => {
+                    setBusy(p.code);
+                    setMsg(null);
+                    try {
+                      await startPayment(p.code, null, { method: "CARD", recurrenceConsent: true });
+                    } catch (e) {
+                      setMsg({ tone: "error", text: e instanceof ApiError ? e.message : "Platbu se nepodařilo zahájit." });
+                      setBusy(null);
+                    }
+                  }}
+                >
+                  {busy === p.code ? "Přesměrovávám…" : "Zaplatit kartou a založit opakovanou platbu"}
+                </button>
+                <button className="btn btn-ghost" onClick={() => setPendingSub(null)}>
+                  Zpět
+                </button>
+              </div>
+            </div>
+          );
+        })()}
+        <p className="mt-3 text-sm text-muted">
+          Jednorázovou analýzu můžete koupit i přímo u konkrétního projektu – po zaplacení se odemkne automaticky. Při platbě převodem se kredit připíše po přijetí
+          platby na účet (obvykle 1–2 pracovní dny). Předplatné se hradí jen kartou (opakovaná platba).
+        </p>
       </section>
 
       <section>
@@ -156,16 +285,51 @@ export function BillingPanel() {
               <tbody>
                 {b.orders.map((o) => (
                   <tr key={o.id} className="border-b border-line-soft last:border-0">
-                    <td className="px-4 py-2 font-mono text-xs">{o.number}</td>
+                    <td className="px-4 py-2 font-mono text-xs">
+                      {o.paymentMethod === "BANK" ? (
+                        <Link className="link" href={`/app/objednavky/${o.id}`}>
+                          {o.number}
+                        </Link>
+                      ) : (
+                        o.number
+                      )}
+                    </td>
                     <td className="px-4 py-2">{o.productName}</td>
                     <td className="px-4 py-2 text-right">{czk(o.amountHaler)}</td>
-                    <td className="px-4 py-2">{ORDER_STATUS[o.status] ?? o.status}</td>
+                    <td className="px-4 py-2">
+                      {ORDER_STATUS[o.status] ?? o.status}
+                      {o.paymentMethod === "BANK" ? " (převod)" : ""}
+                    </td>
                     <td className="px-4 py-2">{new Date(o.createdAt).toLocaleString("cs-CZ", { dateStyle: "short", timeStyle: "short" })}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+        )}
+      </section>
+
+      <section>
+        <h2 className="text-xl">Doklady</h2>
+        {b.invoices.length === 0 ? (
+          <p className="mt-2 text-ink-soft">Doklady se vystaví automaticky po přijetí platby.</p>
+        ) : (
+          <ul className="mt-3 divide-y divide-line-soft text-sm">
+            {b.invoices.map((i) => (
+              <li key={i.id} className="flex flex-wrap items-center justify-between gap-2 py-1.5">
+                <span>
+                  Faktura {i.number} – {new Date(i.issuedAt).toLocaleDateString("cs-CZ")}
+                  {i.canceled ? " (stornováno)" : ""}
+                </span>
+                <span className="flex items-center gap-3">
+                  {czk(i.totalHaler)}
+                  <a className="link" href={`/api/invoices/${i.id}`} target="_blank" rel="noopener">
+                    PDF
+                  </a>
+                </span>
+              </li>
+            ))}
+          </ul>
         )}
       </section>
 

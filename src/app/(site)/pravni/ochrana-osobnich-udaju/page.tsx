@@ -31,8 +31,9 @@ export default function PrivacyPage() {
           odpovídá za oprávněnost jejich zadání.
         </li>
         <li>
-          <strong>Objednávky a platby</strong> – číslo objednávky, produkt, částka, stav platby. Údaje o kartě zpracovává výhradně GoPay. Účel: plnění smlouvy, účetní a daňové
-          povinnosti.
+          <strong>Objednávky, platby a doklady</strong> – číslo objednávky, produkt, částka, stav platby, variabilní symbol, fakturační údaje odběratele (jméno, firma,
+          IČO, DIČ, adresa, e-mail – přebírají se z výchozího profilu zpracovatele) a vystavené doklady. Údaje o kartě zpracovává výhradně GoPay. Účel: plnění smlouvy,
+          účetní a daňové povinnosti.
         </li>
         <li>
           <strong>Bezpečnostní záznamy</strong> – čas přihlášení, technické záznamy o důležitých akcích bez obsahu projektů. Účel: oprávněný zájem na zabezpečení služby.
@@ -40,6 +41,10 @@ export default function PrivacyPage() {
         <li>
           <strong>Potvrzení odpovědnosti zpracovatele</strong> – datum, verze textu a identifikace projektu, u kterého zpracovatel potvrdil prohlášení o odpovědnosti. Účel:
           oprávněný zájem provozovatele na prokázání sjednaných podmínek (po dobu 10 let).
+        </li>
+        <li>
+          <strong>Souhlas s opakovanou platbou</strong> – zobrazené parametry opakované platby, datum a čas souhlasu a IP adresa. Účel: prokázání souhlasu se
+          založením opakované platby (oprávněný zájem, požadavek platební brány); uchovává se po dobu předplatného a 12 měsíců po jeho skončení.
         </li>
       </ul>
 
@@ -54,7 +59,8 @@ export default function PrivacyPage() {
       <h2>4. Doba uložení</h2>
       <ul>
         <li>údaje účtu a projekty – po dobu existence účtu, poté smazání do 30 dnů (zálohy do 35 dnů),</li>
-        <li>účetní doklady – po dobu stanovenou právními předpisy (zpravidla 10 let),</li>
+        <li>účetní doklady a objednávky – po dobu stanovenou právními předpisy (zpravidla 10 let),</li>
+        <li>souhlas s opakovanou platbou – po dobu předplatného a 12 měsíců po jeho skončení,</li>
         <li>bezpečnostní záznamy – 12 měsíců,</li>
         <li>účty hostů bez zaplacené analýzy – 60 dnů od poslední aktivity.</li>
       </ul>

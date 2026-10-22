@@ -317,13 +317,18 @@ export const orders = pgTable(
     status: orderStatus("status").notNull().default("PENDING"),
     projectId: text("project_id").references(() => projects.id, { onDelete: "set null" }),
     billing: jsonb("billing"),
+    /** CARD = platební brána, BANK = bankovní převod (potvrzuje správce) */
+    paymentMethod: text("payment_method").notNull().default("CARD"),
+    variableSymbol: text("variable_symbol").unique(),
+    /** Souhlasy udělené při objednávce (např. založení opakované platby) – uchovávají se jako důkaz. */
+    consents: jsonb("consents"),
     createdAt: createdAt(),
     paidAt: ts("paid_at"),
   },
-  (t) => [index("orders_ws_idx").on(t.workspaceId, t.createdAt)],
+  (t) => [index("orders_ws_idx").on(t.workspaceId, t.createdAt), index("orders_status_idx").on(t.status, t.createdAt)],
 );
 
-export const paymentProvider = pgEnum("payment_provider", ["GOPAY", "MOCK"]);
+export const paymentProvider = pgEnum("payment_provider", ["GOPAY", "MOCK", "BANK"]);
 
 export const payments = pgTable(
   "payments",
@@ -407,6 +412,60 @@ export const subscriptions = pgTable(
   },
   (t) => [index("subs_ws_idx").on(t.workspaceId, t.status)],
 );
+
+/* ------------------------------------------------------------------ */
+/* Doklady (faktury)                                                  */
+/* ------------------------------------------------------------------ */
+
+/** Doklad o zaplacení – vystavuje se automaticky ke každé přijaté platbě (i k obnově předplatného). */
+export const invoices = pgTable(
+  "invoices",
+  {
+    id: id(),
+    number: text("number").notNull().unique(),
+    year: integer("year").notNull(),
+    seq: integer("seq").notNull(),
+    orderId: text("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "restrict" }),
+    paymentId: text("payment_id")
+      .notNull()
+      .unique()
+      .references(() => payments.id, { onDelete: "restrict" }),
+    workspaceId: text("workspace_id").notNull(),
+    userId: text("user_id").notNull(),
+    issuedAt: ts("issued_at").notNull().defaultNow(),
+    paidAt: ts("paid_at").notNull(),
+    supplier: jsonb("supplier").notNull(),
+    customer: jsonb("customer").notNull(),
+    items: jsonb("items").notNull(),
+    totalHaler: integer("total_haler").notNull(),
+    currency: text("currency").notNull().default("CZK"),
+    paymentMethod: text("payment_method").notNull(),
+    variableSymbol: text("variable_symbol"),
+    note: text("note"),
+    canceledAt: ts("canceled_at"),
+  },
+  (t) => [uniqueIndex("invoices_year_seq_uq").on(t.year, t.seq), index("invoices_ws_idx").on(t.workspaceId, t.issuedAt)],
+);
+
+/** Číselná řada dokladů po letech. */
+export const invoiceCounters = pgTable("invoice_counters", {
+  year: integer("year").primaryKey(),
+  last: integer("last").notNull().default(0),
+});
+
+/* ------------------------------------------------------------------ */
+/* Nastavení webu (správce)                                           */
+/* ------------------------------------------------------------------ */
+
+/** Nastavení a texty webu upravitelné ve správě (klíč → JSON). */
+export const siteSettings = pgTable("site_settings", {
+  key: text("key").primaryKey(),
+  value: jsonb("value").notNull(),
+  updatedById: text("updated_by_id"),
+  updatedAt: updatedAt(),
+});
 
 /* ------------------------------------------------------------------ */
 /* Šablony                                                            */

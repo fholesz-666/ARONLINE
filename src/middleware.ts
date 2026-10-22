@@ -2,26 +2,39 @@
  * Middleware: bezpečnostní hlavičky a ochrana proti CSRF (kontrola Origin u mutujících požadavků).
  */
 import { NextResponse, type NextRequest } from "next/server";
+import { canonicalUrl, isAllowedOrigin } from "./lib/origin";
 
 const MUTATING = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 /** Endpointy volané třetí stranou (platební brána) – bez kontroly Origin. */
 const ORIGIN_EXEMPT = ["/api/payments/notify"];
 
-function allowedOrigin(req: NextRequest): string {
-  const appUrl = process.env.APP_URL;
-  if (appUrl) return new URL(appUrl).origin;
-  return req.nextUrl.origin;
+/** Host, na který prohlížeč skutečně poslal požadavek (za proxy Renderu). */
+function requestHost(req: NextRequest): string | null {
+  return (req.headers.get("x-forwarded-host") ?? req.headers.get("host"))?.split(",")[0].trim().toLowerCase() ?? null;
 }
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  const target = canonicalUrl({
+    appUrl: process.env.APP_URL,
+    host: requestHost(req),
+    method: req.method,
+    pathname,
+    search: req.nextUrl.search,
+  });
+  if (target) return NextResponse.redirect(target, 308);
+
   if (pathname.startsWith("/api/") && MUTATING.has(req.method) && !ORIGIN_EXEMPT.includes(pathname)) {
-    const origin = req.headers.get("origin");
-    const expected = allowedOrigin(req);
-    // Prohlížeče posílají Origin u všech POST požadavků; jeho absence nebo nesoulad = odmítnout.
-    if (!origin || (origin !== expected && origin !== req.nextUrl.origin)) {
+    // Prohlížeče posílají Origin u všech POST požadavků; jeho absence nebo cizí původ = odmítnout.
+    const ok = isAllowedOrigin(req.headers.get("origin"), {
+      appUrl: process.env.APP_URL,
+      allowedOrigins: process.env.ALLOWED_ORIGINS,
+      nextOrigin: req.nextUrl.origin,
+      host: requestHost(req),
+    });
+    if (!ok) {
       return NextResponse.json({ error: "forbidden", message: "Neplatný původ požadavku." }, { status: 403 });
     }
   }

@@ -75,8 +75,13 @@ export async function requireRegistered(): Promise<Current> {
   return c;
 }
 
+/** Správce služby – role ADMIN a ověřený e-mail. */
 export async function requireAdmin(): Promise<Current> {
   const c = await requireUser();
-  if (c.user.role !== "ADMIN") throw forbidden();
+  if (c.user.role !== "ADMIN" || !c.user.emailVerified) throw forbidden();
   return c;
+}
+
+export function isAdmin(c: Current | null | undefined): boolean {
+  return Boolean(c && c.user.role === "ADMIN" && c.user.emailVerified);
 }

@@ -3,11 +3,16 @@ import Link from "next/link";
 import { LIABILITY_CONFIRMATION } from "@/config/liability";
 import { FvsolPromo } from "@/components/fvsol";
 import { LegalDraftNotice, Operator } from "@/components/legal";
+import { PCI_NOTE, RECURRENCE_MAX_MONTHS } from "@/config/recurrence";
+import { getSettings } from "@/server/services/settings";
 
 export const metadata: Metadata = { title: "Obchodní podmínky" };
 
-export default function TermsPage() {
-  const vat = process.env.OPERATOR_VAT_PAYER === "true";
+export const dynamic = "force-dynamic";
+
+export default async function TermsPage() {
+  const { operator, bank } = await getSettings();
+  const vat = operator.vatPayer;
   return (
     <article className="prose-legal mx-auto max-w-3xl px-4 py-12">
       <h1 className="text-3xl">Obchodní podmínky služby ARONLINE</h1>
@@ -46,18 +51,68 @@ export default function TermsPage() {
       <h2>3. Ceny a platby</h2>
       <ol>
         <li>
-          Aktuální ceny jsou uvedeny v <Link href="/cenik">ceníku</Link>. Ceny jsou konečné{vat ? " a zahrnují DPH" : "; provozovatel není plátcem DPH"}.
+          Aktuální ceny jsou uvedeny v <Link href="/cenik">ceníku</Link>. Ceny jsou konečné v Kč{vat ? " a zahrnují DPH" : "; provozovatel není plátcem DPH"}. Služba
+          se poskytuje elektronicky, žádné náklady na dodání se neúčtují.
         </li>
         <li>
-          Jednorázová analýza a balíček analýz se hradí předem. Kredity se připíší po potvrzení platby platební bránou. Kredity nemají omezenou platnost, nejsou převoditelné
-          mimo pracovní prostor a nelze je směnit za peníze.
+          Platit lze <strong>platební kartou online</strong> prostřednictvím platební brány GoPay s.r.o.
+          {bank.enabled ? (
+            <>
+              {" "}
+              nebo <strong>bankovním převodem</strong> na účet provozovatele {bank.account} s variabilním symbolem uvedeným v objednávce (jen jednorázová analýza a balíček)
+            </>
+          ) : null}
+          . Provozovatel nemá přístup k údajům o platebních kartách.
         </li>
         <li>
-          Předplatné se hradí kartou a automaticky se obnovuje po uplynutí zaplaceného období. Uživatel může předplatné kdykoli zrušit. Zrušení se projeví ke konci zaplaceného
-          období, již uhrazená částka se nevrací.
+          Jednorázová analýza a balíček analýz se hradí předem. Kredity se připíší po potvrzení platby platební bránou, u převodu po připsání platby na účet
+          provozovatele (obvykle 1–2 pracovní dny). Neuhrazená objednávka převodem se po uplynutí splatnosti může zrušit. Kredity nemají omezenou platnost, nejsou
+          převoditelné mimo pracovní prostor a nelze je směnit za peníze.
         </li>
-        <li>Platby zpracovává GoPay s.r.o. Provozovatel nemá přístup k údajům o platebních kartách.</li>
-        <li>Úhrada se považuje za provedenou až potvrzením platby platební bránou; samotné přesměrování z brány není potvrzením platby.</li>
+        <li>Úhrada se považuje za provedenou až potvrzením platby platební bránou nebo připsáním na účet; samotné přesměrování z brány není potvrzením platby.</li>
+        <li>
+          Ke každé přijaté platbě (i k obnově předplatného) se automaticky vystaví doklad (faktura). Doklad je dostupný v aplikaci v sekci Předplatné a kredity
+          a zasílá se e-mailem.
+        </li>
+      </ol>
+
+      <h3 id="opakovane-platby">3.1 Předplatné a opakované platby</h3>
+      <ol>
+        <li>
+          Předplatné se hradí výhradně platební kartou formou <strong>automatické opakované platby</strong> prostřednictvím GoPay s.r.o. Důvodem opakované platby je
+          úhrada předplatného zvoleného tarifu.
+        </li>
+        <li>
+          První platba se provede při objednávce. Další platby se strhávají automaticky <strong>jednou měsíčně</strong>, vždy v den odpovídající datu první platby
+          (frekvence i datum jsou fixní), a to <strong>v pevné výši ceny tarifu platné v okamžiku objednávky</strong>; tato částka je zároveň nejvyšší částkou jedné
+          opakované platby.
+        </li>
+        <li>
+          Opakovaná platba se zakládá na dobu neurčitou do jejího zrušení, nejdéle však na {RECURRENCE_MAX_MONTHS / 12} let od založení.
+        </li>
+        <li>
+          Před založením opakované platby se zákazníkovi na samostatném místě objednávky zobrazí její parametry. Opakovaná platba se založí jen po výslovném
+          souhlasu zákazníka (zaškrtnutím) s jejími parametry a s uložením údajů o platební kartě u GoPay. {PCI_NOTE} Souhlas včetně zobrazených parametrů, data
+          a času provozovatel uchovává po dobu trvání předplatného a nejméně 12 měsíců po jeho skončení.
+        </li>
+        <li>
+          Založení opakované platby provozovatel potvrdí zákazníkovi e-mailem nejpozději do 2 pracovních dnů. O každé další platbě zákazník obdrží e-mail s dokladem.
+        </li>
+        <li>
+          Provozovatel bude zákazníka informovat e-mailem nejméně 7 pracovních dní předem o jakékoli změně parametrů opakované platby (např. výše částky nebo
+          frekvence) a před stržením platby, pokud od předchozí opakované platby uplynulo více než 6 měsíců. Změna ceny tarifu v ceníku se na již založené opakované
+          platby nevztahuje.
+        </li>
+        <li>
+          <strong>Zrušení:</strong> zákazník může opakovanou platbu kdykoli zrušit v aplikaci tlačítkem „Zrušit předplatné“ v sekci Předplatné a kredity, nebo
+          e-mailem na <a href={`mailto:${operator.email}`}>{operator.email}</a>. Zrušením se okamžitě zastaví další platby; předplatné lze využívat do konce již
+          zaplaceného období, již uhrazená částka se nevrací. Zrušení provozovatel potvrdí e-mailem.
+        </li>
+        <li>
+          Změnu nastavení opakované platby (např. změnu tarifu) lze provést zrušením stávajícího předplatného a objednáním nového, případně po dohodě e-mailem na{" "}
+          {operator.email}.
+        </li>
+        <li>Pokud se opakovanou platbu nepodaří strhnout ani po opakovaných pokusech, předplatné skončí uplynutím zaplaceného období.</li>
       </ol>
 
       <h2>4. Odemčení analýzy</h2>
@@ -72,8 +127,11 @@ export default function TermsPage() {
           s datem a verzí textu.
         </li>
         <li>
-          Vzhledem k povaze digitálního obsahu, který je zpřístupněn ihned po zaplacení, nelze po odemčení od smlouvy odstoupit; tím nejsou dotčena práva z vadného plnění
-          (čl. 7).
+          Spotřebitel může od smlouvy odstoupit bez udání důvodu do 14 dnů od jejího uzavření, a to e-mailem na {operator.email}; provozovatel vrátí přijatou
+          platbu do 14 dnů stejným platebním prostředkem. Odstoupit nelze od smlouvy o dodání digitálního obsahu, pokud byl obsah se souhlasem spotřebitele
+          zpřístupněn před uplynutím lhůty (§ 1837 písm. l) občanského zákoníku): odemčením analýzy spotřebitel výslovně žádá o okamžité zpřístupnění dokumentace
+          a bere na vědomí, že tím u odemčené analýzy právo na odstoupení zaniká. U balíčku se vrací poměrná část za nevyčerpané kredity, u předplatného poměrná část
+          za dny do odstoupení, pokud v něm dosud nebyla odemčena žádná analýza. Tím nejsou dotčena práva z vadného plnění (čl. 7).
         </li>
       </ol>
 

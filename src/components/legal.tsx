@@ -1,4 +1,5 @@
 import { OPERATOR } from "@/config/operator";
+import { getSettings } from "@/server/services/settings";
 
 export function LegalDraftNotice() {
   return (
@@ -8,20 +9,23 @@ export function LegalDraftNotice() {
   );
 }
 
-export function Operator() {
-  const { name, ico, address, email, web } = OPERATOR;
+/** Identifikace provozovatele z nastavení správy (server component). */
+export async function Operator() {
+  const { operator } = await getSettings();
+  const { name, ico, address, email, phone } = operator;
   return (
     <>
       {name}
       {ico ? `, IČO ${ico}` : ", IČO [doplnit]"}
-      {address ? `, se sídlem ${address}` : ", sídlo [doplnit]"} (FVSOL –{" "}
-      <a className="link" href={web} rel="noopener">
+      {address ? `, s místem podnikání ${address}` : ", sídlo [doplnit ve správě]"} (FVSOL –{" "}
+      <a className="link" href={OPERATOR.web} rel="noopener">
         fvsol.cz
       </a>
       ), e-mail{" "}
       <a className="link" href={`mailto:${email}`}>
         {email}
       </a>
+      {phone ? `, tel. ${phone}` : ""}
     </>
   );
 }

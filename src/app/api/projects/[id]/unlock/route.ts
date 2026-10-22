@@ -22,6 +22,11 @@ export const POST = handler(async (req: Request, ctx: Ctx) => {
     workspaceId: c.workspaceId,
     meta: { projectId: id, version: LIABILITY_VERSION },
   });
-  const u = await unlockProject({ workspaceId: c.workspaceId, projectId: id, userId: c.user.id });
+  const u = await unlockProject({
+    workspaceId: c.workspaceId,
+    projectId: id,
+    userId: c.user.id,
+    asAdmin: c.user.role === "ADMIN" && c.user.emailVerified,
+  });
   return json({ ok: true, source: u.source });
 });

@@ -3,6 +3,7 @@ import { FvsolPromo } from "@/components/fvsol";
 import { RESULT_DISCLAIMER } from "@/config/liability";
 import { OPERATOR } from "@/config/operator";
 import { getPublicProducts, PricingTable } from "@/components/pricing";
+import { getSettings } from "@/server/services/settings";
 import { getVerificationSummary } from "@/core/risk/methodologies/csn-en-62305-2-ed2/verification";
 import { JsonLd } from "@/components/json-ld";
 import { SITE_URL } from "@/config/site";
@@ -66,6 +67,7 @@ export default async function HomePage() {
   const products = await getPublicProducts();
   const v = getVerificationSummary();
   const single = products.find((p) => p.code === "SINGLE");
+  const { texts, operator } = await getSettings();
   return (
     <>
       <JsonLd
@@ -93,7 +95,7 @@ export default async function HomePage() {
             "@type": "Organization",
             name: "FVSOL",
             url: "https://fvsol.cz",
-            email: OPERATOR.email,
+            email: OPERATOR.projectEmail,
             founder: { "@type": "Person", name: "Filip Holesz" },
             knowsAbout: ["ochrana před bleskem", "analýza rizika LPS", "fotovoltaické elektrárny", "ČSN EN 62305"],
           },
@@ -102,13 +104,11 @@ export default async function HomePage() {
       <section className="border-b border-line bg-sheet">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 lg:grid-cols-[1.1fr_1fr] lg:py-20">
           <div>
-            <h1 className="text-[2.1rem] sm:text-[2.6rem]">Analýza rizika LPS online – ochrana před bleskem podle ČSN EN 62305-2</h1>
+            <h1 className="text-[2.1rem] sm:text-[2.6rem]">{texts.homeTitle}</h1>
             <p className="mt-3 text-lg font-semibold text-ink">
               Výpočet rizika úderu blesku bez přepisování podkladů{single ? ` – jedna analýza za ${single.priceCzk} Kč` : ""}.
             </p>
-            <p className="mt-5 max-w-[60ch] text-lg text-ink-soft">
-              Ověření rizika podle ČSN EN 62305-2 ed. 2 (výpočet podle ed. 3 nasadíme od 10/2027). Budovu a okolí načte z katastru, bouřkové dny z mapy ČR, výpočet vede krok za krokem a dokumentaci vydá s vaším razítkem v PDF i ve Wordu.
-            </p>
+            <p className="mt-5 max-w-[60ch] text-lg text-ink-soft">{texts.homeLead}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/registrace" className="btn btn-primary px-5 py-2.5">
                 Založit účet zdarma
@@ -120,7 +120,7 @@ export default async function HomePage() {
                 Prohlédnout ceník
               </Link>
             </div>
-            <p className="mt-4 text-sm text-muted">Platíte až za stažení hotové dokumentace. Rozpracované analýzy se ukládají automaticky.</p>
+            <p className="mt-4 text-sm text-muted">{texts.homeNote}</p>
             <p className="mt-2 text-sm text-muted">
               Nechcete počítat sami? Analýzu rizika i celý projekt hromosvodu nebo FVE vám zpracujeme –{" "}
               <a className="link" href="https://fvsol.cz/?utm_source=aronline&utm_medium=web&utm_campaign=hero" rel="noopener">
@@ -164,8 +164,8 @@ export default async function HomePage() {
             <a className="btn btn-primary px-5 py-2.5" href="https://fvsol.cz/?utm_source=aronline&utm_medium=web&utm_campaign=sluzby" rel="noopener">
               Nezávazná poptávka na fvsol.cz
             </a>
-            <a className="link text-sm" href={`mailto:${OPERATOR.email}`}>
-              {OPERATOR.email}
+            <a className="link text-sm" href={`mailto:${OPERATOR.projectEmail}`}>
+              {OPERATOR.projectEmail}
             </a>
           </div>
         </div>
@@ -199,31 +199,13 @@ export default async function HomePage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pt-12">
-        <h2 className="text-2xl">Analýza rizika LPS – průvodce</h2>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
-          {(
-            [
-              ["/analyza-rizika-lps", "Co je analýza rizika LPS", "Kdy ji zpracovat, co se počítá a jaké podklady budete potřebovat."],
-              ["/analyza-rizika-fve", "Analýza rizika u fotovoltaiky", "Co se mění po instalaci FVE na střechu a jak zadat vedení a střídač."],
-              ["/casto-kladene-otazky", "Časté otázky", "Norma, cena, doba zpracování, ed. 2 a ed. 3, odpovědnost zpracovatele."],
-            ] as const
-          ).map(([href, t, d]) => (
-            <Link key={href} href={href} className="panel block p-5 no-underline hover:border-ink">
-              <h3 className="text-base">{t}</h3>
-              <p className="mt-1 text-sm text-ink-soft">{d}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 pt-12">
         <FvsolPromo context="home" />
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16" id="cenik">
         <h2 className="text-2xl">Ceník</h2>
         <p className="mt-2 max-w-[70ch] text-ink-soft">
-          Analýzu založíte, vyplníte a spočítáte zdarma. Platíte za odemčení dokumentace konkrétního objektu. Ceny jsou konečné{process.env.OPERATOR_VAT_PAYER === "true" ? " včetně DPH" : ", provozovatel není plátcem DPH"}.
+          {texts.pricingIntro} Ceny jsou konečné{operator.vatPayer ? " včetně DPH" : ", provozovatel není plátcem DPH"}. Platit můžete kartou online nebo bankovním převodem.
         </p>
         <div className="mt-8">
           <PricingTable products={products} />

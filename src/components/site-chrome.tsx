@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { OPERATOR } from "@/config/operator";
 import { getCurrent } from "@/server/auth/session";
+import { getSettings } from "@/server/services/settings";
 import { Brand } from "./brand";
 
 export async function SiteHeader() {
@@ -10,11 +10,17 @@ export async function SiteHeader() {
   } catch {
     loggedIn = false;
   }
+  const { texts } = await getSettings();
   return (
     <header className="border-b border-line bg-sheet">
+      {texts.announcement && (
+        <div className="border-b border-signal bg-signal-soft">
+          <p className="mx-auto max-w-6xl px-4 py-2 text-sm">{texts.announcement}</p>
+        </div>
+      )}
       <div className="bg-ink text-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-1.5 text-xs">
-          <span>Projekce hromosvodů (LPS) a fotovoltaických elektráren na klíč – DSP, DPS, analýza rizika, přepěťové ochrany.</span>
+          <span>{texts.topBar}</span>
           <a className="font-semibold text-white underline underline-offset-2" href="https://fvsol.cz/?utm_source=aronline&utm_medium=web&utm_campaign=lista" rel="noopener">
             Poptat na fvsol.cz →
           </a>
@@ -52,46 +58,46 @@ export async function SiteHeader() {
   );
 }
 
-export function SiteFooter() {
-  const operator = OPERATOR.name;
-  const ico = OPERATOR.ico;
-  const email = OPERATOR.email;
+export async function SiteFooter() {
+  const { operator, texts } = await getSettings();
   return (
     <footer className="mt-16 border-t border-line bg-sheet">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-ink-soft md:grid-cols-3">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-ink-soft md:grid-cols-4">
         <div>
           <p className="type-wide font-semibold text-ink">ARONLINE</p>
-          <p className="mt-1 max-w-xs">Analýza rizika ochrany před bleskem pro projektanty elektro a LPS.</p>
-          {operator && (
-            <p className="mt-3">
-              Provozovatel: {operator}
-              {ico && <>, IČO {ico}</>}
-              {email && (
-                <>
-                  <br />
-                  <a className="link" href={`mailto:${email}`}>
-                    {email}
-                  </a>
-                </>
-              )}
-            </p>
-          )}
+          <p className="mt-1 max-w-xs">{texts.footerAbout}</p>
+          <p className="mt-3">
+            Provozovatel: {operator.name}
+            {operator.ico && <>, IČO {operator.ico}</>}
+            {operator.address && (
+              <>
+                <br />
+                {operator.address}
+              </>
+            )}
+            <br />
+            <a className="link" href={`mailto:${operator.email}`}>
+              {operator.email}
+            </a>
+            {operator.phone && (
+              <>
+                <br />
+                <a className="link" href={`tel:${operator.phone.replace(/\s+/g, "")}`}>
+                  {operator.phone}
+                </a>
+              </>
+            )}
+          </p>
         </div>
         <nav className="flex flex-col gap-1.5" aria-label="Informace">
-          <Link className="link" href="/analyza-rizika-lps">
-            Analýza rizika LPS podle ČSN EN 62305-2
-          </Link>
-          <Link className="link" href="/analyza-rizika-fve">
-            Analýza rizika u fotovoltaiky (FVE)
-          </Link>
-          <Link className="link" href="/casto-kladene-otazky">
-            Časté otázky
-          </Link>
           <Link className="link" href="/cenik">
             Ceník a podmínky tarifů
           </Link>
           <Link className="link" href="/metodika">
             Metodika a stav ověření výpočtu
+          </Link>
+          <Link className="link" href="/kontakty">
+            Kontakty
           </Link>
           <Link className="link" href="/pravni/obchodni-podminky">
             Obchodní podmínky
@@ -103,6 +109,20 @@ export function SiteFooter() {
             Reklamace a řešení chyb
           </Link>
         </nav>
+        <nav className="flex flex-col gap-1.5" aria-label="Průvodce">
+          <Link className="link" href="/analyza-rizika-lps">
+            Co je analýza rizika LPS
+          </Link>
+          <Link className="link" href="/analyza-rizika-fve">
+            Analýza rizika u fotovoltaiky
+          </Link>
+          <Link className="link" href="/casto-kladene-otazky">
+            Časté otázky
+          </Link>
+          <Link className="link" href="/o-aplikaci">
+            O aplikaci
+          </Link>
+        </nav>
         <div>
           <p className="font-semibold text-ink">Související služby</p>
           <p className="mt-1">
@@ -112,9 +132,27 @@ export function SiteFooter() {
             </a>
             .
           </p>
+          <PaymentMethods />
           <p className="mt-4 text-xs text-muted">Mapové podklady a geodata © ČÚZK (CC BY 4.0).</p>
         </div>
       </div>
     </footer>
+  );
+}
+
+/** Přijímané platební metody (náležitost prodejního místa podle GoPay). */
+export function PaymentMethods() {
+  const badge = "rounded-sm border border-line bg-paper px-1.5 py-0.5 text-[0.6875rem] font-semibold tracking-wide text-ink";
+  return (
+    <div className="mt-4">
+      <p className="text-xs text-muted">Platby kartou zabezpečuje GoPay</p>
+      <div className="mt-1 flex flex-wrap gap-1" aria-label="Přijímané platební metody">
+        <span className={badge}>VISA</span>
+        <span className={badge}>Mastercard</span>
+        <span className={badge}>3-D Secure</span>
+        <span className={badge}>GoPay</span>
+        <span className={badge}>převod / QR platba</span>
+      </div>
+    </div>
   );
 }

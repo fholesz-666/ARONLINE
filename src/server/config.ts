@@ -3,6 +3,7 @@
  * Tajné hodnoty se nikdy nelogují.
  */
 import { z } from "zod";
+import { OWNER_ADMIN_EMAILS } from "@/config/operator";
 
 const bool = (def: boolean) =>
   z
@@ -31,14 +32,14 @@ const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
   SMTP_SECURE: bool(false),
-  MAIL_FROM: z.string().default("ARONLINE <no-reply@localhost>"),
+  MAIL_FROM: z.string().default("ARONLINE <info@aronline.cz>"),
   /** Verze obchodních podmínek, se kterou uživatel souhlasí při registraci. */
   TERMS_VERSION: z.string().default("2026-10-návrh"),
   /** Identifikace provozovatele pro patičku a doklady. */
   OPERATOR_NAME: z.string().default("Filip Holesz"),
-  OPERATOR_ICO: z.string().default(""),
+  OPERATOR_ICO: z.string().default("09000461"),
   OPERATOR_ADDRESS: z.string().default(""),
-  OPERATOR_EMAIL: z.string().default("projekce@fvsol.cz"),
+  OPERATOR_EMAIL: z.string().default("info@aronline.cz"),
   /** E-maily správců (role ADMIN se přidělí při registraci). */
   ADMIN_EMAILS: z.string().default(""),
 });
@@ -72,9 +73,11 @@ export function getConfig(): AppConfig {
     ...c,
     isProduction,
     gopayConfigured,
-    adminEmails: c.ADMIN_EMAILS.split(",")
-      .map((s) => s.trim().toLowerCase())
-      .filter(Boolean),
+    adminEmails: [
+      ...new Set(
+        [...c.ADMIN_EMAILS.split(","), ...OWNER_ADMIN_EMAILS].map((s) => s.trim().toLowerCase()).filter(Boolean),
+      ),
+    ],
   };
   return cached;
 }

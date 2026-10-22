@@ -43,6 +43,7 @@ async function pay(u: TestUser, productCode: string, projectId?: string, state: 
     emailVerified: true,
     productCode,
     projectId,
+    recurrenceConsent: true,
   });
   const pid = new URL(gwUrl).searchParams.get("id")!;
   m.mock.MockGateway.setState(pid, state);

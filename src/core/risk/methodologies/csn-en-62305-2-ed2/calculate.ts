@@ -627,9 +627,12 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
           { symbol: "KS4", value: KS4, source: { kind: "computed", equationId: E.KS4.id } },
         ],
       });
-      // Tab. B.4, pozn. 3: hodnoty CLD platí pro stíněné vnitřní systémy; pro nestíněné se uvažuje CLD = 1.
+      /* Tab. B.4, pozn. 3 a 4: CLD z tabulky platí pro stíněné vnitřní systémy; pro nestíněné se uvažuje CLD = 1.
+         Výjimkou jsou nestíněné systémy bez vnějšího vedení, s oddělovacím rozhraním nebo s vedením v bleskově
+         odolném kabelu / kovovém kanálu (pozn. 4) – tam platí hodnota z tabulky, je-li indukované napětí Ui ≤ UW.
+         Ostatní řádky tab. B.4 mají CLD = 1, takže výsledek je CLD z tabulky. */
       const shieldedInternal = sys.ks3 === "shielded_bonded";
-      const CLDpc = shieldedInternal ? CLD : 1;
+      const CLDpc = CLD;
       const PCi = step({
         key: sp + "PC",
         symbol: "PCi",
@@ -641,11 +644,12 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
         normRef: E.PC.normRef,
         inputs: [
           { symbol: "PSPD", value: PSPD, source: tableSource(T.TABLE_PSPD, sys.pspd), label: T.TABLE_PSPD.rows[sys.pspd].label },
-          shieldedInternal
-            ? { symbol: "CLD", value: CLD, source: tableSource(T.TABLE_CLD_CLI, clRow), label: T.TABLE_CLD_CLI.rows[clRow].label }
-            : { symbol: "CLD", value: 1, source: { kind: "default", note: "nestíněný vnitřní systém – tab. B.4, pozn. 3" } },
+          { symbol: "CLD", value: CLD, source: tableSource(T.TABLE_CLD_CLI, clRow), label: T.TABLE_CLD_CLI.rows[clRow].label },
         ],
-        notes: shieldedInternal || CLD === 1 ? undefined : ["Nestíněný vnitřní systém: pro PC se uvažuje CLD = 1 (tab. B.4, pozn. 3)."],
+        notes:
+          !shieldedInternal && CLD === 0
+            ? ["Nestíněný vnitřní systém s CLD = 0 (tab. B.4, pozn. 4): předpokládá se indukované napětí Ui ≤ UW – ověřte podle ČSN EN 62305-4, příl. A."]
+            : undefined,
       });
       // Čl. B.5: u zařízení nevyhovujících výrobkovým normám (odolnost, výdržné napětí) se uvažuje PM = 1.
       const nonCompliant = sys.nonCompliant === true;

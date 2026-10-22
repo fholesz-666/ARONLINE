@@ -40,7 +40,7 @@ souběžně s ed. 3 do 31. 10. 2027. Opraveno / doplněno podle textu:
 | Bod normy | Co aplikace dělala | Nově |
 |---|---|---|
 | čl. 6.9.1 | jen 1 systém na vedení | více systémů na vedení; RU, RV, RW, RZ z nejhorší hodnoty parametru (max PSPD, min UW); PC a PM kombinací (rov. 14, 15) |
-| tab. B.4, pozn. 3 | CLD z tabulky i pro nestíněné vnitřní systémy | pro PC u nestíněných vnitřních systémů CLD = 1 |
+| tab. B.4, pozn. 3 a 4 | – | CLD z tabulky; u nestíněných systémů s CLD = 0 upozornění na podmínku Ui ≤ UW (pozn. 4) |
 | čl. B.5 | – | volba „zařízení nevyhovuje výrobkovým normám“ → PM = 1 |
 | text pod tab. C.4 | rp podle opatření i u výbuchu | stavby s rizikem výbuchu: rp = 1 |
 | pozn. 2 k čl. A.4 | AL = 40·LL vždy | volitelná korekce AL·√(ρ/400) pro vedení v zemi (shodné s Prozikem) |

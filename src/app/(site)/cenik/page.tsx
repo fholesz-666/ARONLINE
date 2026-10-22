@@ -3,7 +3,11 @@ import Link from "next/link";
 import { FvsolPromo } from "@/components/fvsol";
 import { getPublicProducts, PricingTable } from "@/components/pricing";
 
-export const metadata: Metadata = { title: "Ceník" };
+export const metadata: Metadata = {
+  title: "Ceník analýzy rizika LPS – od 149 Kč",
+  description: "Ceny analýzy rizika ochrany před bleskem: jednorázová analýza 149 Kč i bez registrace, balíček 20 analýz, předplatné pro projektanty a firmy.",
+  alternates: { canonical: "/cenik" },
+};
 export const dynamic = "force-dynamic";
 
 export default async function PricingPage() {

@@ -3,7 +3,11 @@ import { getVerificationSummary, listVerificationItems, NORMATIVE_DATA_HASH } fr
 import { CORE_VERSION } from "@/core/risk";
 import { METHODOLOGIES } from "@/core/risk/registry";
 
-export const metadata: Metadata = { title: "Metodika a stav ověření" };
+export const metadata: Metadata = {
+  title: "Metodika výpočtu rizika podle ČSN EN 62305-2",
+  description: "Jak ARONLINE počítá riziko úderu blesku: tabulky a rovnice ČSN EN 62305-2 ed. 2, stav ověření a porovnání s programem Prozik.",
+  alternates: { canonical: "/metodika" },
+};
 
 const STATUS: Record<string, string> = { unverified: "Neověřeno", verified: "Ověřeno", rejected: "Zamítnuto – k opravě" };
 

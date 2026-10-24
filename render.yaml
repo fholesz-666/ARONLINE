@@ -1,11 +1,11 @@
-# Render Blueprint – webová služba + PostgreSQL (region Frankfurt, EU)
+# Render Blueprint – webová služba na tarifu Free (region Frankfurt, EU), databáze na Supabase
 # Návod: docs/deployment.md
 services:
   - type: web
     name: aronline
     runtime: node
     region: frankfurt
-    plan: starter
+    plan: free
     buildCommand: npm ci && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
@@ -15,9 +15,11 @@ services:
       - key: NODE_VERSION
         value: "22"
       - key: DATABASE_URL
-        fromDatabase:
-          name: aronline-db
-          property: connectionString
+        sync: false # Supabase → Connect → Session pooler (URI) s heslem k databázi
+      - key: DATABASE_SSL
+        value: "true"
+      - key: DATABASE_SSL_CA
+        sync: false # certifikát Supabase (Database Settings → SSL Configuration), viz docs/deployment.md
       - key: APP_ENV
         value: production
       - key: APP_URL
@@ -63,9 +65,3 @@ services:
       - key: GOOGLE_SITE_VERIFICATION
         sync: false # kód z Google Search Console (ověření meta značkou)
 
-databases:
-  - name: aronline-db
-    region: frankfurt
-    plan: basic-256mb
-    databaseName: aronline
-    postgresMajorVersion: "16"

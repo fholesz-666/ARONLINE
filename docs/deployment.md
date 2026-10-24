@@ -28,6 +28,7 @@ Popsány jsou dvě varianty:
    - `OPERATOR_*` – údaje provozovatele do patičky a právních textů,
    - `ADMIN_EMAILS` – váš e-mail (po registraci získáte roli správce).
 4. Databázové spojení na Renderu používá TLS: nastavte `DATABASE_SSL=true`. Pokud připojení selže kvůli certifikátu, nastavte navíc `DATABASE_SSL_INSECURE=true`. Interní spojení v rámci Renderu je šifrované i tak.
+   Databáze na **Supabase** (Session pooler, port 5432) používá vlastní certifikační autoritu: stáhněte certifikát (Supabase → Database Settings → SSL Configuration → Download certificate) a jeho obsah vložte do proměnné `DATABASE_SSL_CA`. `DATABASE_SSL_INSECURE` pak není potřeba.
 5. Migrace databáze a výchozí ceník se aplikují **automaticky při startu** (`src/instrumentation.ts`).
 6. V nastavení služby zkopírujte **Deploy Hook** do GitHub tajemství (bod 1.3). V `render.yaml` je `autoDeploy: false`, takže se nasazuje jen přes CI.
 

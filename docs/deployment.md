@@ -17,9 +17,8 @@ Popsány jsou dvě varianty:
 ## 2A. Render
 
 1. Účet na <https://render.com>, připojte GitHub.
-2. **New → Blueprint**, vyberte repozitář. Render načte `render.yaml` a založí:
-   - webovou službu `aronline` (Node 22, `npm ci && npm run build`, `npm start`, health check `/api/health`),
-   - databázi `aronline-db` (PostgreSQL 16, Frankfurt).
+2. **New → Blueprint**, vyberte repozitář. Render načte `render.yaml` a založí webovou službu `aronline` na tarifu **Free** (Node 22, `npm ci && npm run build`, `npm start`, health check `/api/health`).
+   Databáze běží na **Supabase** (projekt `aronline`, Frankfurt, tarif Free), ne na Renderu. Služba na tarifu Free se po 15 minutách bez provozu uspí; monitor UptimeRobot na `/api/health` každých 5 minut ji udrží vzhůru a zároveň brání uspání projektu Supabase.
    Při importu Blueprintu Render ukáže chyby, pokud se mezitím změnil formát `render.yaml` nebo názvy tarifů. Pak je opravte podle hlášky.
 3. Doplňte proměnné označené `sync: false` (Render se na ně při importu zeptá):
    - `APP_URL` – veřejná adresa, např. `https://aronline.cz`,
@@ -27,6 +26,8 @@ Popsány jsou dvě varianty:
    - `SMTP_*`, `MAIL_FROM` – odesílání e-mailů (ověření e-mailu, obnova hesla, pozvánky),
    - `OPERATOR_*` – údaje provozovatele do patičky a právních textů,
    - `ADMIN_EMAILS` – váš e-mail (po registraci získáte roli správce).
+   - `DATABASE_URL` – Supabase → Connect → Session pooler (URI) s heslem k databázi,
+   - `DATABASE_SSL_CA` – certifikát Supabase (viz bod 4).
 4. Databázové spojení na Renderu používá TLS: nastavte `DATABASE_SSL=true`. Pokud připojení selže kvůli certifikátu, nastavte navíc `DATABASE_SSL_INSECURE=true`. Interní spojení v rámci Renderu je šifrované i tak.
    Databáze na **Supabase** (Session pooler, port 5432) používá vlastní certifikační autoritu: stáhněte certifikát (Supabase → Database Settings → SSL Configuration → Download certificate) a jeho obsah vložte do proměnné `DATABASE_SSL_CA`. `DATABASE_SSL_INSECURE` pak není potřeba.
 5. Migrace databáze a výchozí ceník se aplikují **automaticky při startu** (`src/instrumentation.ts`).

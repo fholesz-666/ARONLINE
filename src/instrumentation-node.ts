@@ -8,11 +8,9 @@ export async function runStartupTasks() {
   const { drizzle } = await import("drizzle-orm/node-postgres");
   const { migrate } = await import("drizzle-orm/node-postgres/migrator");
   const { seedProducts } = await import("./server/services/billing");
+  const { sslOptions } = await import("./server/db");
 
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_SSL === "true" ? { rejectUnauthorized: process.env.DATABASE_SSL_INSECURE !== "true" } : undefined,
-  });
+  const client = new Client({ connectionString: process.env.DATABASE_URL, ssl: sslOptions() });
   await client.connect();
   try {
     // zámek na jednom spojení – brání souběžným migracím při více instancích

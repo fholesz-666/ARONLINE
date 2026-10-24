@@ -13,8 +13,17 @@ function createPool(): Pool {
   return new Pool({
     connectionString: url,
     max: Number(process.env.DATABASE_POOL_MAX ?? 10),
-    ssl: process.env.DATABASE_SSL === "true" ? { rejectUnauthorized: process.env.DATABASE_SSL_INSECURE !== "true" } : undefined,
+    ssl: sslOptions(),
   });
+}
+
+/** TLS pro spojení s DB. DATABASE_SSL_CA = vlastní certifikační autorita v PEM (např. Supabase). */
+export function sslOptions() {
+  if (process.env.DATABASE_SSL !== "true") return undefined;
+  return {
+    rejectUnauthorized: process.env.DATABASE_SSL_INSECURE !== "true",
+    ca: process.env.DATABASE_SSL_CA?.replace(/\\n/g, "\n") || undefined,
+  };
 }
 
 /** Sdílené připojení k DB (v dev režimu přežije hot-reload). */

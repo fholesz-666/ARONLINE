@@ -22,6 +22,6 @@
 | Ztráty LT, LF, LO | typické hodnoty z tabulek normy podle druhu objektu | normové (neověřené) | potvrdit nebo zadat vlastní hodnotu se zdůvodněním |
 | Ochranná opatření (LPS, SPD, stínění) | – | – | zadat navržený stav |
 
-Každý automaticky převzatý nebo předvyplněný údaj má v aplikaci štítek původu („převzato“, „předvolba“, „výchozí“, „ručně“), zdroj a datum. V kroku **Kontrola údajů** ho projektant potvrdí. Nepotvrzené údaje se vypíší v upozorněních dokumentu.
+Každý automaticky převzatý nebo předvyplněný údaj má v aplikaci štítek původu („převzato“, „předvolba“, „výchozí“, „ručně“), zdroj a datum. V kroku **Kontrola údajů** ho projektant potvrdí. V dokumentu je stav potvrzení uveden v tabulce v kap. 5 (sloupec „Potvrzeno“).
 
 Rozlišení údajů o vedení: **ověřeno** (vyjádření / projekt správce), **orientačně** (mapa, prohlídka), **neověřeno – nutno od správce sítě**, **zadal projektant**.

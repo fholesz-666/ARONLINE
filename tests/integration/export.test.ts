@@ -47,6 +47,18 @@ describe("export dokumentace", () => {
     const docx = await m.exp.exportDocument({ userId: user.id, workspaceId: workspace.id, projectId: p.id, format: "DOCX" });
     expect(docx.body.subarray(0, 2).toString()).toBe("PK");
 
+    // obsah dokumentu: bez odkazů na fvsol a bez upozornění na správnost; v závěru třída LPS a LPL
+    const JSZip = (await import("jszip")).default;
+    const zip = await JSZip.loadAsync(docx.body);
+    const xml = (await Promise.all(Object.keys(zip.files).filter((f) => f.startsWith("word/") && f.endsWith(".xml")).map((f) => zip.file(f)!.async("string")))).join("");
+    const text = xml.replace(/<[^>]+>/g, "");
+    expect(text).not.toMatch(/fvsol/i);
+    expect(text).not.toContain("Odpovědnost zpracovatele");
+    expect(text).not.toContain("neručí");
+    expect(text).not.toContain("orientační odhad");
+    expect(text).toContain("Třída LPS");
+    expect(text).toContain("LPL");
+
     await expect(
       m.exp.exportDocument({ userId: other.user.id, workspaceId: other.workspace.id, projectId: p.id, format: "PDF" }),
     ).rejects.toMatchObject({ status: 404 });

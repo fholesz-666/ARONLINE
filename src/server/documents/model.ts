@@ -3,12 +3,11 @@
  * Veškeré texty závěru se odvozují výhradně z vypočtených hodnot.
  */
 import { buildingType } from "@/catalog";
-import { LIABILITY_DOCUMENT_TEXT, RESULT_DISCLAIMER } from "@/config/liability";
 import type { Ed2CalculationResult } from "@/core/risk/methodologies/csn-en-62305-2-ed2";
 import { COMPONENTS, UNPROTECTED_DESCRIPTION, type Component, type Ed2ScenarioResult } from "@/core/risk/methodologies/csn-en-62305-2-ed2/calculate";
 import type { Ed2Input, LossValueInput } from "@/core/risk/methodologies/csn-en-62305-2-ed2/schema";
 import * as T from "@/core/risk/methodologies/csn-en-62305-2-ed2/tables";
-import type { MethodologyInfo } from "@/core/risk/registry";
+import { METHODOLOGIES, type MethodologyInfo } from "@/core/risk/registry";
 import { fmtNum, fmtRisk } from "@/core/util/format";
 import { DOC_STAGE_LABELS, type FieldMeta, type Identification, type ProcessorData } from "@/domain/project";
 
@@ -26,8 +25,6 @@ export interface ReportModel {
   subtitle: string;
   projectName: string;
   unverified: boolean;
-  /** Upozornění na orientační povahu výsledku – titulní strana. */
-  disclaimer: string;
   accentColor: string;
   headerText: string;
   footerText: string;
@@ -106,6 +103,68 @@ const COMPONENT_LEVERS: Record<Component, string> = {
 const SHORT_CI: Record<string, string> = { aerial: "venkovní", buried: "v zemi", buried_meshed: "v zemi v mřížové uzemňovací soustavě" };
 const SHORT_CT: Record<string, string> = { lv_tlc: "NN / telekom. / data", hv_with_transformer: "VN s transformátorem VN/NN" };
 const SHORT_CE: Record<string, string> = { rural: "venkovské", suburban: "předměstské", urban: "městské", urban_tall: "městské, budovy > 20 m" };
+
+/* Třída LPS a hladina ochrany LPL ------------------------------------ */
+const ROMAN = ["I", "II", "III", "IV"] as const;
+
+/** Třída LPS podle volby PB (tab. B.2): index do ROMAN, null = bez LPS nebo třída v tabulce neuvedena. */
+const LPS_CLASS: Record<T.PbKey, number | null> = {
+  none: null,
+  lps_iv: 3,
+  lps_iii: 2,
+  lps_ii: 1,
+  lps_i: 0,
+  // „jímací soustava odpovídající LPS I“ + spojitá konstrukce jako náhodný svod
+  lps_i_framework: 0,
+  // kovová střecha + spojitá konstrukce (PB = 0,001) – tab. B.2 třídu LPS výslovně neuvádí
+  metal_roof_framework: null,
+};
+
+/** Hladina LPL, pro kterou jsou navrženy SPD (tab. B.3 a B.7). rank: 0 = LPL I … 3 = LPL III–IV. */
+const SPD_LPL: Record<T.SpdLplKey, { rank: number; lpl: string; display: string } | null> = {
+  none: null,
+  lpl_iii_iv: { rank: 3, lpl: "III–IV", display: "LPL III–IV" },
+  lpl_ii: { rank: 1, lpl: "II", display: "LPL II" },
+  lpl_i: { rank: 0, lpl: "I", display: "LPL I" },
+  better_0005: { rank: 0, lpl: "I", display: "lepší než LPL I" },
+  better_0001: { rank: 0, lpl: "I", display: "lepší než LPL I" },
+};
+
+/**
+ * Třída LPS a LPL v posuzovaném (navrženém) stavu – odvozeno výhradně ze vstupů výpočtu.
+ * LPL stavby odpovídá třídě LPS (ČSN EN 62305-3 ed. 2, tab. 1). Bez vnějšího LPS se LPL odvodí
+ * z nejpřísnější hladiny navržených SPD. Hladiny SPD se uvádějí zvlášť.
+ */
+export function protectionLevels(input: Ed2Input, failing: boolean): [string, string][] {
+  const lps = input.structure.lps;
+  const cls = LPS_CLASS[lps];
+  const uniq = (xs: ({ rank: number; lpl: string; display: string } | null)[]) => {
+    const seen = new Map<string, { rank: number; lpl: string; display: string }>();
+    for (const x of xs) if (x && !seen.has(x.display)) seen.set(x.display, x);
+    return [...seen.values()].sort((a, b) => a.rank - b.rank);
+  };
+  const peb = uniq(input.lines.map((l) => SPD_LPL[l.peb]));
+  const pspd = uniq(input.zones.flatMap((z) => z.internalSystems.map((s) => SPD_LPL[s.pspd])));
+
+  let lpsText: string;
+  if (cls != null) lpsText = lps === "lps_i_framework" ? `I – ${T.TABLE_PB.rows[lps].label}` : ROMAN[cls];
+  else if (lps === "none") lpsText = failing ? "bez vnějšího LPS" : "vnější LPS se nenavrhuje";
+  else lpsText = `${T.TABLE_PB.rows[lps].label} (PB = ${fmtNum(T.TABLE_PB.rows[lps].value)}; třídu LPS tab. B.2 neuvádí)`;
+
+  let lplText: string;
+  const spdAll = [...peb, ...pspd].sort((a, b) => a.rank - b.rank);
+  if (cls != null) lplText = ROMAN[cls];
+  else if (spdAll.length) lplText = `${spdAll[0]!.lpl} (podle navržených SPD)`;
+  else lplText = "nestanovuje se – výpočet nepočítá s ochrannými opatřeními proti blesku";
+
+  const rows: [string, string][] = [
+    [failing ? "Třída LPS (posuzovaný stav)" : "Třída LPS", lpsText],
+    [failing ? "Hladina ochrany LPL (posuzovaný stav)" : "Hladina ochrany před bleskem LPL", lplText],
+  ];
+  if (peb.length) rows.push(["SPD pro vyrovnání potenciálů na vstupu vedení", peb.map((x) => x.display).join(", ")]);
+  if (pspd.length) rows.push(["Koordinovaný systém SPD", pspd.map((x) => x.display).join(", ")]);
+  return rows;
+}
 
 const n = (v: number | null | undefined, d = 3) => (v == null ? "–" : fmtNum(v, d));
 const yesNo = (b: boolean) => (b ? "ano" : "ne");
@@ -186,7 +245,9 @@ export function buildReport(run: RunRecord): ReportModel {
       "Nařízení vlády č. 190/2022 Sb., o vyhrazených technických elektrických zařízeních",
     ],
   });
-  for (const note of ctx.methodology.notes) blocks.push({ type: "paragraph", style: "note", text: note });
+  // poznámky z aktuálního registru – starší uložené výpočty nesou zastaralý text (např. „neověřeno“)
+  const methodologyNotes = METHODOLOGIES[ctx.methodology.id]?.notes ?? ctx.methodology.notes;
+  for (const note of methodologyNotes) blocks.push({ type: "paragraph", style: "note", text: note });
   blocks.push({
     type: "paragraph",
     text: "Riziko R je součtem složek RX = NX · PX · LX, kde NX je roční počet nebezpečných událostí, PX pravděpodobnost škody a LX následná ztráta. Vypočtené riziko se porovnává s přípustným rizikem RT. Je-li R ≤ RT, ochrana je pro daný druh ztráty dostatečná; je-li R > RT, je nutné přijmout ochranná opatření, která riziko sníží na hodnotu R ≤ RT.",
@@ -305,7 +366,7 @@ export function buildReport(run: RunRecord): ReportModel {
   blocks.push({
     type: "paragraph",
     style: "small",
-    text: "Geografická data: © ČÚZK (RÚIAN, DMR 5G, DMP 1G), licence CC BY 4.0. Automaticky převzaté hodnoty jsou orientační a zpracovatel je ověřil a potvrdil.",
+    text: "Geografická data: © ČÚZK (RÚIAN, DMR 5G, DMP 1G), licence CC BY 4.0.",
   });
 
   /* 6. Výpočet ----------------------------------------------------- */
@@ -380,6 +441,7 @@ export function buildReport(run: RunRecord): ReportModel {
       style: "strong",
       text: `Pro všechny hodnocené druhy ztrát je vypočtené riziko v navrženém stavu menší nebo rovno přípustnému riziku (${losses.map((l) => verdict(d, l)).join("; ")}).`,
     });
+    blocks.push({ type: "keyvalue", rows: protectionLevels(input, false) });
     blocks.push({
       type: "paragraph",
       text: measures.length
@@ -393,6 +455,7 @@ export function buildReport(run: RunRecord): ReportModel {
       style: "warning",
       text: `V navrženém stavu riziko PŘEKRAČUJE přípustnou hodnotu pro: ${failing.map((l) => verdict(d, l)).join("; ")}. Navržená ochranná opatření nejsou dostatečná – je nutné přijmout další opatření a výpočet zopakovat.`,
     });
+    blocks.push({ type: "keyvalue", rows: protectionLevels(input, true) });
     for (const l of failing) {
       const dom = d.risks[l]!.dominant.filter((x) => x.share >= 0.05).slice(0, 3);
       blocks.push({
@@ -405,8 +468,10 @@ export function buildReport(run: RunRecord): ReportModel {
     }
   }
 
-  /* 9. Předpoklady a upozornění ----------------------------------- */
-  blocks.push({ type: "heading", level: 1, text: "9. Předpoklady, upozornění a rozsah zpracování" });
+  /* 9. Předpoklady a rozsah ---------------------------------------- */
+  // Upozornění na správnost údajů a odpovědnost zpracovatele se do dokumentu nevkládá –
+  // zpracovatel ji výslovně potvrdil před odemčením (auditní záznam, OP čl. 6).
+  blocks.push({ type: "heading", level: 1, text: "9. Předpoklady a rozsah zpracování" });
   const warnings = [...result.messages, ...d.messages].filter((m) => m.severity !== "info");
   const infos = d.messages.filter((m) => m.severity === "info");
   if (unverified) {
@@ -418,24 +483,9 @@ export function buildReport(run: RunRecord): ReportModel {
   }
   if (warnings.length) blocks.push({ type: "bullets", items: warnings.map((m) => m.message) });
   if (infos.length) blocks.push({ type: "bullets", items: infos.map((m) => m.message) });
-  const unconfirmed = prov.filter(([, m]) => !m.confirmed);
-  if (unconfirmed.length) {
-    blocks.push({
-      type: "paragraph",
-      style: "warning",
-      text: `Nepotvrzené předvyplněné údaje (${unconfirmed.length}): ${unconfirmed.map(([k]) => k.replace(/^calc\./, "")).join(", ")}. Zpracovatel je musí ověřit.`,
-    });
-  }
-  blocks.push({ type: "heading", level: 2, text: "Odpovědnost zpracovatele" });
-  for (const t of LIABILITY_DOCUMENT_TEXT) blocks.push({ type: "paragraph", text: t });
   blocks.push({
     type: "paragraph",
     text: "Analýza rizika neobsahuje návrh vnější ani vnitřní ochrany před bleskem – ten je předmětem samostatné projektové dokumentace.",
-  });
-  blocks.push({
-    type: "paragraph",
-    style: "note",
-    text: "Návrh hromosvodu (LPS), přepěťových ochran nebo kompletní projektovou dokumentaci fotovoltaické elektrárny vám zpracuje FVSOL – https://fvsol.cz",
   });
 
   /* 10. Identifikace výpočtu -------------------------------------- */
@@ -473,14 +523,6 @@ export function buildReport(run: RunRecord): ReportModel {
     ]),
   });
 
-  /* Odkaz na služby (bod 10 zadání) -------------------------------- */
-  blocks.push({
-    type: "paragraph",
-    style: "small",
-    text: "Potřebujete kompletní projektovou dokumentaci fotovoltaické elektrárny (FVE) nebo ochrany před bleskem (LPS) – návrh hromosvodu, přepěťových ochran, technickou zprávu a výkresy? Více informací naleznete na fvsol.cz.",
-  });
-  blocks.push({ type: "link", text: "https://fvsol.cz", url: "https://fvsol.cz" });
-
   const stamp: [string, string][] = [
     ["Zpracovatel", [p.fullName, p.authorization].filter(Boolean).join(", ") || "–"],
     ["Firma", [p.company, p.ico ? `IČO ${p.ico}` : ""].filter(Boolean).join(", ") || "–"],
@@ -507,7 +549,6 @@ export function buildReport(run: RunRecord): ReportModel {
     subtitle: `Ověření rizika podle ${ctx.methodology.title}`,
     projectName: id.projectName || "Projekt",
     unverified,
-    disclaimer: RESULT_DISCLAIMER,
     accentColor: p.appearance.accentColor,
     headerText: p.appearance.headerText || `${id.projectName || "Analýza rizika"} – analýza rizika LPS`,
     footerText: p.appearance.footerText || [p.company || p.fullName, p.email].filter(Boolean).join(" | "),

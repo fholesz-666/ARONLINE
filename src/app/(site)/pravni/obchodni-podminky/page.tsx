@@ -201,7 +201,7 @@ export default async function TermsPage() {
 
       <h2>9. Odkazy na související služby</h2>
       <p>
-        Služba a vygenerované dokumenty obsahují odkaz na služby projekce FVE a ochrany před bleskem FVSOL (fvsol.cz). Využití těchto služeb je dobrovolné a řídí se
+        Webové stránky služby obsahují odkaz na služby projekce FVE a ochrany před bleskem FVSOL (fvsol.cz); vygenerované dokumenty tento odkaz neobsahují. Využití těchto služeb je dobrovolné a řídí se
         samostatnou smlouvou.
       </p>
 

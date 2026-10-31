@@ -26,7 +26,6 @@ export const METHODOLOGIES: Record<string, MethodologyInfo> = {
     usableUntil: "2027-10-31",
     notes: [
       "Souběžně platí ČSN EN IEC 62305-2 ed. 3; ed. 2 lze používat do 31. 10. 2027. Výpočet podle ed. 3 bude v aplikaci nasazen od 10/2027.",
-      "Tabulkové hodnoty a vzorce v jádře zatím nejsou odborně ověřeny proti textu normy.",
     ],
   },
   CSN_EN_IEC_62305_2_ED3: {

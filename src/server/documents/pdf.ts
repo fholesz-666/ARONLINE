@@ -99,6 +99,8 @@ function blockToPdf(b: Block, accent: string): Content[] {
           },
           layout: gridLayout,
           margin: [0, 2, 0, 8],
+          // krátká tabulka (např. třída LPS / LPL v závěru) se nedělí mezi stránky
+          unbreakable: b.rows.length <= 6,
         },
       ];
     case "link":
@@ -137,7 +139,6 @@ export async function renderPdf(model: ReportModel, logo?: { data: Buffer; mime:
     } as Content);
   }
   for (const [k, v] of model.coverFacts) cover.push({ text: [{ text: `${k}: `, bold: true }, v], margin: [0, 0, 0, 4] });
-  cover.push({ text: model.disclaimer, fontSize: 8.5, italics: true, color: "#3d4a63", margin: [0, 10, 0, 0] });
   // Razítko
   cover.push({
     table: {
@@ -190,12 +191,7 @@ export async function renderPdf(model: ReportModel, logo?: { data: Buffer; mime:
       margin: [50, 14, 50, 0],
       columns: [
         { text: model.footerText, fontSize: 7.5, color: "#66748b" },
-        {
-          stack: [
-            { text: `Strana ${currentPage} z ${pageCount}   |   ID výpočtu ${model.meta.runId.slice(0, 8)}`, fontSize: 7.5, color: "#66748b", alignment: "right" },
-            { text: "Projekce FVE a LPS: fvsol.cz", link: "https://fvsol.cz", fontSize: 7, color: "#66748b", alignment: "right" },
-          ],
-        },
+        { text: `Strana ${currentPage} z ${pageCount}   |   ID výpočtu ${model.meta.runId.slice(0, 8)}`, fontSize: 7.5, color: "#66748b", alignment: "right" },
       ],
     }),
     // nadpis nesmí zůstat osamocen na konci stránky

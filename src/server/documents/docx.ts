@@ -191,13 +191,7 @@ export async function renderDocx(model: ReportModel, logo?: { data: Buffer; mime
   for (const [k, v] of model.coverFacts) {
     cover.push(new Paragraph({ children: [new TextRun({ text: `${k}: `, bold: true, font: FONT }), new TextRun({ text: v, font: FONT })] }));
   }
-  cover.push(
-    new Paragraph({
-      spacing: { before: 200 },
-      children: [new TextRun({ text: model.disclaimer, italics: true, size: 17, color: "3D4A63", font: FONT })],
-    }),
-  );
-  cover.push(new Paragraph({ spacing: { before: 1200 }, text: "" }));
+  cover.push(new Paragraph({ spacing: { before: 1400 }, text: "" }));
   cover.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
@@ -238,7 +232,7 @@ export async function renderDocx(model: ReportModel, logo?: { data: Buffer; mime
   const footerChildren: ParagraphChild[] = [
     new TextRun({ text: model.footerText ? `${model.footerText}   |   ` : "", size: 15, color: "66748B", font: FONT }),
     new TextRun({ children: ["Strana ", PageNumber.CURRENT, " z ", PageNumber.TOTAL_PAGES], size: 15, color: "66748B", font: FONT }),
-    new TextRun({ text: `   |   ID výpočtu ${model.meta.runId.slice(0, 8)}   |   Projekce FVE a LPS: fvsol.cz`, size: 15, color: "66748B", font: FONT }),
+    new TextRun({ text: `   |   ID výpočtu ${model.meta.runId.slice(0, 8)}`, size: 15, color: "66748B", font: FONT }),
   ];
   const footer = new Footer({
     children: [new Paragraph({ border: { top: { style: BorderStyle.SINGLE, size: 4, color: LINE, space: 4 } }, children: footerChildren })],

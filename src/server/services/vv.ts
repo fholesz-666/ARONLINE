@@ -80,11 +80,8 @@ export async function createProtocol(raw: z.input<typeof zVvCreate>, ip: string)
     .returning({ id: vvProtocols.id });
   await audit("vv.protocol_created", { meta: { id: row.id, spaces: input.data.spaces.length, marketing: input.marketingConsent } });
   const link = protocolLink(row.id, token);
-  try {
-    await sendMail(mails.vvProtocolCreated(input.email, input.data.object.name, link));
-  } catch (e) {
-    log.warn("vv_mail_failed", errorMeta(e));
-  }
+  // E-mail s odkazem posíláme na pozadí – pomalé nebo nedostupné SMTP nesmí zdržet uložení protokolu.
+  void sendMail(mails.vvProtocolCreated(input.email, input.data.object.name, link)).catch((e) => log.warn("vv_mail_failed", errorMeta(e)));
   return { id: row.id, token };
 }
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { VvPromoStrip } from "@/components/vv/chrome";
 import { VV_PRODUCT_CODE } from "@/config/pricing";
 import { SITE_URL } from "@/config/site";
 import { getProduct } from "@/server/services/billing";
@@ -83,6 +84,10 @@ export default async function VvLandingPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-4">
+        <VvPromoStrip campaign="landing" />
+      </section>
+
       <section id="jak-to-funguje" className="mx-auto max-w-6xl px-4 py-10">
         <h2 className="text-2xl font-bold">Jak to funguje</h2>
         <ol className="mt-6 grid gap-4 md:grid-cols-4">
@@ -153,23 +158,9 @@ export default async function VvLandingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-10">
-        <div className="vv-card grid gap-6 p-6 md:grid-cols-2">
-          <div>
-            <p className="font-semibold">Instalujete FVE nebo hromosvod?</p>
-            <p className="mt-1 text-sm text-ink-soft">
-              Části instalace vně budov spadají do AQ3. Analýzu rizika podle ČSN EN 62305-2 spočítáte na ARONLINE i bez registrace.
-            </p>
-            <Link href="/" className="vv-link mt-2 inline-block text-sm font-semibold">
-              Analýza rizika LPS →
-            </Link>
-          </div>
-          <div>
-            <p className="font-semibold">Potřebujete projekt?</p>
-            <p className="mt-1 text-sm text-ink-soft">Projektovou dokumentaci fotovoltaiky a ochrany před bleskem zpracuje FVSOL.</p>
-            <a href="https://fvsol.cz/?utm_source=aronline&utm_medium=vv&utm_campaign=landing" rel="noopener" className="vv-link mt-2 inline-block text-sm font-semibold">
-              fvsol.cz →
-            </a>
-          </div>
+        <h2 className="text-2xl font-bold">Co dál po protokolu</h2>
+        <div className="mt-6">
+          <VvPromoStrip campaign="landing-dole" />
         </div>
       </section>
     </>

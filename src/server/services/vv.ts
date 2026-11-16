@@ -60,7 +60,12 @@ export function protocolLink(id: string, token: string): string {
   return `${getConfig().APP_URL.replace(/\/$/, "")}/vnejsi-vlivy/protokol/${id}#t=${token}`;
 }
 
-export async function createProtocol(input: z.infer<typeof zVvCreate>, ip: string) {
+/**
+ * `raw` je tělo požadavku už ověřené schématem (readJson); typ readJson ale odpovídá vstupu schématu,
+ * proto se zde ještě jednou parsuje, aby platily výchozí hodnoty i typy výstupu.
+ */
+export async function createProtocol(raw: z.input<typeof zVvCreate>, ip: string) {
+  const input = zVvCreate.parse(raw);
   checkConfirmations(input.data, input.confirmations);
   const token = randomToken();
   const [row] = await getDb()
@@ -91,8 +96,9 @@ export async function getProtocol(id: string, token: string | null | undefined):
   return row;
 }
 
-export async function updateProtocol(id: string, token: string, input: z.infer<typeof zVvSave>, ip: string) {
+export async function updateProtocol(id: string, token: string, raw: z.input<typeof zVvSave>, ip: string) {
   await getProtocol(id, token);
+  const input = zVvSave.parse(raw);
   checkConfirmations(input.data, input.confirmations);
   await getDb()
     .update(vvProtocols)

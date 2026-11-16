@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMark } from "@/components/brand";
 
 /** Odkaz na FVSOL s označením zdroje (VV online). */
 export function fvsolUrl(campaign: string) {
@@ -22,7 +23,7 @@ export function VvPromoStrip({ campaign, aq3 = false }: { campaign: string; aq3?
         </span>
       </a>
       <Link href="/" className={`vv-card flex items-center gap-4 p-4 no-underline hover:border-[var(--vv-accent)] ${aq3 ? "border-[var(--vv-accent)]" : ""}`}>
-        <span className="shrink-0 rounded-md bg-ink px-2 py-1 text-xs font-bold tracking-wide text-[#f2b705]">ARONLINE</span>
+        <BrandMark className="h-10 w-10 shrink-0" />
         <span className="text-sm text-ink-soft">
           <span className="block font-semibold text-ink">{aq3 ? "Máte AQ3 – spočítejte analýzu rizika" : "Analýza rizika ochrany před bleskem"}</span>
           Podle ČSN EN 62305-2 online, i bez registrace. <span className="vv-link font-semibold">Spočítat →</span>
@@ -32,13 +33,20 @@ export function VvPromoStrip({ campaign, aq3 = false }: { campaign: string; aq3?
   );
 }
 
-/** Značka VV online: štít s kapkou a bleskem v tyrkysové. */
-export function VvMark({ className = "h-8 w-8" }: { className?: string }) {
+/** Značka VV online (varianta VV-3): štítek „VV“ s pruhem kódu vlivu. `detailed` = s textem v pruhu (velké velikosti). */
+export function VvMark({ className = "h-8 w-8", detailed = false }: { className?: string; detailed?: boolean }) {
   return (
-    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
-      <rect x="1" y="1" width="30" height="30" rx="9" fill="#0f766e" />
-      <path d="M11 9.5c0 0-4 4.6-4 7.2a4 4 0 0 0 8 0c0-2.6-4-7.2-4-7.2Z" fill="#ccfbf1" />
-      <path d="M21.5 6 L16.5 16 H20 L18.5 26 L25 13.5 H21.5 L23 6 Z" fill="#fde68a" />
+    <svg viewBox="0 0 180 180" className={className} aria-hidden="true" style={{ borderRadius: "18%" }}>
+      <rect width="180" height="180" fill="#f3faf8" />
+      <rect x="18" y="18" width="144" height="144" rx="24" fill="#ffffff" stroke="#0f766e" strokeWidth="7" />
+      <path fill="#0f766e" d="M34 42 H56 L63 82 L70 42 H90 L72 112 H52 Z" />
+      <path fill="#0f766e" d="M90 42 H112 L119 82 L126 42 H146 L128 112 H108 Z" />
+      <path d="M18 124 H162 V138 C162 151 151 162 138 162 H42 C29 162 18 151 18 138 Z" fill="#0f766e" />
+      {detailed && (
+        <text x="90" y="150" textAnchor="middle" fontSize="17" fontWeight="700" fill="#fde68a" letterSpacing="1.5">
+          AD4 · IP44
+        </text>
+      )}
     </svg>
   );
 }
@@ -48,7 +56,7 @@ export function VvHeader({ account }: { account?: React.ReactNode }) {
     <header className="border-b border-[var(--vv-line)] bg-white/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
         <Link href="/vnejsi-vlivy" className="flex items-center gap-2.5 no-underline" aria-label="VV online – úvod">
-          <VvMark />
+          <VvMark className="h-9 w-9" />
           <span className="leading-tight">
             <span className="block text-[1.05rem] font-bold text-[var(--vv-accent-strong)]">VV online</span>
             <span className="block text-xs text-muted">Protokol o určení vnějších vlivů</span>

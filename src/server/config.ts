@@ -33,6 +33,8 @@ const envSchema = z.object({
   SMTP_PASSWORD: z.string().optional(),
   SMTP_SECURE: bool(false),
   MAIL_FROM: z.string().default("ARONLINE <info@aronline.cz>"),
+  /** Resend (HTTPS API) – má přednost před SMTP; Render free blokuje odchozí SMTP porty. */
+  RESEND_API_KEY: z.string().optional(),
   /** Verze obchodních podmínek, se kterou uživatel souhlasí při registraci. */
   TERMS_VERSION: z.string().default("2026-10-návrh"),
   /** Identifikace provozovatele pro patičku a doklady. */

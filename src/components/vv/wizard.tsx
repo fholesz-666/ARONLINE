@@ -119,9 +119,9 @@ function PersonFields({ person, onChange, label }: { person: VvPerson; onChange:
   );
 }
 
-export function VvWizard() {
+export function VvWizard({ defaultEmail = "" }: { defaultEmail?: string }) {
   const router = useRouter();
-  const [f, setF] = useState<FormState>(emptyState);
+  const [f, setF] = useState<FormState>(() => ({ ...emptyState(), email: defaultEmail }));
   const [step, setStep] = useState(0);
   const [openSpace, setOpenSpace] = useState<string | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
@@ -134,12 +134,8 @@ export function VvWizard() {
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("upravit");
     if (id) {
-      const token = getToken(id);
-      if (!token) {
-        setErrors(["Protokol k úpravě nelze otevřít – použijte odkaz z e-mailu."]);
-        setLoaded(true);
-        return;
-      }
+      // token z odkazu, případně přístup vlastníka přes přihlášení
+      const token = getToken(id) ?? "";
       vvApi<{ protocol: { data: VvProtocolData } }>(`/api/vv/protocols/${encodeURIComponent(id)}`, token)
         .then((r) => {
           setF(fromProtocol(r.protocol.data));
@@ -153,7 +149,7 @@ export function VvWizard() {
     if (raw) {
       try {
         const d = JSON.parse(raw) as Partial<FormState>;
-        setF((cur) => ({ ...cur, ...d, confirmations: [], terms: false }));
+        setF((cur) => ({ ...cur, ...d, email: d.email || cur.email, confirmations: [], terms: false }));
       } catch {
         /* poškozený koncept */
       }

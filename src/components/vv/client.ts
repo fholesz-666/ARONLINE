@@ -63,7 +63,7 @@ export async function vvApi<T>(path: string, token: string | null, opts: { metho
 
 /** Stažení souboru přes fetch (s hlavičkou tokenu) a uložení v prohlížeči. */
 export async function downloadFile(path: string, token: string, fallbackName: string) {
-  const res = await fetch(path, { headers: { "X-VV-Token": token }, credentials: "same-origin" });
+  const res = await fetch(path, { headers: token ? { "X-VV-Token": token } : {}, credentials: "same-origin" });
   if (!res.ok) {
     let msg = `Soubor se nepodařilo stáhnout (${res.status}).`;
     try {

@@ -44,3 +44,13 @@ Po uložení dostane autor odkaz `/vnejsi-vlivy/protokol/<id>#t=<token>` (také 
 | POST | `/api/vv/protocols/:id/order` | objednávka Profi verze → přesměrování na GoPay |
 
 Migrace: `drizzle/0003_vnejsi_vlivy.sql` (tabulka `vv_protocols`, sloupec `orders.vv_protocol_id`).
+
+## Účty a kredity
+
+- Protokol vytvořený přihlášeným (registrovaným) uživatelem patří jeho účtu (`vv_protocols.user_id`). Protokol otevřený přes odkaz v přihlášeném stavu se k účtu přiřadí automaticky.
+- Vlastník protokol otevře bez tokenu; seznam je na `/vnejsi-vlivy/moje`.
+- **Profi zdarma**: správce v administraci přidá workspace uživatele kredity (Administrace → kredity). Uživatel na stránce protokolu klikne „Odemknout za 1 kredit“ (`POST /api/vv/protocols/:id/redeem`). Odečet je idempotentní (`vv:<id>`), jde o stejné kredity jako u analýz rizika.
+
+## E-maily
+
+`RESEND_API_KEY` (Resend, HTTPS) má přednost před SMTP. Render na bezplatném plánu blokuje odchozí SMTP, proto SMTP končí „Connection timeout“. Odesílací doména (`MAIL_FROM`) musí být v Resendu ověřená.

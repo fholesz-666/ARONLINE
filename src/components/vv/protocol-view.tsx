@@ -25,6 +25,8 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
   const [email, setEmail] = useState("");
   const [terms, setTerms] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [viewer, setViewer] = useState<{ loggedIn: boolean; isOwner: boolean; credits: number }>({ loggedIn: false, isOwner: false, credits: 0 });
+  const [ready, setReady] = useState(false);
 
   // Token: z fragmentu odkazu (#t=…) nebo z úložiště prohlížeče
   useEffect(() => {
@@ -33,31 +35,35 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
       saveToken(id, hash);
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
-    const t = hash ?? getToken(id);
-    if (!t) {
-      setError("Protokol lze otevřít jen přes odkaz z e-mailu nebo v prohlížeči, ve kterém byl vytvořen.");
-      return;
-    }
-    setToken(t);
+    // bez tokenu zkusíme přístup vlastníka přes přihlášení
+    setToken(hash ?? getToken(id) ?? "");
+    setReady(true);
     const q = new URLSearchParams(window.location.search);
     if (q.get("novy")) setNotice("Protokol je hotový. Odkaz pro pozdější úpravy jsme poslali na váš e-mail.");
     if (q.get("upraveno")) setNotice("Změny jsou uložené.");
   }, [id]);
 
   const load = useCallback(async () => {
-    if (!token) return;
+    if (!ready || token === null) return;
     try {
-      const r = await vvApi<{ protocol: Protocol }>(`/api/vv/protocols/${encodeURIComponent(id)}`, token);
+      const r = await vvApi<{ protocol: Protocol; viewer: { loggedIn: boolean; isOwner: boolean; credits: number } }>(`/api/vv/protocols/${encodeURIComponent(id)}`, token);
       setP(r.protocol);
+      setViewer(r.viewer);
       setEmail((e) => e || r.protocol.email);
       if (r.protocol.hasLogo) {
-        const res = await fetch(`/api/vv/protocols/${encodeURIComponent(id)}/logo`, { headers: { "X-VV-Token": token } });
+        const res = await fetch(`/api/vv/protocols/${encodeURIComponent(id)}/logo`, { headers: token ? { "X-VV-Token": token } : {} });
         if (res.ok) setLogoUrl(URL.createObjectURL(await res.blob()));
       } else setLogoUrl(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Protokol se nepodařilo načíst.");
+      setError(
+        token
+          ? e instanceof Error
+            ? e.message
+            : "Protokol se nepodařilo načíst."
+          : "Protokol lze otevřít přes odkaz z e-mailu, v prohlížeči, ve kterém byl vytvořen, nebo po přihlášení k účtu, ke kterému patří.",
+      );
     }
-  }, [id, token]);
+  }, [id, token, ready]);
 
   useEffect(() => {
     void load();
@@ -67,7 +73,7 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
   const hasAq3 = evaluations.some(({ ev }) => ev.abnormal.some((r) => r.value === "AQ3"));
 
   const download = async (fmt: "pdf" | "docx") => {
-    if (!token) return;
+    if (token === null) return;
     setBusy(fmt);
     setError(null);
     try {
@@ -80,7 +86,7 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
   };
 
   const uploadLogo = async (file: File | null) => {
-    if (!token || !file) return;
+    if (token === null || !file) return;
     if (file.size > 300_000) {
       setError("Logo může mít nejvýše 300 kB.");
       return;
@@ -90,7 +96,7 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
     try {
       const fd = new FormData();
       fd.append("logo", file);
-      const res = await fetch(`/api/vv/protocols/${encodeURIComponent(id)}/logo`, { method: "POST", body: fd, headers: { "X-VV-Token": token } });
+      const res = await fetch(`/api/vv/protocols/${encodeURIComponent(id)}/logo`, { method: "POST", body: fd, headers: token ? { "X-VV-Token": token } : {} });
       if (!res.ok) throw new Error(((await res.json().catch(() => ({}))) as { message?: string }).message ?? "Logo se nepodařilo nahrát.");
       await load();
     } catch (e) {
@@ -101,7 +107,7 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
   };
 
   const removeLogo = async () => {
-    if (!token) return;
+    if (token === null) return;
     setBusy("logo");
     try {
       await vvApi(`/api/vv/protocols/${encodeURIComponent(id)}/logo`, token, { method: "DELETE" });
@@ -113,8 +119,23 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
     }
   };
 
+  const redeem = async () => {
+    if (token === null) return;
+    setBusy("redeem");
+    setError(null);
+    try {
+      await vvApi(`/api/vv/protocols/${encodeURIComponent(id)}/redeem`, token, { method: "POST", body: {} });
+      setNotice("Profi verze je odemčená kreditem z vašeho účtu.");
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Kredit se nepodařilo uplatnit.");
+    } finally {
+      setBusy(null);
+    }
+  };
+
   const order = async () => {
-    if (!token) return;
+    if (token === null) return;
     if (!terms) {
       setError("Pro objednávku potvrďte souhlas s obchodními podmínkami.");
       return;
@@ -243,6 +264,29 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
             <li>✓ vaše logo v záhlaví</li>
             <li>✓ editovatelný Word (DOCX)</li>
           </ul>
+          {viewer.loggedIn && viewer.credits > 0 ? (
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--vv-accent)] bg-[var(--vv-accent-soft)] p-4">
+              <span className="text-sm">
+                Na účtu máte <strong>{viewer.credits}</strong> {viewer.credits === 1 ? "kredit" : viewer.credits < 5 ? "kredity" : "kreditů"}. Profi verzi můžete
+                odemknout kreditem místo platby.
+              </span>
+              <button type="button" className="vv-btn vv-btn-primary" disabled={busy !== null} onClick={() => void redeem()}>
+                {busy === "redeem" ? "Odemykám…" : "Odemknout za 1 kredit"}
+              </button>
+            </div>
+          ) : !viewer.loggedIn ? (
+            <p className="mt-3 text-sm text-ink-soft">
+              Máte účet s kredity?{" "}
+              <Link className="vv-link" href={`/prihlaseni?next=${encodeURIComponent(`/vnejsi-vlivy/protokol/${id}`)}`}>
+                Přihlaste se
+              </Link>{" "}
+              – nebo si{" "}
+              <Link className="vv-link" href={`/registrace?next=${encodeURIComponent(`/vnejsi-vlivy/protokol/${id}`)}`}>
+                založte účet zdarma
+              </Link>{" "}
+              a protokoly budete mít pohromadě.
+            </p>
+          ) : null}
           <div className="mt-4 rounded-lg border border-[var(--vv-line)] bg-white p-4">
             <p className="text-sm font-medium">1. Logo (nepovinné – lze nahrát i po zaplacení)</p>
             <div className="mt-2 flex flex-wrap items-center gap-3">

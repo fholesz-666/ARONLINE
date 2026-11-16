@@ -3,7 +3,7 @@ import { buildVvDoc } from "@/server/documents/vv-model";
 import { renderVvPdf } from "@/server/documents/vv-pdf";
 import { handler } from "@/server/http";
 import { getProtocol, protocolFileName } from "@/server/services/vv";
-import { limitVvRead, vvToken } from "@/server/vv-http";
+import { limitVvRead, vvToken, vvViewer } from "@/server/vv-http";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -13,7 +13,7 @@ export const runtime = "nodejs";
 export const GET = handler(async (req: Request, ctx: Ctx) => {
   await limitVvRead(req);
   const { id } = await ctx.params;
-  const row = await getProtocol(id, vvToken(req));
+  const row = await getProtocol(id, vvToken(req), (await vvViewer())?.userId);
   const premium = row.premiumAt != null;
   const confirmedAt = (row.confirmations as { at?: string } | null)?.at ?? null;
   const model = buildVvDoc(row.data as VvProtocolData, { premium, confirmedAt });

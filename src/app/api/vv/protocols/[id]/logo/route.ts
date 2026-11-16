@@ -1,13 +1,13 @@
 import { badRequest, handler, json, notFound } from "@/server/http";
 import { getProtocol, setProtocolLogo } from "@/server/services/vv";
-import { limitVvRead, vvToken } from "@/server/vv-http";
+import { limitVvRead, vvToken, vvViewer } from "@/server/vv-http";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export const GET = handler(async (req: Request, ctx: Ctx) => {
   await limitVvRead(req);
   const { id } = await ctx.params;
-  const row = await getProtocol(id, vvToken(req));
+  const row = await getProtocol(id, vvToken(req), (await vvViewer())?.userId);
   if (!row.logo || !row.logoMime) throw notFound("Logo není nahráno.");
   return new Response(new Uint8Array(row.logo), {
     headers: { "Content-Type": row.logoMime, "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" },
@@ -23,13 +23,13 @@ export const POST = handler(async (req: Request, ctx: Ctx) => {
   const form = await req.formData();
   const file = form.get("logo");
   if (!(file instanceof File)) throw badRequest("Vyberte soubor s logem.");
-  await setProtocolLogo(id, vvToken(req) ?? "", Buffer.from(await file.arrayBuffer()));
+  await setProtocolLogo(id, vvToken(req), Buffer.from(await file.arrayBuffer()), (await vvViewer())?.userId);
   return json({ ok: true });
 });
 
 export const DELETE = handler(async (req: Request, ctx: Ctx) => {
   await limitVvRead(req);
   const { id } = await ctx.params;
-  await setProtocolLogo(id, vvToken(req) ?? "", null);
+  await setProtocolLogo(id, vvToken(req), null, (await vvViewer())?.userId);
   return json({ ok: true });
 });

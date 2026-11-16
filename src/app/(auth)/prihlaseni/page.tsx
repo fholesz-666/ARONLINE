@@ -43,7 +43,7 @@ function LoginForm() {
         <Link className="link" href="/zapomenute-heslo">
           Zapomenuté heslo
         </Link>
-        <Link className="link" href="/registrace">
+        <Link className="link" href={next && next.startsWith("/") && !next.startsWith("//") ? `/registrace?next=${encodeURIComponent(next)}` : "/registrace"}>
           Založit účet
         </Link>
       </div>

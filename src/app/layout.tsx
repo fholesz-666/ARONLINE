@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   title: { default: "Analýza rizika LPS online – ČSN EN 62305-2 | ARONLINE", template: "%s | ARONLINE" },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
+  // název ikony při „Přidat na plochu“ (iOS)
+  appleWebApp: { title: "ARONLINE" },
   keywords: [
     "analýza rizika",
     "analýza rizika LPS",

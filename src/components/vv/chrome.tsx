@@ -43,7 +43,7 @@ export function VvMark({ className = "h-8 w-8" }: { className?: string }) {
   );
 }
 
-export function VvHeader() {
+export function VvHeader({ account }: { account?: React.ReactNode }) {
   return (
     <header className="border-b border-[var(--vv-line)] bg-white/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
@@ -64,6 +64,7 @@ export function VvHeader() {
           <a href={fvsolUrl("menu")} rel="noopener" className="vv-btn vv-btn-ghost hidden lg:inline-flex">
             Projekce FVE – fvsol.cz
           </a>
+          {account}
           <Link href="/vnejsi-vlivy/novy" className="vv-btn vv-btn-primary">
             Vyplnit protokol
           </Link>

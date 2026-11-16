@@ -102,6 +102,8 @@ h3 {
   color: var(--color-muted);
   margin-top: 0.25rem;
 }
+/* Komponentové třídy jsou ve vrstvě components, aby je utility Tailwindu (hidden, sm:inline-flex, px-…) mohly přepsat. */
+@layer components {
 .input {
   width: 100%;
   border: 1px solid var(--color-line);
@@ -170,6 +172,8 @@ select.input {
   border-color: var(--color-line);
 }
 
+}
+
 .panel {
   background: var(--color-sheet);
   border: 1px solid var(--color-line);
@@ -234,6 +238,7 @@ select.input {
   font-family: var(--font-sans);
 }
 
+@layer components {
 /*
  * VV online (/vnejsi-vlivy) – samostatný vzhled odlišený od ARONLINE:
  * tyrkysová místo bezpečnostní žluté, světlé zaoblené karty místo výkresového rastru.
@@ -362,4 +367,5 @@ select.input {
 }
 .vv-row-abnormal {
   background: var(--color-bad-soft);
+}
 }

@@ -24,7 +24,7 @@ Po uložení dostane autor odkaz `/vnejsi-vlivy/protokol/<id>#t=<token>` (také 
 
 | | Zdarma | Profi (produkt `VV_PREMIUM`, výchozí 99 Kč) |
 |---|---|---|
-| PDF | s patičkou „vytvořeno na aronline.cz…“, odkazy na ARONLINE a FVSOL | bez patičky, s logem |
+| PDF | jemný vodoznak, patička s logem FVSOL a odkazy na ARONLINE a FVSOL, zamčené proti úpravám (tisk povolen) | bez vodoznaku, patičky a zámku, s logem |
 | DOCX | – | ano |
 
 - Platba jen kartou (GoPay). Bez přihlášení se na pozadí založí účet hosta – stejně jako u jednorázové analýzy.

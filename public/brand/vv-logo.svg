@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <rect width="180" height="180" fill="#f3faf8"/>
+  <rect x="18" y="18" width="144" height="144" rx="24" fill="#ffffff" stroke="#0f766e" stroke-width="7"/>
+  <path fill="#0f766e" d="M34 42 H56 L63 82 L70 42 H90 L72 112 H52 Z"/>
+  <path fill="#0f766e" d="M90 42 H112 L119 82 L126 42 H146 L128 112 H108 Z"/>
+  <path d="M18 124 H162 V138 C162 151 151 162 138 162 H42 C29 162 18 151 18 138 Z" fill="#0f766e"/>
+  <text x="90" y="150" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#fde68a" letter-spacing="1.5">AD4 · IP44</text>
+</svg>

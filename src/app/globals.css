@@ -57,12 +57,15 @@ body {
   font-stretch: 85%;
 }
 
-h1,
-h2,
-h3 {
-  font-stretch: 112%;
-  line-height: 1.15;
-  font-weight: 650;
+/* základní vzhled nadpisů ve vrstvě base – utility (font-extrabold, leading-…) ho mohou přepsat */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-stretch: 112%;
+    line-height: 1.15;
+    font-weight: 650;
+  }
 }
 
 :focus-visible {
@@ -368,4 +371,14 @@ select.input {
 .vv-row-abnormal {
   background: var(--color-bad-soft);
 }
+}
+
+/* Úvod ARONLINE: tmavá plocha s jemným výkresovým rastrem */
+.hero-grid {
+  background-color: #14213d;
+  background-image:
+    linear-gradient(#22325a 1px, transparent 1px),
+    linear-gradient(90deg, #22325a 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
 }

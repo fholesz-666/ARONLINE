@@ -1,6 +1,8 @@
 /**
  * PDF protokolu o určení vnějších vlivů (pdfmake, písmo Roboto s českou diakritikou).
  */
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import type { Content, TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
 import { getPrinter } from "./pdf";
 import type { VvDocModel } from "./vv-model";
@@ -11,6 +13,18 @@ const LINE = "#9aa8b8";
 const ACCENT = "#0f766e";
 const BAD = "#fbe7e5";
 const HEAD = "#eef4f3";
+
+/** Logo FVSOL do patičky bezplatné verze (public/brand/fvsol-logo.png); při chybě se patička vykreslí bez něj. */
+let fvsolLogo: string | null | undefined;
+function fvsolLogoDataUrl(): string | null {
+  if (fvsolLogo !== undefined) return fvsolLogo;
+  try {
+    fvsolLogo = `data:image/png;base64,${readFileSync(path.join(process.cwd(), "public", "brand", "fvsol-logo.png")).toString("base64")}`;
+  } catch {
+    fvsolLogo = null;
+  }
+  return fvsolLogo;
+}
 
 const grid = {
   hLineWidth: () => 0.5,
@@ -166,6 +180,9 @@ export async function renderVvPdf(m: VvDocModel, logo?: { data: Buffer; mime: st
               { canvas: [{ type: "line" as const, x1: 0, y1: 0, x2: 499, y2: 0, lineWidth: 0.6, lineColor: ACCENT }] },
               {
                 columns: [
+                  ...(fvsolLogoDataUrl()
+                    ? [{ image: fvsolLogoDataUrl()!, fit: [62, 16] as [number, number], width: 70, link: "https://fvsol.cz/?utm_source=aronline&utm_medium=vv&utm_campaign=pdf", margin: [0, 5, 0, 0] as [number, number, number, number] }]
+                    : []),
                   {
                     stack: m.brandingLines.map((t, i) => ({ text: t, fontSize: 7, color: i === 0 ? ACCENT : "#66748b", bold: i === 0, margin: [0, i === 0 ? 3 : 1, 0, 0] as [number, number, number, number] })),
                   },

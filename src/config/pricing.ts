@@ -77,7 +77,7 @@ export const DEFAULT_PRODUCTS: ProductDefinition[] = [
     type: "ONE_TIME",
     priceCzk: 99,
     maxMembers: 1,
-    features: ["Bez reklamní patičky", "Vlastní logo v záhlaví", "Editovatelný Word (DOCX)", "Úpravy a nové exporty téhož protokolu"],
+    features: ["Bez vodoznaku a reklamní patičky", "Vlastní logo v záhlaví", "Editovatelný Word (DOCX)", "Uložení do účtu (Moje protokoly)"],
     sortOrder: 90,
   },
 ];

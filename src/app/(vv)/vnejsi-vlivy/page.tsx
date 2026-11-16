@@ -122,6 +122,7 @@ export default async function VvLandingPage() {
               <li>✓ Bez vodoznaku a reklamní patičky, PDF bez zámku</li>
               <li>✓ Vaše logo v záhlaví protokolu</li>
               <li>✓ Editovatelný Word (DOCX)</li>
+              <li>✓ Uložení do účtu (Moje protokoly)</li>
             </ul>
             <p className="mt-3 text-xs text-muted">Placená verze se kupuje k hotovému protokolu, platba kartou přes GoPay.</p>
           </div>

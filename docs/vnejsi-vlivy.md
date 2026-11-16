@@ -47,7 +47,7 @@ Migrace: `drizzle/0003_vnejsi_vlivy.sql` (tabulka `vv_protocols`, sloupec `order
 
 ## Účty a kredity
 
-- Protokol vytvořený přihlášeným (registrovaným) uživatelem patří jeho účtu (`vv_protocols.user_id`). Protokol otevřený přes odkaz v přihlášeném stavu se k účtu přiřadí automaticky.
+- Do účtu (`vv_protocols.user_id`) se ukládají **jen protokoly v Profi verzi**: po zaplacení (kupující je registrovaný), po odemknutí kreditem, nebo když přihlášený uživatel otevře Profi protokol přes odkaz. Bezplatné protokoly zůstávají jen na odkazu z e-mailu.
 - Vlastník protokol otevře bez tokenu; seznam je na `/vnejsi-vlivy/moje`.
 - **Profi zdarma**: správce v administraci přidá workspace uživatele kredity (Administrace → kredity). Uživatel na stránce protokolu klikne „Odemknout za 1 kredit“ (`POST /api/vv/protocols/:id/redeem`). Odečet je idempotentní (`vv:<id>`), jde o stejné kredity jako u analýz rizika.
 

@@ -33,8 +33,8 @@ export default async function VvMinePage() {
       </div>
       {protocols.length === 0 ? (
         <div className="vv-card p-6 text-sm text-ink-soft">
-          Zatím tu nemáte žádný protokol. Protokoly vytvořené po přihlášení, nebo otevřené přes odkaz z e-mailu v přihlášeném stavu, se sem uloží
-          automaticky.
+          Zatím tu nemáte žádný protokol. Do účtu se ukládají protokoly v Profi verzi – zaplacené, nebo odemčené kreditem. Bezplatné protokoly
+          najdete přes odkaz z e-mailu.
         </div>
       ) : (
         <ul className="vv-card divide-y divide-[var(--vv-line)]">

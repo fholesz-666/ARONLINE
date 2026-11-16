@@ -42,6 +42,10 @@ export async function sendMail(mail: Mail): Promise<boolean> {
     port: c.SMTP_PORT ?? 587,
     secure: c.SMTP_SECURE,
     auth: c.SMTP_USER ? { user: c.SMTP_USER, pass: c.SMTP_PASSWORD } : undefined,
+    // nedostupný SMTP server nesmí blokovat požadavky (výchozí limity nodemaileru jsou až minuty)
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
   });
   try {
     await transporter.sendMail({

@@ -9,6 +9,7 @@ import { presetValues } from "@/core/vv/presets";
 import type { VvPerson, VvProtocolData, VvSpace } from "@/core/vv/schema";
 import { ApiError } from "@/lib/api";
 import { DRAFT_KEY, getToken, newId, saveToken, storeGet, storeRemove, storeSet, vvApi } from "./client";
+import { VvPromoStrip } from "./chrome";
 import { SpaceEditor } from "./space-editor";
 
 interface FormState {
@@ -174,6 +175,7 @@ export function VvWizard() {
 
   const members = useMemo(() => [{ ...f.chair, chair: true }, ...f.members.map((m) => ({ ...m, chair: false }))], [f.chair, f.members]);
   const evaluations = useMemo(() => f.spaces.map((s) => evaluateSpace(s.values)), [f.spaces]);
+  const hasAq3 = evaluations.some((e) => e.abnormal.some((r) => r.value === "AQ3"));
 
   const go = (to: number) => {
     if (to > step) {
@@ -397,6 +399,19 @@ export function VvWizard() {
                   + Přidat prostor
                 </button>
               )}
+              {hasAq3 && (
+                <div className="rounded-xl border border-[var(--vv-accent)] bg-[var(--vv-accent-soft)] px-4 py-3 text-sm">
+                  <strong>AQ3 – přímé ohrožení bleskem.</strong> Ochranu je nutné navrhnout podle ČSN EN 62305 včetně analýzy rizika.{" "}
+                  <Link href="/" target="_blank" className="vv-link font-semibold">
+                    Spočítat analýzu rizika na ARONLINE
+                  </Link>{" "}
+                  nebo{" "}
+                  <a href="https://fvsol.cz/?utm_source=aronline&utm_medium=vv&utm_campaign=aq3" target="_blank" rel="noopener" className="vv-link font-semibold">
+                    nechat navrhnout hromosvod u FVSOL
+                  </a>
+                  .
+                </div>
+              )}
               <label className="field-label mt-4 block">
                 Poznámky komise k protokolu (nepovinné)
                 <textarea className="input mt-1 min-h-[70px] font-normal" maxLength={4000} value={f.notes} onChange={(e) => setF((c) => ({ ...c, notes: e.target.value }))} />
@@ -495,6 +510,9 @@ export function VvWizard() {
                 {busy ? "Ukládám…" : edit ? "Uložit změny" : "Vytvořit protokol zdarma"}
               </button>
             )}
+          </div>
+          <div className="mt-10">
+            <VvPromoStrip campaign="formular" aq3={hasAq3} />
           </div>
         </div>
       )}

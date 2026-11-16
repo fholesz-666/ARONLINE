@@ -52,7 +52,7 @@ export function formatDateCz(iso: string | Date): string {
 
 export const VV_BRANDING_LINES = [
   "Protokol vytvořen zdarma na aronline.cz/vnejsi-vlivy",
-  "Analýza rizika ochrany před bleskem (ČSN EN 62305-2): aronline.cz  ·  Projekce FVE a hromosvodů: fvsol.cz",
+  "Projekce FVE a hromosvodů: fvsol.cz  ·  Analýza rizika ochrany před bleskem (ČSN EN 62305-2): aronline.cz",
 ];
 
 export function buildVvDoc(

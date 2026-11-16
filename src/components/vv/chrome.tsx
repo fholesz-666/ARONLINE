@@ -1,5 +1,37 @@
 import Link from "next/link";
 
+/** Odkaz na FVSOL s označením zdroje (VV online). */
+export function fvsolUrl(campaign: string) {
+  return `https://fvsol.cz/?utm_source=aronline&utm_medium=vv&utm_campaign=${campaign}`;
+}
+
+export function FvsolLogo({ className = "h-5 w-auto" }: { className?: string }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/brand/fvsol-logo.png" alt="FVSOL" className={className} />;
+}
+
+/** Proužek s prokliky na projekci FVSOL a analýzu rizika ARONLINE. */
+export function VvPromoStrip({ campaign, aq3 = false }: { campaign: string; aq3?: boolean }) {
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      <a href={fvsolUrl(campaign)} rel="noopener" className="vv-card flex items-center gap-4 p-4 no-underline hover:border-[var(--vv-accent)]">
+        <FvsolLogo className="h-6 w-auto shrink-0" />
+        <span className="text-sm text-ink-soft">
+          <span className="block font-semibold text-ink">Projekt FVE nebo hromosvodu?</span>
+          Kompletní projektovou dokumentaci zpracuje FVSOL. <span className="vv-link font-semibold">Poptat →</span>
+        </span>
+      </a>
+      <Link href="/" className={`vv-card flex items-center gap-4 p-4 no-underline hover:border-[var(--vv-accent)] ${aq3 ? "border-[var(--vv-accent)]" : ""}`}>
+        <span className="shrink-0 rounded-md bg-ink px-2 py-1 text-xs font-bold tracking-wide text-[#f2b705]">ARONLINE</span>
+        <span className="text-sm text-ink-soft">
+          <span className="block font-semibold text-ink">{aq3 ? "Máte AQ3 – spočítejte analýzu rizika" : "Analýza rizika ochrany před bleskem"}</span>
+          Podle ČSN EN 62305-2 online, i bez registrace. <span className="vv-link font-semibold">Spočítat →</span>
+        </span>
+      </Link>
+    </div>
+  );
+}
+
 /** Značka VV online: štít s kapkou a bleskem v tyrkysové. */
 export function VvMark({ className = "h-8 w-8" }: { className?: string }) {
   return (
@@ -29,6 +61,9 @@ export function VvHeader() {
           <Link href="/" className="vv-btn vv-btn-ghost hidden md:inline-flex">
             Analýza rizika LPS
           </Link>
+          <a href={fvsolUrl("menu")} rel="noopener" className="vv-btn vv-btn-ghost hidden lg:inline-flex">
+            Projekce FVE – fvsol.cz
+          </a>
           <Link href="/vnejsi-vlivy/novy" className="vv-btn vv-btn-primary">
             Vyplnit protokol
           </Link>
@@ -56,8 +91,11 @@ export function VvFooter() {
           <Link className="vv-link" href="/">
             Analýza rizika ochrany před bleskem (ČSN EN 62305-2)
           </Link>
-          <a className="vv-link" href="https://fvsol.cz/?utm_source=aronline&utm_medium=vv&utm_campaign=paticka" rel="noopener">
+          <a className="vv-link" href={fvsolUrl("paticka")} rel="noopener">
             Projekce FVE a hromosvodů – fvsol.cz
+          </a>
+          <a href={fvsolUrl("paticka-logo")} rel="noopener" className="mt-2 inline-flex w-fit" aria-label="FVSOL – projekce FVE a hromosvodů">
+            <FvsolLogo className="h-6 w-auto" />
           </a>
           <Link className="vv-link" href="/kontakty">
             Kontakty

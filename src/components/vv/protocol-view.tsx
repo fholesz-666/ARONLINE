@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { evaluateSpace } from "@/core/vv/evaluate";
 import type { VvProtocolData } from "@/core/vv/schema";
+import { VvPromoStrip } from "./chrome";
 import { downloadFile, getToken, saveToken, vvApi } from "./client";
 
 interface Protocol {
@@ -187,6 +188,16 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
             Nový protokol
           </Link>
         </div>
+        <p className="mt-3 text-sm text-ink-soft">
+          Další krok:{" "}
+          <Link href="/" className="vv-link font-semibold">
+            analýza rizika ochrany před bleskem
+          </Link>{" "}
+          ·{" "}
+          <a href="https://fvsol.cz/?utm_source=aronline&utm_medium=vv&utm_campaign=protokol-hore" rel="noopener" className="vv-link font-semibold">
+            projekt FVE nebo hromosvodu u FVSOL
+          </a>
+        </p>
 
         <ul className="mt-5 divide-y divide-[var(--vv-line)] border-t border-[var(--vv-line)]">
           {evaluations.map(({ s, ev }, i) => (
@@ -264,26 +275,7 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className={`vv-card p-5 ${hasAq3 ? "border-[var(--vv-accent)]" : ""}`}>
-          <p className="font-semibold">{hasAq3 ? "Protokol obsahuje AQ3 – potřebujete analýzu rizika" : "Analýza rizika ochrany před bleskem"}</p>
-          <p className="mt-1 text-sm text-ink-soft">
-            {hasAq3
-              ? "U části instalace vně budovy je přímé ohrožení bleskem. Ochranu navrhněte podle ČSN EN 62305 – analýzu rizika spočítáte online."
-              : "Výpočet rizika podle ČSN EN 62305-2 s daty z katastru a mapou bouřkových dní, dokumentace v PDF i DOCX."}
-          </p>
-          <Link href="/" className="vv-link mt-2 inline-block text-sm font-semibold">
-            Spočítat analýzu rizika na ARONLINE →
-          </Link>
-        </div>
-        <div className="vv-card p-5">
-          <p className="font-semibold">Projekt FVE nebo hromosvodu</p>
-          <p className="mt-1 text-sm text-ink-soft">Projektovou dokumentaci fotovoltaické elektrárny a ochrany před bleskem zpracuje FVSOL.</p>
-          <a href="https://fvsol.cz/?utm_source=aronline&utm_medium=vv&utm_campaign=protokol" rel="noopener" className="vv-link mt-2 inline-block text-sm font-semibold">
-            Poptat na fvsol.cz →
-          </a>
-        </div>
-      </div>
+      <VvPromoStrip campaign="protokol" aq3={hasAq3} />
     </div>
   );
 }

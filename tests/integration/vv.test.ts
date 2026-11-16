@@ -11,6 +11,7 @@ type Mods = {
   billing: typeof import("@/server/services/billing");
   schema: typeof import("@/server/db/schema");
   model: typeof import("@/server/documents/vv-model");
+  admin: typeof import("@/server/services/admin");
 };
 let m: Mods;
 let db: Awaited<ReturnType<typeof setupTestDb>>;
@@ -37,6 +38,7 @@ beforeAll(async () => {
     billing: await import("@/server/services/billing"),
     schema: await import("@/server/db/schema"),
     model: await import("@/server/documents/vv-model"),
+    admin: await import("@/server/services/admin"),
   };
 });
 afterAll(teardownTestDb);
@@ -84,5 +86,36 @@ describe("protokol o určení vnějších vlivů", () => {
 
     expect((await m.billing.listProducts()).some((p) => p.code === "VV_PREMIUM")).toBe(false);
     expect((await m.billing.listProducts(false, true)).some((p) => p.code === "VV_PREMIUM")).toBe(true);
+  });
+
+  it("registrovaný uživatel odemkne protokol kreditem od správce a vidí ho bez odkazu", async () => {
+    const { user, workspace } = await m.auth.registerUser({ email: "projektant@example.cz", password: "Bezpecne-heslo-123", name: "Projektant", acceptTerms: true });
+    const { user: admin } = await m.auth.registerUser({ email: "spravce@example.cz", password: "Bezpecne-heslo-123", name: "Správce", acceptTerms: true });
+    const { id, token } = await m.vv.createProtocol({ data, confirmations: [true, true], email: "projektant@example.cz", marketingConsent: false, acceptTerms: true }, "1.2.3.4", user.id);
+
+    // vlastník protokol otevře i bez tokenu, cizí uživatel ne
+    expect((await m.vv.getProtocol(id, null, user.id)).id).toBe(id);
+    await expect(m.vv.getProtocol(id, null, admin.id)).rejects.toMatchObject({ status: 404 });
+    expect((await m.vv.listUserProtocols(user.id)).map((p) => p.id)).toContain(id);
+
+    // bez kreditu nejde
+    await expect(m.vv.redeemWithCredit(id, token, { userId: user.id, workspaceId: workspace.id })).rejects.toMatchObject({ status: 402 });
+
+    await m.admin.adjustCredits({ workspaceId: workspace.id, delta: 2, note: "VV zdarma", adminId: admin.id });
+    await m.vv.redeemWithCredit(id, null, { userId: user.id, workspaceId: workspace.id });
+    const row = await db.query.vvProtocols.findFirst({ where: eq(m.schema.vvProtocols.id, id) });
+    expect(row?.premiumAt).not.toBeNull();
+    expect(await m.billing.creditBalance(workspace.id)).toBe(1);
+    await expect(m.vv.redeemWithCredit(id, null, { userId: user.id, workspaceId: workspace.id })).rejects.toMatchObject({ status: 409 });
+    expect(await m.billing.creditBalance(workspace.id)).toBe(1);
+  });
+
+  it("protokol otevřený přes odkaz přihlášeným uživatelem se přiřadí k jeho účtu", async () => {
+    const { user } = await m.auth.registerUser({ email: "druhy@example.cz", password: "Bezpecne-heslo-123", name: "Druhý", acceptTerms: true });
+    const { id, token } = await m.vv.createProtocol({ data, confirmations: [true, true], email: "druhy@example.cz", marketingConsent: false, acceptTerms: true }, "1.2.3.4");
+    const row = await m.vv.getProtocol(id, token, user.id);
+    expect(row.userId).toBeNull();
+    expect((await m.vv.claimProtocol(row, user.id)).userId).toBe(user.id);
+    expect((await m.vv.getProtocol(id, null, user.id)).id).toBe(id);
   });
 });

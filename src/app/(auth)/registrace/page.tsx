@@ -26,7 +26,9 @@ export default function RegisterPage() {
       await api("/api/auth/register", {
         body: { name, email, password, acceptTerms: accept },
       });
-      router.push("/app/profil?vitejte=1");
+      // návrat odkud uživatel přišel (např. protokol VV), jen interní cesty
+      const next = new URLSearchParams(window.location.search).get("next");
+      router.push(next && next.startsWith("/") && !next.startsWith("//") ? next : "/app/profil?vitejte=1");
       router.refresh();
     } catch (err) {
       setErrors(fieldErrors(err));

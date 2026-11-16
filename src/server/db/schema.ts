@@ -428,6 +428,8 @@ export const vvProtocols = pgTable(
   {
     id: id(),
     tokenHash: text("token_hash").notNull().unique(),
+    /** Vlastník (registrovaný uživatel) – protokol vidí v „Moje protokoly“ i bez odkazu s tokenem */
+    userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
     data: jsonb("data").notNull(),
     email: text("email").notNull(),
     marketingConsent: boolean("marketing_consent").notNull().default(false),
@@ -439,7 +441,11 @@ export const vvProtocols = pgTable(
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
-  (t) => [index("vv_protocols_created_idx").on(t.createdAt), index("vv_protocols_email_idx").on(t.email)],
+  (t) => [
+    index("vv_protocols_created_idx").on(t.createdAt),
+    index("vv_protocols_email_idx").on(t.email),
+    index("vv_protocols_user_idx").on(t.userId),
+  ],
 );
 
 /* ------------------------------------------------------------------ */

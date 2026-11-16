@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { VvWizard } from "@/components/vv/wizard";
+import { getCurrent } from "@/server/auth/session";
 
 export const metadata: Metadata = {
   title: { absolute: "Vyplnit protokol o určení vnějších vlivů | VV online" },
@@ -7,6 +8,15 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function VvNewPage() {
-  return <VvWizard />;
+export const dynamic = "force-dynamic";
+
+export default async function VvNewPage() {
+  let email = "";
+  try {
+    const c = await getCurrent();
+    if (c && !c.user.isGuest) email = c.user.email;
+  } catch {
+    /* nepřihlášen */
+  }
+  return <VvWizard defaultEmail={email} />;
 }

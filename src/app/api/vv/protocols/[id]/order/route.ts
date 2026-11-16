@@ -8,7 +8,7 @@ import { enforce, LIMITS } from "@/server/ratelimit";
 import { createGuestUser, toPublicUser, zEmail, type PublicUser } from "@/server/services/auth";
 import { getProtocol } from "@/server/services/vv";
 import { getMembership } from "@/server/services/workspace";
-import { vvToken } from "@/server/vv-http";
+import { vvToken, vvViewer } from "@/server/vv-http";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -26,7 +26,7 @@ export const POST = handler(async (req: Request, ctx: Ctx) => {
       acceptTerms: z.literal(true, { errorMap: () => ({ message: "Je nutný souhlas s obchodními podmínkami" }) }),
     }),
   );
-  const protocol = await getProtocol(id, vvToken(req));
+  const protocol = await getProtocol(id, vvToken(req), (await vvViewer())?.userId);
   if (protocol.premiumAt) throw conflict("Protokol už je v placené verzi.");
   await enforce(`payment:vv:${clientIp(req)}`, LIMITS.payment);
   // účet hosta zakládáme, až když je jisté, že platbu lze provést

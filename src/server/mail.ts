@@ -20,6 +20,36 @@ export const testOutbox: Mail[] = [];
 
 let transporter: Transporter | null = null;
 
+/** Odeslání přes Resend HTTPS API (https://resend.com/docs/api-reference/emails/send-email). */
+async function sendViaResend(mail: Mail, apiKey: string, from: string, replyTo?: string): Promise<boolean> {
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from,
+        to: [mail.to],
+        bcc: mail.bcc ? [mail.bcc] : undefined,
+        reply_to: replyTo || undefined,
+        subject: mail.subject,
+        text: mail.text,
+        attachments: mail.attachments?.map((a) => ({ filename: a.filename, content: a.content.toString("base64") })),
+      }),
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (!res.ok) {
+      const body = (await res.text()).slice(0, 300);
+      log.error("mail_failed", { subject: mail.subject, provider: "resend", status: res.status, message: body });
+      return false;
+    }
+    log.info("mail_sent", { subject: mail.subject, provider: "resend" });
+    return true;
+  } catch (e) {
+    log.error("mail_failed", { subject: mail.subject, provider: "resend", ...errorMeta(e) });
+    return false;
+  }
+}
+
 export async function sendMail(mail: Mail): Promise<boolean> {
   const c = getConfig();
   // Zástupné adresy hostů (*.invalid) nejsou doručitelné – nic neposíláme.
@@ -28,6 +58,7 @@ export async function sendMail(mail: Mail): Promise<boolean> {
     testOutbox.push(mail);
     return true;
   }
+  if (c.RESEND_API_KEY) return sendViaResend(mail, c.RESEND_API_KEY, c.MAIL_FROM, c.OPERATOR_EMAIL);
   if (!c.SMTP_HOST) {
     if (c.isProduction) {
       log.error("mail_not_configured", { subject: mail.subject });

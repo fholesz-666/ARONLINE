@@ -558,6 +558,14 @@ async function fulfil(tx: Tx, payment: typeof payments.$inferSelect, order: type
         .update(vvProtocols)
         .set({ premiumAt: now })
         .where(and(eq(vvProtocols.id, order.vvProtocolId), isNull(vvProtocols.premiumAt)));
+      // zaplacený protokol se uloží do účtu kupujícího (jen registrovaný uživatel, ne host)
+      const buyer = await tx.query.users.findFirst({ where: eq(users.id, order.userId), columns: { isGuest: true } });
+      if (buyer && !buyer.isGuest) {
+        await tx
+          .update(vvProtocols)
+          .set({ userId: order.userId })
+          .where(and(eq(vvProtocols.id, order.vvProtocolId), isNull(vvProtocols.userId)));
+      }
     }
     if (order.projectId) {
       const projectId = order.projectId;

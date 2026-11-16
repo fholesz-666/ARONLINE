@@ -259,10 +259,11 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
             <p className="text-lg font-semibold text-[var(--vv-accent-strong)]">Profi verze za {price} Kč</p>
             <span className="text-sm text-muted">jednorázově k tomuto protokolu</span>
           </div>
-          <ul className="mt-3 grid gap-1.5 text-sm text-ink-soft sm:grid-cols-3">
+          <ul className="mt-3 grid gap-1.5 text-sm text-ink-soft sm:grid-cols-2">
             <li>✓ bez vodoznaku, patičky a zámku PDF</li>
             <li>✓ vaše logo v záhlaví</li>
             <li>✓ editovatelný Word (DOCX)</li>
+            <li>✓ uložení do účtu (Moje protokoly)</li>
           </ul>
           {viewer.loggedIn && viewer.credits > 0 ? (
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--vv-accent)] bg-[var(--vv-accent-soft)] p-4">
@@ -284,7 +285,7 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
               <Link className="vv-link" href={`/registrace?next=${encodeURIComponent(`/vnejsi-vlivy/protokol/${id}`)}`}>
                 založte účet zdarma
               </Link>{" "}
-              a protokoly budete mít pohromadě.
+              – Profi protokoly se vám uloží do účtu.
             </p>
           ) : null}
           <div className="mt-4 rounded-lg border border-[var(--vv-line)] bg-white p-4">

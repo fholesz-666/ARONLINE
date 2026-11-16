@@ -65,7 +65,8 @@ export function protocolLink(id: string, token: string): string {
  * `raw` je tělo požadavku už ověřené schématem (readJson); typ readJson ale odpovídá vstupu schématu,
  * proto se zde ještě jednou parsuje, aby platily výchozí hodnoty i typy výstupu.
  */
-export async function createProtocol(raw: z.input<typeof zVvCreate>, ip: string, ownerId: string | null = null) {
+/** Nový protokol je vždy bez vlastníka – do účtu se ukládá až Profi verze (platba, kredit od správce). */
+export async function createProtocol(raw: z.input<typeof zVvCreate>, ip: string) {
   const input = zVvCreate.parse(raw);
   checkConfirmations(input.data, input.confirmations);
   const token = randomToken();
@@ -73,7 +74,6 @@ export async function createProtocol(raw: z.input<typeof zVvCreate>, ip: string,
     .insert(vvProtocols)
     .values({
       tokenHash: sha256(token),
-      userId: ownerId,
       data: input.data,
       email: input.email,
       marketingConsent: input.marketingConsent,
@@ -101,9 +101,12 @@ export async function getProtocol(id: string, token: string | null | undefined, 
   return row;
 }
 
-/** Protokol otevřený přes odkaz přihlášeným uživatelem bez vlastníka se přiřadí k jeho účtu. */
+/**
+ * Profi protokol otevřený přes odkaz přihlášeným uživatelem se přiřadí k jeho účtu (pokud ještě nemá vlastníka).
+ * Bezplatné protokoly se do účtu neukládají.
+ */
 export async function claimProtocol(row: VvProtocolRow, userId: string | null | undefined): Promise<VvProtocolRow> {
-  if (!userId || row.userId) return row;
+  if (!userId || row.userId || !row.premiumAt) return row;
   await getDb()
     .update(vvProtocols)
     .set({ userId })

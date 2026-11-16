@@ -24,6 +24,11 @@ export default function PrivacyPage() {
           Nedokončený účet hosta bez zaplacené analýzy mažeme do 60 dnů od poslední aktivity.
         </li>
         <li>
+          <strong>Protokol o určení vnějších vlivů (VV online)</strong> – e-mail autora, jména a profese členů komise, údaje o objektu a objednateli,
+          potvrzení členů komise (čas a IP adresa), případně logo. Účel: vytvoření protokolu a jeho opakované stažení či úprava (plnění smlouvy);
+          potvrzení komise uchováváme jako doklad pro případ sporu (oprávněný zájem). Obchodní sdělení posíláme jen se samostatným souhlasem.
+        </li>
+        <li>
           <strong>Údaje zpracovatele do razítka</strong> – jméno, firma, IČO, adresa, kontakty, logo. Účel: generování dokumentace (plnění smlouvy).
         </li>
         <li>
@@ -62,7 +67,8 @@ export default function PrivacyPage() {
         <li>účetní doklady a objednávky – po dobu stanovenou právními předpisy (zpravidla 10 let),</li>
         <li>souhlas s opakovanou platbou – po dobu předplatného a 12 měsíců po jeho skončení,</li>
         <li>bezpečnostní záznamy – 12 měsíců,</li>
-        <li>účty hostů bez zaplacené analýzy – 60 dnů od poslední aktivity.</li>
+        <li>účty hostů bez zaplacené analýzy – 60 dnů od poslední aktivity,</li>
+        <li>protokoly VV online – po dobu potřebnou pro opakované stažení a úpravy; na žádost je smažeme (zaplacené protokoly s objednávkou po dobu evidence dokladů).</li>
       </ul>
 
       <h2>5. Vaše práva</h2>

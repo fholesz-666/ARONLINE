@@ -22,6 +22,8 @@ export const LIMITS = {
   export: { max: 60, windowSec: 60 * 60 },
   calc: { max: 120, windowSec: 60 * 60 },
   notify: { max: 300, windowSec: 60 },
+  vvCreate: { max: 30, windowSec: 60 * 60 },
+  vvRead: { max: 300, windowSec: 60 * 60 },
 } satisfies Record<string, Limit>;
 
 /** Zvýší čítač a vrátí true, pokud je limit překročen. */

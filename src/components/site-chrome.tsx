@@ -35,6 +35,9 @@ export async function SiteHeader() {
           <Link href="/metodika" className="btn btn-ghost hidden sm:inline-flex">
             Metodika
           </Link>
+          <Link href="/vnejsi-vlivy" className="btn btn-ghost hidden lg:inline-flex">
+            Vnější vlivy
+          </Link>
           <a href="https://fvsol.cz/?utm_source=aronline&utm_medium=web&utm_campaign=menu" rel="noopener" className="btn btn-ghost hidden md:inline-flex">
             Projekce FVE a LPS
           </a>
@@ -115,6 +118,9 @@ export async function SiteFooter() {
           </Link>
           <Link className="link" href="/analyza-rizika-fve">
             Analýza rizika u fotovoltaiky
+          </Link>
+          <Link className="link" href="/vnejsi-vlivy">
+            Protokol o určení vnějších vlivů zdarma
           </Link>
           <Link className="link" href="/casto-kladene-otazky">
             Časté otázky

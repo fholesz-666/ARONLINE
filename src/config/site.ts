@@ -10,6 +10,7 @@ export const PUBLIC_PAGES: [string, number, "weekly" | "monthly" | "yearly"][] =
   ["/", 1, "weekly"],
   ["/analyza-rizika-lps", 0.9, "monthly"],
   ["/analyza-rizika-fve", 0.8, "monthly"],
+  ["/vnejsi-vlivy", 0.8, "monthly"],
   ["/casto-kladene-otazky", 0.7, "monthly"],
   ["/cenik", 0.8, "monthly"],
   ["/metodika", 0.6, "monthly"],

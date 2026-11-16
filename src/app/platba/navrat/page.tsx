@@ -62,7 +62,11 @@ export default async function PaymentReturnPage({ searchParams }: { searchParams
         {order && paid && (
           <Notice tone="ok" title="Platba přijata">
             Objednávka {order.number} je zaplacená.{" "}
-            {order.projectId ? "Analýza je odemčená – dokumentaci můžete stáhnout." : "Kredity nebo předplatné jsou aktivní."}
+            {order.vvProtocolId
+              ? "Protokol je v placené verzi – stáhněte si ho bez patičky, s logem a ve formátu DOCX."
+              : order.projectId
+                ? "Analýza je odemčená – dokumentaci můžete stáhnout."
+                : "Kredity nebo předplatné jsou aktivní."}
           </Notice>
         )}
         {order && !paid && (state === "CANCELED" || state === "TIMEOUTED") && (
@@ -76,14 +80,21 @@ export default async function PaymentReturnPage({ searchParams }: { searchParams
           </Notice>
         )}
         <div className="flex gap-2">
+          {order?.vvProtocolId && (
+            <Link className="btn btn-primary" href={`/vnejsi-vlivy/protokol/${order.vvProtocolId}`}>
+              Zpět k protokolu
+            </Link>
+          )}
           {order?.projectId && (
             <Link className="btn btn-primary" href={`/app/projekty/${order.projectId}?krok=vysledky`}>
               Zpět k analýze
             </Link>
           )}
-          <Link className="btn btn-secondary" href="/app/predplatne">
-            Přehled plateb
-          </Link>
+          {!order?.vvProtocolId && (
+            <Link className="btn btn-secondary" href="/app/predplatne">
+              Přehled plateb
+            </Link>
+          )}
         </div>
       </main>
     </div>

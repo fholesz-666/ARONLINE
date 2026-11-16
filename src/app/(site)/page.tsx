@@ -202,6 +202,22 @@ export default async function HomePage() {
         <FvsolPromo context="home" />
       </section>
 
+      <section className="mx-auto max-w-6xl px-4 pt-12">
+        <div className="flex flex-col gap-4 rounded-md border border-[#0f766e] bg-[#f3faf8] p-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wide text-[#0f766e]">Novinka · zdarma</span>
+            <h2 className="mt-1 text-xl">Protokol o určení vnějších vlivů online</h2>
+            <p className="mt-1 max-w-2xl text-sm text-ink-soft">
+              Komise vyklikne prostory podle ČSN 33 2000-5-51 ed. 3, aplikace vyhodnotí normální a abnormální vlivy, doplní opatření a krytí IP.
+              PDF ihned a bez registrace.
+            </p>
+          </div>
+          <Link href="/vnejsi-vlivy" className="btn shrink-0 bg-[#0f766e] px-5 py-2.5 text-white hover:bg-[#115e59]">
+            Vyplnit protokol VV
+          </Link>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-6xl px-4 py-16" id="cenik">
         <h2 className="text-2xl">Ceník</h2>
         <p className="mt-2 max-w-[70ch] text-ink-soft">

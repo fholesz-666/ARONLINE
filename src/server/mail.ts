@@ -81,10 +81,10 @@ export const mails = {
     subject: `Pozvánka do týmu ${workspaceName} – ARONLINE`,
     text: `Dobrý den,\n\nbyli jste pozváni do týmu „${workspaceName}“ v aplikaci ARONLINE.\nPozvánku přijmete zde (platí 7 dní):\n${link}${footer()}`,
   }),
-  paymentReceived: (to: string, orderNumber: string, productName: string, amount: string, invoiceNumber?: string): Mail => ({
+  paymentReceived: (to: string, orderNumber: string, productName: string, amount: string, invoiceNumber?: string, nextStep?: string): Mail => ({
     to,
     subject: `Platba přijata – objednávka ${orderNumber}`,
-    text: `Dobrý den,\n\nděkujeme, platba za „${productName}“ (${amount}) byla přijata.${invoiceNumber ? `\nV příloze posíláme doklad č. ${invoiceNumber}.` : ""}\nPřehled objednávek a dokladů najdete v aplikaci v sekci Předplatné a kredity.${footer()}`,
+    text: `Dobrý den,\n\nděkujeme, platba za „${productName}“ (${amount}) byla přijata.${invoiceNumber ? `\nV příloze posíláme doklad č. ${invoiceNumber}.` : ""}\n${nextStep ?? "Přehled objednávek a dokladů najdete v aplikaci v sekci Předplatné a kredity."}${footer()}`,
   }),
   bankTransferInstructions: (
     to: string,
@@ -98,6 +98,11 @@ export const mails = {
     to,
     subject: `Opakovaná platba založena – ${productName}`,
     text: `Dobrý den,\n\npotvrzujeme, že byla založena opakovaná platba pro předplatné „${productName}“ s těmito parametry:\n\n${terms.map((t) => `${t.label}: ${t.value}`).join("\n")}\n\nS údaji o platební kartě nakládá GoPay s.r.o. podle standardu PCI DSS Level 1.\nPodmínky opakovaných plateb: ${site()}/pravni/obchodni-podminky#opakovane-platby${footer()}`,
+  }),
+  vvProtocolCreated: (to: string, objectName: string, link: string): Mail => ({
+    to,
+    subject: `Protokol o určení vnějších vlivů – ${objectName}`,
+    text: `Dobrý den,\n\nprotokol o určení vnějších vlivů pro objekt „${objectName}“ je připravený.\nZde si ho můžete kdykoli znovu stáhnout nebo upravit (odkaz nikomu nepřeposílejte):\n${link}\n\nPotřebujete k objektu i analýzu rizika ochrany před bleskem podle ČSN EN 62305-2? Spočítáte ji na ${site()}.\nProjekci FVE a hromosvodů zajistí https://fvsol.cz.${footer()}`,
   }),
   subscriptionCanceled: (to: string, productName: string, until: string): Mail => ({
     to,

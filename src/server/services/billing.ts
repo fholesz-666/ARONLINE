@@ -7,7 +7,7 @@
  * - Souběžná odemčení v jednom workspace serializuje advisory lock.
  */
 import { and, asc, count, eq, gt, gte, inArray, isNull, sql, sum } from "drizzle-orm";
-import { DEFAULT_PRODUCTS } from "@/config/pricing";
+import { DEFAULT_PRODUCTS, isAnalysisProduct } from "@/config/pricing";
 import { getVerificationSummary } from "@/core/risk/methodologies/csn-en-62305-2-ed2/verification";
 import { audit } from "../audit";
 import { getConfig } from "../config";
@@ -17,13 +17,15 @@ import { forbidden, notFound, paymentRequired } from "../http";
 
 export type ProductRow = typeof products.$inferSelect;
 
-export async function listProducts(activeOnly = true): Promise<ProductRow[]> {
+/** Ceník. Produkty služby VV online (kód „VV_…“) se vracejí jen s `includeVv` (administrace). */
+export async function listProducts(activeOnly = true, includeVv = false): Promise<ProductRow[]> {
   const db = getDb();
-  return db
+  const rows = await db
     .select()
     .from(products)
     .where(activeOnly ? eq(products.active, true) : undefined)
     .orderBy(asc(products.sortOrder));
+  return includeVv ? rows : rows.filter((r) => isAnalysisProduct(r.code));
 }
 
 export async function getProduct(code: string): Promise<ProductRow | null> {

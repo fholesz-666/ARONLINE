@@ -22,6 +22,13 @@
       "when": 1792664588176,
       "tag": "0002_spravce_doklady",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794819600000,
+      "tag": "0003_vnejsi_vlivy",
+      "breakpoints": true
     }
   ]
 }

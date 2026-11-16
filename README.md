@@ -28,6 +28,7 @@
 | [docs/costs.md](docs/costs.md) | Odhad měsíčních provozních nákladů |
 | [docs/security.md](docs/security.md) | Bezpečnostní opatření |
 | [docs/test-results.md](docs/test-results.md) | Výsledky testů |
+| [docs/vnejsi-vlivy.md](docs/vnejsi-vlivy.md) | VV online – protokol o určení vnějších vlivů (normy, platba, API) |
 | [docs/remaining.md](docs/remaining.md) | **Co musí dodat nebo odborně ověřit člověk** |
 
 ## Technologie

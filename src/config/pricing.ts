@@ -20,6 +20,9 @@ export interface ProductDefinition {
   sortOrder: number;
 }
 
+/** Placená verze protokolu o určení vnějších vlivů (VV online). */
+export const VV_PRODUCT_CODE = "VV_PREMIUM";
+
 export const DEFAULT_PRODUCTS: ProductDefinition[] = [
   {
     code: "SINGLE",
@@ -67,4 +70,19 @@ export const DEFAULT_PRODUCTS: ProductDefinition[] = [
     features: ["Až 150 analýz měsíčně", "Až 5 uživatelů", "Sdílené projekty a šablony", "Více profilů zpracovatele"],
     sortOrder: 40,
   },
+  {
+    code: VV_PRODUCT_CODE,
+    name: "Protokol o určení vnějších vlivů – Profi",
+    description: "Placená verze protokolu VV online: bez patičky s reklamou, s vlastním logem, ke stažení i jako editovatelný DOCX.",
+    type: "ONE_TIME",
+    priceCzk: 99,
+    maxMembers: 1,
+    features: ["Bez reklamní patičky", "Vlastní logo v záhlaví", "Editovatelný Word (DOCX)", "Úpravy a nové exporty téhož protokolu"],
+    sortOrder: 90,
+  },
 ];
+
+/** Produkty služby VV online se nezobrazují v ceníku analýz rizika. */
+export function isAnalysisProduct(code: string): boolean {
+  return !code.startsWith("VV_");
+}

@@ -239,7 +239,7 @@ export function VvProtocolView({ id, price }: { id: string; price: number }) {
             <span className="text-sm text-muted">jednorázově k tomuto protokolu</span>
           </div>
           <ul className="mt-3 grid gap-1.5 text-sm text-ink-soft sm:grid-cols-3">
-            <li>✓ bez reklamní patičky</li>
+            <li>✓ bez vodoznaku, patičky a zámku PDF</li>
             <li>✓ vaše logo v záhlaví</li>
             <li>✓ editovatelný Word (DOCX)</li>
           </ul>

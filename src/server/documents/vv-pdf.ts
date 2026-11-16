@@ -1,6 +1,7 @@
 /**
  * PDF protokolu o určení vnějších vlivů (pdfmake, písmo Roboto s českou diakritikou).
  */
+import { randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { Content, TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
@@ -168,6 +169,22 @@ export async function renderVvPdf(m: VvDocModel, logo?: { data: Buffer; mime: st
     pageMargins: [48, 46, 48, m.branding ? 62 : 46],
     info: { title: `${m.title}${m.number ? ` ${m.number}` : ""}`, ...(m.branding ? { creator: "ARONLINE – VV online" } : {}) },
     defaultStyle: { font: "Roboto", fontSize: 9.5, lineHeight: 1.2, color: "#1a1a1a" },
+    // Bezplatná verze: jemný vodoznak a zamčení úprav (tisk povolen). Placená verze je bez omezení.
+    ...(m.branding
+      ? {
+          watermark: { text: "VV online zdarma · aronline.cz", color: ACCENT, opacity: 0.07, bold: true, fontSize: 40, angle: -40 },
+          ownerPassword: randomBytes(18).toString("base64url"),
+          permissions: {
+            printing: "highResolution" as const,
+            modifying: false,
+            copying: false,
+            annotating: false,
+            fillingForms: false,
+            contentAccessibility: true,
+            documentAssembly: false,
+          },
+        }
+      : {}),
     styles: {
       h1: { fontSize: 12.5, bold: true, color: INK, margin: [0, 0, 0, 6] },
       h2: { fontSize: 11, bold: true, color: INK, margin: [0, 8, 0, 4] },

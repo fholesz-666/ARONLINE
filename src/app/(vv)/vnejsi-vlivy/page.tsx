@@ -56,7 +56,7 @@ export default async function VvLandingPage() {
               Jak to funguje
             </Link>
           </div>
-          <p className="mt-3 text-sm text-muted">Bez patičky, s vaším logem a ve Wordu za {price} Kč.</p>
+          <p className="mt-3 text-sm text-muted">Bez vodoznaku, s vaším logem a ve Wordu za {price} Kč.</p>
         </div>
         <div className="vv-card p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted">Ukázka vyhodnocení</p>
@@ -111,7 +111,7 @@ export default async function VvLandingPage() {
               <li>✓ Neomezený počet prostor a členů komise</li>
               <li>✓ Vyhodnocení, doporučená opatření a krytí IP</li>
               <li>✓ PDF ke stažení a odkaz pro pozdější úpravy</li>
-              <li>· V patičce odkaz na ARONLINE a FVSOL</li>
+              <li>· Jemný vodoznak, patička s odkazem na ARONLINE a FVSOL, PDF zamčené proti úpravám</li>
             </ul>
           </div>
           <div className="vv-card border-[var(--vv-accent)] p-6">
@@ -119,7 +119,7 @@ export default async function VvLandingPage() {
             <p className="mt-1 text-3xl font-bold">{price} Kč</p>
             <ul className="mt-4 space-y-1.5 text-sm text-ink-soft">
               <li>✓ Vše ze zdarma verze</li>
-              <li>✓ Bez reklamní patičky</li>
+              <li>✓ Bez vodoznaku a reklamní patičky, PDF bez zámku</li>
               <li>✓ Vaše logo v záhlaví protokolu</li>
               <li>✓ Editovatelný Word (DOCX)</li>
             </ul>

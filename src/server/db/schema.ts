@@ -316,6 +316,8 @@ export const orders = pgTable(
     currency: text("currency").notNull().default("CZK"),
     status: orderStatus("status").notNull().default("PENDING"),
     projectId: text("project_id").references(() => projects.id, { onDelete: "set null" }),
+    /** Objednávka placené verze protokolu o určení vnějších vlivů */
+    vvProtocolId: text("vv_protocol_id").references(() => vvProtocols.id, { onDelete: "set null" }),
     billing: jsonb("billing"),
     /** CARD = platební brána, BANK = bankovní převod (potvrzuje správce) */
     paymentMethod: text("payment_method").notNull().default("CARD"),
@@ -411,6 +413,33 @@ export const subscriptions = pgTable(
     updatedAt: updatedAt(),
   },
   (t) => [index("subs_ws_idx").on(t.workspaceId, t.status)],
+);
+
+/* ------------------------------------------------------------------ */
+/* Protokoly o určení vnějších vlivů (VV online, /vnejsi-vlivy)       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Protokol VV vyplněný bez registrace. Přístup je vázán na náhodný token (v DB jen jeho SHA-256),
+ * který dostane autor v odkazu. Placená verze (premiumAt) = bez patičky, vlastní logo, DOCX.
+ */
+export const vvProtocols = pgTable(
+  "vv_protocols",
+  {
+    id: id(),
+    tokenHash: text("token_hash").notNull().unique(),
+    data: jsonb("data").notNull(),
+    email: text("email").notNull(),
+    marketingConsent: boolean("marketing_consent").notNull().default(false),
+    /** Potvrzení členů komise (jména, čas, IP) – důkaz pro případ sporu */
+    confirmations: jsonb("confirmations").notNull(),
+    logo: bytea("logo"),
+    logoMime: text("logo_mime"),
+    premiumAt: ts("premium_at"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [index("vv_protocols_created_idx").on(t.createdAt), index("vv_protocols_email_idx").on(t.email)],
 );
 
 /* ------------------------------------------------------------------ */

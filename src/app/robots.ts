@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/app", "/api", "/platba", "/prihlaseni", "/registrace", "/zapomenute-heslo", "/obnova-hesla", "/overeni-emailu", "/pozvanka"],
+        disallow: ["/app", "/api", "/platba", "/prihlaseni", "/registrace", "/zapomenute-heslo", "/obnova-hesla", "/overeni-emailu", "/pozvanka", "/vnejsi-vlivy/protokol"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

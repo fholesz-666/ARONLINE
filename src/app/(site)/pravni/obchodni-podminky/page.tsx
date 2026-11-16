@@ -135,6 +135,24 @@ export default async function TermsPage() {
         </li>
       </ol>
 
+      <h2>4a. Protokol o určení vnějších vlivů (VV online)</h2>
+      <ol>
+        <li>
+          Na stránce /vnejsi-vlivy poskytuje provozovatel bezplatně elektronický formulář pro sestavení protokolu o určení vnějších vlivů. Vnější vlivy určuje komise
+          uvedená v protokolu; každý její člen určení potvrzuje zaškrtnutím. Provozovatel poskytuje pouze formulář, předvolby a vzhled dokumentu a za určení vlivů
+          ani za doporučená opatření neodpovídá. Potvrzení komise se ukládá s datem, časem a IP adresou.
+        </li>
+        <li>Bezplatná verze protokolu obsahuje v zápatí odkaz na služby ARONLINE a FVSOL.</li>
+        <li>
+          Placená verze (Profi) se kupuje k jednomu konkrétnímu protokolu a zahrnuje dokument bez reklamního zápatí, s logem uživatele a export do formátu DOCX.
+          Úpravy téhož protokolu a opakované exporty jsou v ceně. Placenou verzi lze uhradit pouze kartou přes platební bránu.
+        </li>
+        <li>
+          Objednáním placené verze spotřebitel výslovně žádá o její zpřístupnění ihned po zaplacení a bere na vědomí, že tím právo odstoupit od smlouvy zaniká
+          (§ 1837 písm. l) občanského zákoníku). Tím nejsou dotčena práva z vadného plnění (čl. 7).
+        </li>
+      </ol>
+
       <h2>5. Povaha služby a výsledků</h2>
       <ol>
         <li>
@@ -201,7 +219,7 @@ export default async function TermsPage() {
 
       <h2>9. Odkazy na související služby</h2>
       <p>
-        Webové stránky služby obsahují odkaz na služby projekce FVE a ochrany před bleskem FVSOL (fvsol.cz); vygenerované dokumenty tento odkaz neobsahují. Využití těchto služeb je dobrovolné a řídí se
+        Webové stránky služby obsahují odkaz na služby projekce FVE a ochrany před bleskem FVSOL (fvsol.cz); dokumenty analýzy rizika tento odkaz neobsahují, bezplatná verze protokolu o určení vnějších vlivů ho obsahuje v zápatí (čl. 4a). Využití těchto služeb je dobrovolné a řídí se
         samostatnou smlouvou.
       </p>
 

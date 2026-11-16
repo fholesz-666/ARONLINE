@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { DEFAULT_PRODUCTS } from "@/config/pricing";
+import { DEFAULT_PRODUCTS, isAnalysisProduct } from "@/config/pricing";
 import { listProducts } from "@/server/services/billing";
 
 export interface PublicProduct {
@@ -28,7 +28,7 @@ export async function getPublicProducts(): Promise<PublicProduct[]> {
   } catch {
     /* výchozí ceník */
   }
-  return DEFAULT_PRODUCTS.map((p) => ({ ...p }));
+  return DEFAULT_PRODUCTS.filter((p) => isAnalysisProduct(p.code)).map((p) => ({ ...p }));
 }
 
 export function formatCzk(v: number) {

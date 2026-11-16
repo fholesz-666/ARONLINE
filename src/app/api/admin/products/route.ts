@@ -9,7 +9,7 @@ import { listProducts } from "@/server/services/billing";
 
 export const GET = handler(async () => {
   await requireAdmin();
-  return json({ products: await listProducts(false) });
+  return json({ products: await listProducts(false, true) });
 });
 
 /** Úprava ceny a parametrů produktu (bez zásahu do výpočetního jádra). */

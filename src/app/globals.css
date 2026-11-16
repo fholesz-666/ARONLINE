@@ -233,3 +233,133 @@ select.input {
 .leaflet-container {
   font-family: var(--font-sans);
 }
+
+/*
+ * VV online (/vnejsi-vlivy) – samostatný vzhled odlišený od ARONLINE:
+ * tyrkysová místo bezpečnostní žluté, světlé zaoblené karty místo výkresového rastru.
+ */
+.vv-theme {
+  --vv-accent: #0f766e;
+  --vv-accent-strong: #115e59;
+  --vv-accent-soft: #ccfbf1;
+  --vv-bg: #f3faf8;
+  --vv-card: #ffffff;
+  --vv-line: #cfe3df;
+  background: var(--vv-bg);
+  min-height: 100vh;
+}
+.vv-theme :focus-visible {
+  outline-color: var(--vv-accent);
+}
+.vv-theme .input:focus {
+  border-color: var(--vv-accent);
+  box-shadow: 0 0 0 3px var(--vv-accent-soft);
+}
+.vv-card {
+  background: var(--vv-card);
+  border: 1px solid var(--vv-line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgb(15 118 110 / 0.06);
+}
+.vv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.6rem 1.25rem;
+  font-weight: 650;
+  font-size: 0.9375rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+.vv-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.vv-btn-primary {
+  background: var(--vv-accent);
+  color: #fff;
+}
+.vv-btn-primary:hover:not(:disabled) {
+  background: var(--vv-accent-strong);
+}
+.vv-btn-secondary {
+  background: #fff;
+  color: var(--vv-accent-strong);
+  border-color: var(--vv-line);
+}
+.vv-btn-secondary:hover:not(:disabled) {
+  border-color: var(--vv-accent);
+}
+.vv-btn-ghost {
+  background: transparent;
+  color: var(--color-ink-soft);
+}
+.vv-btn-ghost:hover:not(:disabled) {
+  background: var(--vv-accent-soft);
+  color: var(--vv-accent-strong);
+}
+.vv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  padding: 0.125rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+.vv-chip-ok {
+  background: var(--color-ok-soft);
+  color: var(--color-ok);
+}
+.vv-chip-bad {
+  background: var(--color-bad-soft);
+  color: var(--color-bad);
+}
+.vv-chip-accent {
+  background: var(--vv-accent-soft);
+  color: var(--vv-accent-strong);
+}
+.vv-link {
+  color: var(--vv-accent-strong);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.vv-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+.vv-step[aria-current="step"] {
+  color: var(--vv-accent-strong);
+}
+.vv-step-num {
+  display: inline-flex;
+  height: 1.75rem;
+  width: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid var(--vv-line);
+  background: #fff;
+  font-size: 0.8125rem;
+}
+.vv-step[aria-current="step"] .vv-step-num {
+  border-color: var(--vv-accent);
+  background: var(--vv-accent);
+  color: #fff;
+}
+.vv-step[data-done="true"] .vv-step-num {
+  border-color: var(--vv-accent);
+  color: var(--vv-accent-strong);
+}
+.vv-row-abnormal {
+  background: var(--color-bad-soft);
+}

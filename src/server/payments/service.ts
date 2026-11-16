@@ -10,13 +10,14 @@
  */
 import { randomInt } from "node:crypto";
 import { GUEST_EMAIL_DOMAIN } from "../services/auth";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 import { audit } from "../audit";
 import { getConfig } from "../config";
 import { getDb, type Tx } from "../db";
 import { RECURRENCE_CONSENT, RECURRENCE_TERMS_VERSION, recurrenceDateTo, recurrenceTerms } from "@/config/recurrence";
 import { renderInvoicePdf } from "../documents/invoice-pdf";
-import { invoices, orders, paymentEvents, payments, subscriptions, users } from "../db/schema";
+import { VV_PRODUCT_CODE } from "@/config/pricing";
+import { invoices, orders, paymentEvents, payments, subscriptions, users, vvProtocols } from "../db/schema";
 import { badRequest, conflict, forbidden, notFound } from "../http";
 import { errorMeta, log } from "../log";
 import { mails, sendMail } from "../mail";
@@ -55,8 +56,12 @@ function expectedGoid(): string {
   return gatewayOverride?.provider === "MOCK" || c.PAYMENTS_MODE === "mock" ? MOCK_GOID : (c.GOPAY_GOID ?? "");
 }
 
-export function paymentsAvailable(): { available: boolean; reason?: string } {
-  const gate = commerceAllowed();
+/**
+ * Jsou platby kartou dostupné? Protokol VV (`productCode` = VV_PREMIUM) nezávisí na ověření
+ * výpočetního jádra analýzy rizika, proto se u něj tato podmínka nekontroluje.
+ */
+export function paymentsAvailable(productCode?: string): { available: boolean; reason?: string } {
+  const gate = productCode === VV_PRODUCT_CODE ? { allowed: true as const, reason: undefined } : commerceAllowed();
   if (!gate.allowed) return { available: false, reason: gate.reason };
   const c = getConfig();
   if (c.PAYMENTS_MODE !== "mock" && !c.gopayConfigured) {
@@ -92,13 +97,18 @@ export interface CreateOrderInput {
   recurrenceConsent?: boolean;
   /** IP adresa pro doklad o souhlasu */
   clientIp?: string;
+  /** Protokol o určení vnějších vlivů (jen u produktu VV_PREMIUM) */
+  vvProtocolId?: string | null;
 }
 
-/** Jediný produkt dostupný bez registrace. */
+/** Jediný produkt analýzy rizika dostupný bez registrace. */
 export const GUEST_PRODUCT_CODE = "SINGLE";
 
 /** Společné kontroly objednávky (karta i převod). */
 async function validateOrder(input: CreateOrderInput) {
+  if (input.productCode === VV_PRODUCT_CODE || input.vvProtocolId) {
+    return validateVvOrder(input);
+  }
   if (input.isGuest) {
     if (input.productCode !== GUEST_PRODUCT_CODE) {
       throw forbidden("Balíčky a předplatné vyžadují registraci. Jako host lze zakoupit jen jednorázovou analýzu.");
@@ -125,6 +135,26 @@ async function validateOrder(input: CreateOrderInput) {
   return product;
 }
 
+/** Placená verze protokolu VV – kupuje se vždy ke konkrétnímu protokolu, i bez registrace. */
+async function validateVvOrder(input: CreateOrderInput) {
+  if (input.productCode !== VV_PRODUCT_CODE || !input.vvProtocolId) {
+    throw badRequest("Placená verze protokolu se kupuje ke konkrétnímu protokolu.");
+  }
+  if (input.projectId) throw badRequest("Objednávka protokolu nesmí být vázána na projekt analýzy.");
+  if (!input.userEmail || input.userEmail.endsWith("@" + GUEST_EMAIL_DOMAIN)) {
+    throw badRequest("Zadejte e-mail pro doklad o platbě.", [{ path: "email", message: "Zadejte e-mail" }]);
+  }
+  const protocol = await getDb().query.vvProtocols.findFirst({
+    where: eq(vvProtocols.id, input.vvProtocolId),
+    columns: { id: true, premiumAt: true },
+  });
+  if (!protocol) throw notFound("Protokol nebyl nalezen.");
+  if (protocol.premiumAt) throw conflict("Protokol už je v placené verzi.");
+  const product = await getProduct(VV_PRODUCT_CODE);
+  if (!product || !product.active) throw notFound("Placená verze protokolu není dostupná.");
+  return product;
+}
+
 function productSnapshot(product: NonNullable<Awaited<ReturnType<typeof getProduct>>>) {
   return {
     code: product.code,
@@ -139,7 +169,7 @@ function productSnapshot(product: NonNullable<Awaited<ReturnType<typeof getProdu
 }
 
 export async function createOrder(input: CreateOrderInput): Promise<{ orderId: string; gwUrl: string }> {
-  const avail = paymentsAvailable();
+  const avail = paymentsAvailable(input.productCode);
   if (!avail.available) throw forbidden(avail.reason);
   const product = await validateOrder(input);
   const c = getConfig();
@@ -182,6 +212,7 @@ export async function createOrder(input: CreateOrderInput): Promise<{ orderId: s
       productSnapshot: productSnapshot(product),
       amountHaler: product.priceHaler,
       projectId: input.projectId ?? null,
+      vvProtocolId: input.vvProtocolId ?? null,
       paymentMethod: "CARD",
       billing: await billingSnapshot(input.workspaceId, input.userId, input.userEmail),
       consents,
@@ -258,6 +289,9 @@ function variableSymbol(): string {
  * Předplatné převodem nelze (vyžaduje opakovanou platbu kartou).
  */
 export async function createBankOrder(input: CreateOrderInput): Promise<{ orderId: string }> {
+  if (input.productCode === VV_PRODUCT_CODE || input.vvProtocolId) {
+    throw badRequest("Placenou verzi protokolu lze zaplatit jen kartou přes platební bránu.");
+  }
   const avail = await bankTransferAvailable();
   if (!avail.available) throw forbidden(avail.reason);
   const product = await validateOrder(input);
@@ -458,7 +492,10 @@ async function notifyPaid(order: typeof orders.$inferSelect, f: Fulfilment) {
     if (!to) return;
     const snap = order.productSnapshot as { name: string; priceHaler: number; periodMonths: number | null };
     const inv = f.invoiceId ? await db.query.invoices.findFirst({ where: eq(invoices.id, f.invoiceId) }) : undefined;
-    const mail = mails.paymentReceived(to, order.number, snap.name, `${(f.amountHaler / 100).toLocaleString("cs-CZ")} Kč`, inv?.number);
+    const nextStep = order.vvProtocolId
+      ? "Protokol si stáhněte bez patičky, s logem a ve Wordu přes odkaz, který jste dostali po jeho vytvoření."
+      : undefined;
+    const mail = mails.paymentReceived(to, order.number, snap.name, `${(f.amountHaler / 100).toLocaleString("cs-CZ")} Kč`, inv?.number, nextStep);
     if (inv) {
       mail.attachments = [{ filename: invoiceFileName(inv), content: await renderInvoicePdf(inv), contentType: "application/pdf" }];
     }
@@ -504,15 +541,24 @@ async function fulfil(tx: Tx, payment: typeof payments.$inferSelect, order: type
   const snap = order.productSnapshot as Snapshot;
   const now = new Date();
   if (snap.type === "ONE_TIME") {
-    await grantCredits(tx, {
-      workspaceId: order.workspaceId,
-      amount: snap.credits ?? 0,
-      key: `payment:${payment.provider}:${payment.providerPaymentId}`,
-      orderId: order.id,
-      paymentId: payment.id,
-      note: snap.name,
-    });
+    if ((snap.credits ?? 0) > 0) {
+      await grantCredits(tx, {
+        workspaceId: order.workspaceId,
+        amount: snap.credits ?? 0,
+        key: `payment:${payment.provider}:${payment.providerPaymentId}`,
+        orderId: order.id,
+        paymentId: payment.id,
+        note: snap.name,
+      });
+    }
     await tx.update(orders).set({ status: "PAID", paidAt: now }).where(eq(orders.id, order.id));
+    if (order.vvProtocolId) {
+      // placená verze protokolu VV – idempotentní (zachová datum první platby)
+      await tx
+        .update(vvProtocols)
+        .set({ premiumAt: now })
+        .where(and(eq(vvProtocols.id, order.vvProtocolId), isNull(vvProtocols.premiumAt)));
+    }
     if (order.projectId) {
       const projectId = order.projectId;
       try {
@@ -568,7 +614,10 @@ async function handleRefund(tx: Tx, payment: typeof payments.$inferSelect, order
   if (state === "REFUNDED" && !payment.isRecurrence) {
     await tx.update(orders).set({ status: "REFUNDED" }).where(eq(orders.id, order.id));
   }
-  if (snap.type === "ONE_TIME" && state === "REFUNDED") {
+  if (order.vvProtocolId && state === "REFUNDED") {
+    await tx.update(vvProtocols).set({ premiumAt: null }).where(eq(vvProtocols.id, order.vvProtocolId));
+  }
+  if (snap.type === "ONE_TIME" && state === "REFUNDED" && (snap.credits ?? 0) > 0) {
     // odebrání kreditů (zůstatek může jít do mínusu, pokud byly spotřebovány)
     await grantCredits(tx, {
       workspaceId: order.workspaceId,

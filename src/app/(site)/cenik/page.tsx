@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FvsolPromo } from "@/components/fvsol";
 import { getPublicProducts, PricingTable } from "@/components/pricing";
 import { PCI_NOTE, recurrenceTerms } from "@/config/recurrence";
+import { paymentsAvailable } from "@/server/payments/service";
 import { getSettings } from "@/server/services/settings";
 
 export const metadata: Metadata = {
@@ -16,6 +17,7 @@ export default async function PricingPage() {
   const products = await getPublicProducts();
   const { operator, texts, bank } = await getSettings();
   const vat = operator.vatPayer;
+  const cardAvailable = paymentsAvailable().available;
   const subs = products.filter((p) => p.type === "SUBSCRIPTION");
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
@@ -55,10 +57,17 @@ export default async function PricingPage() {
         <section>
           <h2 className="text-xl">Platby</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-ink-soft">
-            <li>Platbu kartou online zpracovává platební brána GoPay s.r.o. (karta, Apple Pay, Google Pay). Kredit se připíše po potvrzení platby, obvykle během několika sekund.</li>
+            {cardAvailable ? (
+              <li>Platbu kartou online zpracovává platební brána GoPay s.r.o. (karta, Apple Pay, Google Pay). Kredit se připíše po potvrzení platby, obvykle během několika sekund.</li>
+            ) : (
+              <li>
+                <strong>Platební brána již brzy.</strong> Platbu kartou, Apple Pay a Google Pay připravujeme.
+              </li>
+            )}
             {bank.enabled && (
               <li>
-                Jednorázovou analýzu a balíček můžete zaplatit i bankovním převodem (QR platba). Kredit se připíše po přijetí platby na účet, obvykle za 1–2 pracovní dny.
+                Jednorázovou analýzu a balíček zaplatíte QR kódem v bankovní aplikaci (bankovní převod, ideálně okamžitá platba). Kredit se připíše po přijetí platby na
+                účet{cardAvailable ? ", obvykle za 1–2 pracovní dny" : ", u okamžité platby obvykle týž den"}.
               </li>
             )}
             <li>Ke každé platbě se automaticky vystaví doklad (faktura), najdete ho v aplikaci a pošleme ho e-mailem.</li>

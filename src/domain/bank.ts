@@ -60,8 +60,11 @@ export function isValidIban(iban: string): boolean {
   return mod97(numeric) === 1;
 }
 
-/** Řetězec pro QR Platbu (SPAYD 1.0). Zpráva bez diakritiky a hvězdiček, max. 60 znaků. */
-export function spayd(p: { iban: string; amountHaler: number; vs?: string; message?: string }): string {
+/**
+ * Řetězec pro QR Platbu (SPAYD 1.0). Zpráva bez diakritiky a hvězdiček, max. 60 znaků.
+ * `instant` doplní `PT:IP` – banka předvyplní okamžitou platbu (kde ji podporuje, jinak pole ignoruje).
+ */
+export function spayd(p: { iban: string; amountHaler: number; vs?: string; message?: string; instant?: boolean }): string {
   const msg = (p.message ?? "")
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
@@ -74,6 +77,7 @@ export function spayd(p: { iban: string; amountHaler: number; vs?: string; messa
     `AM:${(p.amountHaler / 100).toFixed(2)}`,
     "CC:CZK",
   ];
+  if (p.instant) parts.push("PT:IP");
   if (p.vs) parts.push(`X-VS:${p.vs}`);
   if (msg) parts.push(`MSG:${msg}`);
   return parts.join("*");

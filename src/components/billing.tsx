@@ -113,12 +113,17 @@ export function BillingPanel() {
           Jako správce služby odemykáte dokumentaci analýz bez platby a bez odečtu kreditů.
         </Notice>
       )}
-      {!b.payments.available && (
-        <Notice tone="warning" title="Platba kartou je dočasně nedostupná">
-          {b.payments.reason}
-          {b.bank.available ? " Analýzu i balíček můžete zaplatit bankovním převodem." : ""}
-        </Notice>
-      )}
+      {!b.payments.available &&
+        (b.bank.available ? (
+          <Notice tone="info" title="Platební brána již brzy">
+            Platbu kartou spouštíme již brzy. Zatím analýzu i balíček zaplatíte QR kódem z bankovní aplikace (ideálně okamžitou platbou). Kredity připíšeme,
+            jakmile platbu uvidíme na účtu, a doklad vám přijde e-mailem.
+          </Notice>
+        ) : (
+          <Notice tone="warning" title="Platba je dočasně nedostupná">
+            {b.payments.reason}
+          </Notice>
+        ))}
 
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="panel p-5">
@@ -184,6 +189,7 @@ export function BillingPanel() {
               </ul>
               {(
                 <div className="mt-4 flex flex-col gap-2">
+                  {(b.payments.available || p.type === "SUBSCRIPTION" || !b.bank.available) && (
                   <button
                     className="btn btn-primary"
                     disabled={!b.payments.available || busy != null || (p.type === "SUBSCRIPTION" && b.subscription != null)}
@@ -204,11 +210,18 @@ export function BillingPanel() {
                       }
                     }}
                   >
-                    {busy === p.code ? "Přesměrovávám…" : p.type === "SUBSCRIPTION" ? "Předplatit kartou" : "Zaplatit kartou"}
+                    {busy === p.code
+                      ? "Přesměrovávám…"
+                      : !b.payments.available
+                        ? "Platba kartou – již brzy"
+                        : p.type === "SUBSCRIPTION"
+                          ? "Předplatit kartou"
+                          : "Zaplatit kartou"}
                   </button>
+                  )}
                   {p.type === "ONE_TIME" && b.bank.available && (
                     <button
-                      className="btn btn-secondary"
+                      className={b.payments.available ? "btn btn-secondary" : "btn btn-primary"}
                       disabled={busy != null}
                       onClick={async () => {
                         setBusy(p.code + ":bank");
@@ -221,7 +234,7 @@ export function BillingPanel() {
                         }
                       }}
                     >
-                      {busy === p.code + ":bank" ? "Zakládám…" : "Zaplatit převodem"}
+                      {busy === p.code + ":bank" ? "Zakládám…" : "Zaplatit QR kódem"}
                     </button>
                   )}
                 </div>
@@ -261,8 +274,8 @@ export function BillingPanel() {
           );
         })()}
         <p className="mt-3 text-sm text-muted">
-          Jednorázovou analýzu můžete koupit i přímo u konkrétního projektu – po zaplacení se odemkne automaticky. Při platbě převodem se kredit připíše po přijetí
-          platby na účet (obvykle 1–2 pracovní dny). Předplatné se hradí jen kartou (opakovaná platba).
+          Jednorázovou analýzu můžete koupit i přímo u konkrétního projektu – po zaplacení se odemkne automaticky. Při platbě QR kódem (převodem) se kredit připíše po
+          přijetí platby na účet – u okamžité platby obvykle týž den. Předplatné se hradí jen kartou (opakovaná platba).
         </p>
       </section>
 

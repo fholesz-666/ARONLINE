@@ -315,13 +315,18 @@ export function StepResults({ project, issues, go, saveNow, onUnlocked }: StepPr
                         }
                       }}
                     >
-                      Zaplatit převodem{single ? ` (${(single.priceHaler / 100).toLocaleString("cs-CZ")} Kč)` : ""}
+                      {billing.payments.available ? "Zaplatit převodem" : "Zaplatit QR kódem"}{single ? ` (${(single.priceHaler / 100).toLocaleString("cs-CZ")} Kč)` : ""}
                     </button>
                   )}
                   <Link className="btn btn-secondary" href={billing?.isGuest ? "/app/profil" : "/app/predplatne"}>
                     {billing?.isGuest ? "Zaregistrovat se (balíčky a předplatné)" : "Balíčky a předplatné"}
                   </Link>
                 </div>
+                {billing && !billing.payments.available && billing.bank?.available && (
+                  <p className="text-sm text-muted" data-testid="gateway-soon">
+                    Platební brána (karta) již brzy. Zatím zaplatíte QR kódem v bankovní aplikaci – analýzu odemkneme, jakmile platbu uvidíme na účtu.
+                  </p>
+                )}
               </>
             )}
           </section>

@@ -2,7 +2,7 @@
 
 > Soubor je generován skriptem `npm run verification:checklist`. Neupravujte ho ručně.
 
-Metodika: **ČSN EN 62305-2 ed. 2:2013** · otisk normativních dat: `8dfe709cd3124502`
+Metodika: **ČSN EN 62305-2 ed. 2:2013** · otisk normativních dat: `7e94f1e3e95342ce`
 
 Stav: ověřeno **74 / 74**, neověřeno 0, zamítnuto 0.
 
@@ -114,6 +114,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | `lpl_ii` | Koordinované SPD pro LPL II | 0.02 |
 | ☐ | `lpl_i` | Koordinované SPD pro LPL I | 0.01 |
 | ☐ | `better_0005` | SPD s lepšími parametry než pro LPL I – horní mez rozsahu | 0.005 |
+| ☐ | `better_0002` | SPD s lepšími parametry než pro LPL I – mezihodnota | 0.002 |
 | ☐ | `better_0001` | SPD s lepšími parametry než pro LPL I – dolní mez rozsahu | 0.001 |
 
 ### ED2.TAB.B.4 – Součinitele CLD a CLI podle stínění, uzemnění a izolace vedení
@@ -170,6 +171,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | `lpl_ii` | SPD pro LPL II | 0.02 |
 | ☐ | `lpl_i` | SPD pro LPL I | 0.01 |
 | ☐ | `better_0005` | SPD s lepšími parametry než pro LPL I – horní mez rozsahu | 0.005 |
+| ☐ | `better_0002` | SPD s lepšími parametry než pro LPL I – mezihodnota | 0.002 |
 | ☐ | `better_0001` | SPD s lepšími parametry než pro LPL I – dolní mez rozsahu | 0.001 |
 
 ### ED2.TAB.B.8 – Pravděpodobnost PLD podle odporu stínění RS a výdržného napětí UW

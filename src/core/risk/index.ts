@@ -6,7 +6,7 @@ import { runEd2, type Ed2Outcome } from "./methodologies/csn-en-62305-2-ed2";
 import { isMethodologyUsable, METHODOLOGIES } from "./registry";
 
 /** Verze výpočetního jádra (semver). Zvyšuje se při každé změně výpočtu. */
-export const CORE_VERSION = "0.1.0";
+export const CORE_VERSION = "0.2.0";
 
 export type CalculationOutcome =
   | (Ed2Outcome & { methodologyId: "CSN_EN_62305_2_ED2"; coreVersion: string; inputHash?: string })

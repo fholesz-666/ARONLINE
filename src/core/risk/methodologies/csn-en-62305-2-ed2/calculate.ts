@@ -1105,6 +1105,19 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
       }
     });
   }
+  if (input.structure.lps !== "none") {
+    const required = T.PEB_FOR_LPS[input.structure.lps];
+    input.lines.forEach((l, i) => {
+      if (l.peb === "none") {
+        messages.push({
+          severity: "warning",
+          code: "LPS_WITHOUT_PEB",
+          message: `Vedení „${l.name}“: stavba má LPS, ale na vstupu vedení nejsou SPD pro vyrovnání potenciálů (PEB = 1). Pospojování na vstupu je povinnou součástí LPS (ČSN EN 62305-3) a vzorové příklady normy počítají PEB podle třídy LPS (zde ${T.TABLE_PEB.rows[required].label}, PEB = ${f(T.TABLE_PEB.rows[required].value)}). Bez nich vyjdou složky RU a RV výrazně vyšší.`,
+          path: `lines[${i}].peb`,
+        });
+      }
+    });
+  }
   if (input.lossTypes.L4 && input.tolerableL4 == null) {
     messages.push({
       severity: "info",
@@ -1137,7 +1150,7 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
   }
   input.zones.forEach((z, zi) =>
     z.internalSystems.forEach((s, si) => {
-      if (s.pspd === "better_0005" || s.pspd === "better_0001") {
+      if (s.pspd.startsWith("better_")) {
         messages.push({
           severity: "warning",
           code: "PSPD_BETTER_THAN_LPL_I",

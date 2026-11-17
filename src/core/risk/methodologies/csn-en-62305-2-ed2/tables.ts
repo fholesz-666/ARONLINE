@@ -168,7 +168,7 @@ export const TABLE_PB: NormTable<PbKey> = {
   provenance: PROVENANCE_DEHN,
 };
 
-export type SpdLplKey = "none" | "lpl_iii_iv" | "lpl_ii" | "lpl_i" | "better_0005" | "better_0001";
+export type SpdLplKey = "none" | "lpl_iii_iv" | "lpl_ii" | "lpl_i" | "better_0005" | "better_0002" | "better_0001";
 export const TABLE_PSPD: NormTable<SpdLplKey> = {
   id: "ED2.TAB.B.3",
   symbol: "PSPD",
@@ -183,6 +183,11 @@ export const TABLE_PSPD: NormTable<SpdLplKey> = {
       label: "SPD s lepšími parametry než pro LPL I – horní mez rozsahu",
       value: 0.005,
       help: "Pozn. 2 k tab. B.3 připouští 0,005–0,001 pro SPD s lepšími charakteristikami (vyšší In, nižší Up) – nutno doložit.",
+    },
+    better_0002: {
+      label: "SPD s lepšími parametry než pro LPL I – mezihodnota",
+      value: 0.002,
+      help: "Hodnota z rozsahu 0,005–0,001 podle pozn. k tab. B.3 (použita i ve vzorovém příkladu E.4 c) normy) – nutno doložit.",
     },
     better_0001: {
       label: "SPD s lepšími parametry než pro LPL I – dolní mez rozsahu",
@@ -310,10 +315,26 @@ export const TABLE_PEB: NormTable<SpdLplKey> = {
     lpl_ii: { label: "SPD pro LPL II", value: 0.02 },
     lpl_i: { label: "SPD pro LPL I", value: 0.01 },
     better_0005: { label: "SPD s lepšími parametry než pro LPL I – horní mez rozsahu", value: 0.005 },
+    better_0002: { label: "SPD s lepšími parametry než pro LPL I – mezihodnota", value: 0.002 },
     better_0001: { label: "SPD s lepšími parametry než pro LPL I – dolní mez rozsahu", value: 0.001 },
   },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
+};
+
+/**
+ * SPD pro vyrovnání potenciálů na vstupu vedení, které odpovídají třídě LPS.
+ * Pospojování na vstupu je povinnou součástí LPS (ČSN EN 62305-3); vzorové příklady E.3–E.5
+ * ČSN EN 62305-2 ed. 2 proto u stavby s LPS vždy počítají PEB podle LPL odpovídající třídě LPS.
+ */
+export const PEB_FOR_LPS: Record<PbKey, SpdLplKey> = {
+  none: "none",
+  lps_iv: "lpl_iii_iv",
+  lps_iii: "lpl_iii_iv",
+  lps_ii: "lpl_ii",
+  lps_i: "lpl_i",
+  lps_i_framework: "lpl_i",
+  metal_roof_framework: "lpl_i",
 };
 
 /** Impulzní výdržné napětí zařízení UW (kV) – sloupce tabulek B.8 a B.9. */

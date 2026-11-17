@@ -226,3 +226,65 @@ export function Spinner({ label = "Načítám…" }: { label?: string }) {
     </span>
   );
 }
+
+/** Rozbalovací oddíl formuláře – méně častá nastavení schovaná pod souhrnem. */
+export function Disclosure({
+  title,
+  summary,
+  defaultOpen = false,
+  children,
+}: {
+  title: ReactNode;
+  summary?: ReactNode;
+  defaultOpen?: boolean;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <details className="group border-t border-line-soft pt-3" open={open} onToggle={(e) => setOpen((e.currentTarget as HTMLDetailsElement).open)}>
+      <summary className="flex cursor-pointer list-none flex-wrap items-baseline gap-x-3 gap-y-1 select-none [&::-webkit-details-marker]:hidden">
+        <span className="inline-flex items-center gap-1.5 font-semibold">
+          <span aria-hidden="true" className="inline-block w-3 text-xs text-muted transition-transform group-open:rotate-90">
+            ▶
+          </span>
+          {title}
+        </span>
+        {summary && !open && <span className="text-sm text-muted">{summary}</span>}
+      </summary>
+      <div className="mt-3 space-y-4">{children}</div>
+    </details>
+  );
+}
+
+/** Řada rychlých voleb (předvoleb) pod vstupním polem; aktivní volba je zvýrazněná. */
+export function QuickPicks<T extends string | number>({
+  options,
+  value,
+  onPick,
+  label,
+}: {
+  options: { value: T; label: string; title?: string }[];
+  value: T | null | undefined;
+  onPick: (v: T) => void;
+  label?: string;
+}) {
+  return (
+    <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label={label}>
+      {options.map((o) => {
+        const active = o.value === value;
+        return (
+          <button
+            key={String(o.value)}
+            type="button"
+            title={o.title}
+            aria-pressed={active}
+            onClick={() => onPick(o.value)}
+            className={`rounded-sm border px-2 py-0.5 text-xs ${active ? "border-ink bg-ink text-white" : "border-line bg-sheet text-ink-soft hover:border-ink hover:text-ink"}`}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}

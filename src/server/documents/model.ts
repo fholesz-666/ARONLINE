@@ -310,7 +310,7 @@ export function buildReport(run: RunRecord): ReportModel {
       ["Povrch (rt)", row(T.TABLE_RT_FLOOR, z.floor)],
       ["Opatření proti dotykovému a krokovému napětí (PTA)", z.pta.map((k) => row(T.TABLE_PTA, k)).join(" + ")],
       ["Opatření proti dotykovému napětí z vedení (PTU)", row(T.TABLE_PTU, z.ptu)],
-      ["Nebezpečí požáru / výbuchu (rf)", row(T.TABLE_RF, z.fireRisk)],
+      ["Nebezpečí požáru / výbuchu (rf)", row(T.TABLE_RF, z.fireRisk) + (z.fireLoadMJ != null ? `; měrné požární zatížení ${n(z.fireLoadMJ)} MJ/m²` : "")],
       ["Protipožární opatření (rp)", row(T.TABLE_RP, z.fireProvisions)],
       ["Zvláštní nebezpečí (hz)", row(T.TABLE_HZ, z.specialHazard)],
       ["Vnější prostorové stínění (KS1)", z.shieldExternal.continuous ? "spojité kovové stínění" : z.shieldExternal.wm != null ? `mřížové, wm = ${n(z.shieldExternal.wm)} m` : "bez stínění"],

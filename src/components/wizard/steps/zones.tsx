@@ -7,6 +7,8 @@ import { defaultInsideZone, L4_SHARE_ANIMALS_CZ2, L4_SHARE_SYSTEMS_CZ2 } from "@
 import { fmtNum } from "@/core/util/format";
 import { Checkbox, Disclosure, Notice, NumberInput, QuickPicks, SelectInput, TextInput } from "../../ui";
 import { LossSelect } from "../loss-select";
+import { FireRiskInput } from "./fire-risk";
+import { TABLE_HZ as T_HZ } from "@/core/risk/methodologies/csn-en-62305-2-ed2/tables";
 import { HZ_OPTIONS, KS3_OPTIONS, LOSS_TABLES, LOSS_TYPE_LABELS, RF_OPTIONS, RT_FLOOR_OPTIONS, UW_OPTIONS } from "../options";
 import { calcOf, manual, setProvenance } from "../use-project";
 import { issueFor, type StepProps } from "../wizard";
@@ -264,13 +266,13 @@ export function StepZones({ data, update, issues }: StepProps) {
                 {!outside && (
                   <>
                     <SelectInput
-                      label="Nebezpečí požáru nebo výbuchu (rf)"
-                      value={z.fireRisk}
-                      onChange={(v) => setZone(i, (zz) => (zz.fireRisk = v))}
-                      options={rfOptions}
-                      help="Podle požárně bezpečnostního řešení (měrné požární zatížení), případně dokumentace o ochraně před výbuchem."
+                      label="Zvláštní riziko – panika, evakuace (hz)"
+                      value={z.specialHazard}
+                      onChange={(v) => setZone(i, (zz) => (zz.specialHazard = v))}
+                      options={HZ_OPTIONS}
+                      help={T_HZ.rows[z.specialHazard]?.help}
                     />
-                    <SelectInput label="Zvláštní nebezpečí – panika, evakuace (hz)" value={z.specialHazard} onChange={(v) => setZone(i, (zz) => (zz.specialHazard = v))} options={HZ_OPTIONS} />
+                    <FireRiskInput zone={z} options={rfOptions} onChange={(fn) => setZone(i, fn)} />
                   </>
                 )}
               </div>

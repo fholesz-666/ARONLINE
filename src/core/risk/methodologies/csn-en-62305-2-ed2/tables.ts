@@ -337,6 +337,23 @@ export const PEB_FOR_LPS: Record<PbKey, SpdLplKey> = {
   metal_roof_framework: "lpl_i",
 };
 
+/** Pozn. 8 k tab. C.5 – definice měrného požárního zatížení (doslovné znění ČSN EN 62305-2 ed. 2). */
+export const RF_NOTE_8 =
+  "Pozn. 8: Měrné požární zatížení je poměr energie celého množství hořlavého materiálu ve stavbě a celkové plochy stavby.";
+
+/** Výhřevnost dřeva, ke které ČSN 73 0802 vztahuje požární zatížení v kg/m² (ekvivalentní množství dřeva). */
+export const FIRE_LOAD_MJ_PER_KG = 17;
+
+/**
+ * Kategorie rizika požáru podle měrného požárního zatížení (pozn. 5–7 k tab. C.5):
+ * > 800 MJ/m² vysoké, 400–800 MJ/m² obvyklé, < 400 MJ/m² nízké.
+ */
+export function rfFromFireLoad(mjPerM2: number): "fire_high" | "fire_ordinary" | "fire_low" {
+  if (mjPerM2 > 800) return "fire_high";
+  if (mjPerM2 >= 400) return "fire_ordinary";
+  return "fire_low";
+}
+
 /** Impulzní výdržné napětí zařízení UW (kV) – sloupce tabulek B.8 a B.9. */
 export const UW_VALUES = ["1", "1.5", "2.5", "4", "6"] as const;
 export type UwKey = (typeof UW_VALUES)[number];
@@ -503,17 +520,17 @@ export const TABLE_RF: NormTable<RfKey> = {
     fire_high: {
       label: "Požáru – vysoká",
       value: 0.1,
-      help: "Pozn. 5: stavby postavené z hořlavých materiálů, stavby se střechou zhotovenou z hořlavého materiálu nebo stavby s měrným požárním zatížením větším než 800 MJ/m².",
+      help: "Pozn. 5: Za stavby s vysokým rizikem požáru mohou být pokládány stavby postavené z hořlavých materiálů, stavby se střechou zhotovenou z hořlavého materiálu nebo stavby s měrným požárním zatížením větším než 800 MJ/m².",
     },
     fire_ordinary: {
       label: "Požáru – obvyklá",
       value: 0.01,
-      help: "Pozn. 6: stavby s měrným požárním zatížením mezi 800 MJ/m² a 400 MJ/m².",
+      help: "Pozn. 6: Za stavby s obvyklým rizikem požáru mohou být pokládány stavby s měrným požárním zatížením mezi 800 MJ/m² a 400 MJ/m².",
     },
     fire_low: {
       label: "Požáru – nízká",
       value: 0.001,
-      help: "Pozn. 7: stavby s měrným požárním zatížením menším než 400 MJ/m² nebo stavby obsahující malé množství hořlavého materiálu.",
+      help: "Pozn. 7: Za stavby s malým rizikem požáru mohou být pokládány stavby s měrným požárním zatížením menším než 400 MJ/m² nebo stavby obsahující malé množství hořlavého materiálu.",
     },
     none: { label: "Výbuchu nebo požáru – žádné", value: 0 },
   },

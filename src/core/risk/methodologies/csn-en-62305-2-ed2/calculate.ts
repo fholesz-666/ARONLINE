@@ -1118,6 +1118,21 @@ export function calculateScenario(input: Ed2Input, scenario: "designed" | "unpro
       }
     });
   }
+  input.zones.forEach((z, zi) => {
+    if (z.location !== "inside" || z.fireLoadMJ == null || z.fireRisk.startsWith("explosion") || z.fireRisk === "none") return;
+    const byLoad = T.rfFromFireLoad(z.fireLoadMJ);
+    if (byLoad === z.fireRisk) return;
+    const rank = { fire_low: 0, fire_ordinary: 1, fire_high: 2 } as const;
+    const chosenHigher = rank[z.fireRisk as keyof typeof rank] > rank[byLoad];
+    messages.push({
+      severity: chosenHigher ? "info" : "warning",
+      code: "RF_VS_FIRE_LOAD",
+      message: chosenHigher
+        ? `Zóna „${z.name}“: zvolené riziko požáru (${T.TABLE_RF.rows[z.fireRisk].label}) je vyšší, než odpovídá měrnému požárnímu zatížení ${f(z.fireLoadMJ)} MJ/m² (${T.TABLE_RF.rows[byLoad].label}). Je to možné např. u stavby z hořlavých materiálů nebo s hořlavou střechou (pozn. 5 k tab. C.5).`
+        : `Zóna „${z.name}“: zvolené riziko požáru (${T.TABLE_RF.rows[z.fireRisk].label}) je nižší, než odpovídá měrnému požárnímu zatížení ${f(z.fireLoadMJ)} MJ/m² (${T.TABLE_RF.rows[byLoad].label}, pozn. 5–7 k tab. C.5).`,
+      path: `zones[${zi}].fireRisk`,
+    });
+  });
   if (input.lossTypes.L4 && input.tolerableL4 == null) {
     messages.push({
       severity: "info",

@@ -129,6 +129,8 @@ export const zZone = z.object({
   pta: z.array(zPta).min(1).max(5),
   ptu: zPtu,
   fireRisk: zRf,
+  /** Měrné požární zatížení v MJ/m² (z PBŘ) – podklad pro volbu rf podle pozn. 5–8 k tab. C.5; do výpočtu nevstupuje. */
+  fireLoadMJ: z.number().finite().min(0).max(100000).nullable().optional(),
   fireProvisions: zRp,
   specialHazard: zHz,
   l1: z.object({ lt: zLossValue, lf: zLossValue, lo: zLossValue.nullable() }),

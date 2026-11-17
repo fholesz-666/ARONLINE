@@ -216,7 +216,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | `hospital_hotel_school_civic` | Nemocnice, hotel, škola, občanská budova | 0.1 |
 | ☐ | `entertainment_church_museum` | Veřejná zábava, kostel, muzeum | 0.05 |
 | ☐ | `industrial_commercial` | Průmyslový, obchodní objekt | 0.02 |
-| ☐ | `other` | Ostatní (např. obytné budovy) | 0.01 |
+| ☐ | `other` | Ostatní | 0.01 |
 
 ### ED2.TAB.C.2.LO – L1 – typická střední hodnota LO (porucha vnitřních systémů)
 

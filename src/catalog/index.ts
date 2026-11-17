@@ -60,7 +60,7 @@ export const BUILDING_TYPES: BuildingTypePreset[] = [
     description: "Samostatný nebo řadový rodinný dům.",
     lossTypes: { L1: true, L2: false, L3: false, L4: false },
     options: { l1InternalSystemsEndangerLife: false, l4Animals: false },
-    l1Lf: "other",
+    l1Lf: "hospital_hotel_school_civic",
     l1Lo: null,
     l4Lf: "other",
     l4Lo: "other",
@@ -71,7 +71,10 @@ export const BUILDING_TYPES: BuildingTypePreset[] = [
     typicalPersons: 4,
     extraQuestions: [],
     basis: BASIS_C2,
-    warnings: ["Požární riziko ověřte podle požárně bezpečnostního řešení (měrné požární zatížení)."],
+    warnings: [
+      "Požární riziko ověřte podle požárně bezpečnostního řešení (měrné požární zatížení).",
+      "LF = 0,1 jako ve vzorovém příkladu E.2 ČSN EN 62305-2 ed. 2 (venkovský dům).",
+    ],
   },
   {
     key: "apartment_building",
@@ -80,7 +83,7 @@ export const BUILDING_TYPES: BuildingTypePreset[] = [
     description: "Vícepodlažní bytový dům.",
     lossTypes: { L1: true, L2: false, L3: false, L4: false },
     options: { l1InternalSystemsEndangerLife: false, l4Animals: false },
-    l1Lf: "other",
+    l1Lf: "hospital_hotel_school_civic",
     l1Lo: null,
     l4Lf: "other",
     l4Lo: "other",
@@ -91,7 +94,10 @@ export const BUILDING_TYPES: BuildingTypePreset[] = [
     typicalPersons: 40,
     extraQuestions: ["panic"],
     basis: BASIS_C2,
-    warnings: ["Úroveň paniky (hz) zvolte podle počtu podlaží a osob."],
+    warnings: [
+      "Úroveň paniky (hz) zvolte podle počtu podlaží a osob.",
+      "LF = 0,1 jako ve vzorovém příkladu E.5 ČSN EN 62305-2 ed. 2 (bytový dům).",
+    ],
   },
   {
     key: "office",

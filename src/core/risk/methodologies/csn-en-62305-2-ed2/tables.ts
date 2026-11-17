@@ -416,10 +416,14 @@ export const TABLE_L1_LF: NormTable<L1LfKey> = {
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.2",
   rows: {
     explosion: { label: "Nebezpečí výbuchu", value: 0.1 },
-    hospital_hotel_school_civic: { label: "Nemocnice, hotel, škola, občanská budova", value: 0.1 },
+    hospital_hotel_school_civic: {
+      label: "Nemocnice, hotel, škola, občanská budova",
+      value: 0.1,
+      help: "Vzorové příklady normy E.2 (venkovský dům) a E.5 (bytový dům) počítají s LF = 0,1 i u obytných budov.",
+    },
     entertainment_church_museum: { label: "Veřejná zábava, kostel, muzeum", value: 0.05 },
     industrial_commercial: { label: "Průmyslový, obchodní objekt", value: 0.02 },
-    other: { label: "Ostatní (např. obytné budovy)", value: 0.01 },
+    other: { label: "Ostatní", value: 0.01 },
   },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,

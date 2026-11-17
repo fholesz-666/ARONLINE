@@ -389,17 +389,26 @@ export function buildingType(key: string): BuildingTypePreset {
 export interface LinePreset {
   key: string;
   label: string;
+  /** Krátký název na tlačítko a výchozí název vedení. */
+  short: string;
   group: string;
   help: string;
   values: Omit<LineInput, "id" | "name" | "environment" | "lengthM" | "adjacentStructure">;
+  /** Výchozí délka úseku, je-li pro daný druh vedení typická (jinak neznámá → 1 000 m). */
+  lengthM?: number;
+  /** Klíč předvolby vnitřního systému, který se k vedení přidá automaticky (jinak podle druhu vedení). */
+  systemPreset?: string;
   basis: string;
 }
+
+export const LINE_PRESET_GROUPS = ["Silová přípojka", "Fotovoltaika (FVE)", "Telekomunikace a data"] as const;
 
 export const LINE_PRESETS: LinePreset[] = [
   {
     key: "lv_buried_pen",
     label: "NN přípojka – kabel v zemi (síť TN-C s vícenásobně uzemněným PEN)",
-    group: "Silová vedení",
+    short: "NN přípojka – kabel v zemi",
+    group: "Silová přípojka",
     help: "Typická kabelová přípojka z distribuční sítě NN. Ověřte provedení u distributora / v projektu přípojky.",
     values: {
       service: "power",
@@ -414,7 +423,8 @@ export const LINE_PRESETS: LinePreset[] = [
   {
     key: "lv_aerial_pen",
     label: "NN přípojka – venkovní vedení (síť TN-C s vícenásobně uzemněným PEN)",
-    group: "Silová vedení",
+    short: "NN přípojka – venkovní vedení",
+    group: "Silová přípojka",
     help: "Přípojka ze sloupu (holé vodiče nebo izolovaný závěsný kabel).",
     values: {
       service: "power",
@@ -429,7 +439,8 @@ export const LINE_PRESETS: LinePreset[] = [
   {
     key: "lv_buried_unshielded",
     label: "NN kabel v zemi – nestíněný (bez údaje o PEN)",
-    group: "Silová vedení",
+    short: "NN kabel v zemi – provedení neznámé",
+    group: "Silová přípojka",
     help: "Konzervativní volba, pokud provedení sítě není známo.",
     values: {
       service: "power",
@@ -444,7 +455,8 @@ export const LINE_PRESETS: LinePreset[] = [
   {
     key: "hv_buried_transformer",
     label: "VN přípojka s vlastní trafostanicí – kabel v zemi",
-    group: "Silová vedení",
+    short: "VN přípojka s vlastní trafostanicí",
+    group: "Silová přípojka",
     help: "Objekt napájený z vlastní trafostanice VN/NN.",
     values: {
       service: "power",
@@ -457,8 +469,45 @@ export const LINE_PRESETS: LinePreset[] = [
     basis: "Tab. A.3 (VN s transformátorem), B.4 – provedení stínění ověřte.",
   },
   {
+    key: "pv_roof_dc",
+    label: "FVE na střeše – DC kabely od panelů do objektu",
+    short: "FVE na střeše – kabely od panelů",
+    group: "Fotovoltaika (FVE)",
+    help: "Kabely od panelů na střeše vstupují do objektu ke střídači – v praxi se zadávají jako samostatné venkovní nestíněné vedení. Délka = trasa kabelů po střeše ke vstupu do objektu.",
+    values: {
+      service: "power",
+      installation: "aerial",
+      lineType: "lv_tlc",
+      shielding: "aerial_unshielded",
+      shieldResistance: null,
+      peb: "none",
+    },
+    lengthM: 30,
+    systemPreset: "pv_inverter",
+    basis: "Tab. A.2 (venkovní), A.3 (NN), B.4 (nestíněné venkovní vedení). DC strana FVE dále podle ČSN EN 62305-3 a ČSN 33 2000-7-712.",
+  },
+  {
+    key: "pv_ground_buried",
+    label: "FVE na pozemku – kabel v zemi od pole panelů k objektu",
+    short: "FVE na pozemku – kabel v zemi",
+    group: "Fotovoltaika (FVE)",
+    help: "Pozemní FVE nebo FVE na jiném objektu (garáž, přístřešek) propojená s objektem kabelem v zemi. Délka = trasa kabelu.",
+    values: {
+      service: "power",
+      installation: "buried",
+      lineType: "lv_tlc",
+      shielding: "buried_unshielded",
+      shieldResistance: null,
+      peb: "none",
+    },
+    lengthM: 50,
+    systemPreset: "pv_inverter",
+    basis: "Tab. A.2 (v zemi), A.3 (NN), B.4 (nestíněné vedení v zemi).",
+  },
+  {
     key: "tlc_buried_unshielded",
     label: "Telekomunikační kabel v zemi – metalický, nestíněný",
+    short: "Telekom. kabel v zemi – nestíněný",
     group: "Telekomunikace a data",
     help: "Metalická přípojka (např. xDSL).",
     values: {
@@ -474,6 +523,7 @@ export const LINE_PRESETS: LinePreset[] = [
   {
     key: "tlc_buried_shield_bonded",
     label: "Telekomunikační kabel v zemi – stínění spojené s přípojnicí",
+    short: "Telekom. kabel v zemi – stíněný",
     group: "Telekomunikace a data",
     help: "Stínění kabelu je na vstupu do objektu spojeno s hlavní ochrannou přípojnicí. Zadejte odpor stínění RS.",
     values: {
@@ -489,6 +539,7 @@ export const LINE_PRESETS: LinePreset[] = [
   {
     key: "tlc_aerial_unshielded",
     label: "Telekomunikační vedení venkovní – nestíněné",
+    short: "Telekom. vedení venkovní",
     group: "Telekomunikace a data",
     help: "Závěsný metalický kabel ze sloupu.",
     values: {

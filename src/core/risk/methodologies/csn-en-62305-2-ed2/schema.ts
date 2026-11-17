@@ -267,7 +267,7 @@ export const zEd2Input = z
         ctx.addIssue({ code: "custom", path: ["zones", zi, "l3"], message: "Chybí údaje ztrát L3" });
       if (v.lossTypes.L4 && z.l4 == null)
         ctx.addIssue({ code: "custom", path: ["zones", zi, "l4"], message: "Chybí údaje ztrát L4" });
-      if (v.lossTypes.L1 && v.options.l1InternalSystemsEndangerLife && z.l1.lo == null)
+      if (v.lossTypes.L1 && v.options.l1InternalSystemsEndangerLife && z.location === "inside" && z.l1.lo == null)
         ctx.addIssue({ code: "custom", path: ["zones", zi, "l1", "lo"], message: "Chybí hodnota LO pro L1" });
       if (v.lossTypes.L4 && v.options.l4Animals && z.l4 != null && z.l4.lt == null)
         ctx.addIssue({ code: "custom", path: ["zones", zi, "l4", "lt"], message: "Chybí hodnota LT pro L4 (zvířata)" });

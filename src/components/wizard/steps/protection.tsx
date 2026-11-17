@@ -30,6 +30,7 @@ export function StepProtection({ data, update, issues }: StepProps) {
   const calc = calcOf(data);
   const zones = calc.zones ?? [];
   const lines = calc.lines ?? [];
+  const lps = (calc.structure?.lps ?? "none") as T.PbKey;
   const mark = (path: string) => (d: Parameters<Parameters<typeof update>[0]>[0]) => setProvenance(d, path, manual());
 
   return (
@@ -46,12 +47,26 @@ export function StepProtection({ data, update, issues }: StepProps) {
           value={calc.structure?.lps ?? "none"}
           onChange={(v) =>
             update((d) => {
-              (calcOf(d).structure ??= {}).lps = v;
+              const c = calcOf(d);
+              const prev = (c.structure?.lps ?? "none") as T.PbKey;
+              (c.structure ??= {}).lps = v;
               mark("calc.structure.lps")(d);
+              // pospojování na vstupu je povinnou součástí LPS → PEB podle třídy LPS;
+              // přepisuje se jen „žádné“ nebo hodnota předvyplněná podle předchozí třídy, ne ručně zvolené lepší SPD
+              const next = T.PEB_FOR_LPS[v as T.PbKey];
+              if (next !== "none") {
+                (c.lines ?? []).forEach((l) => {
+                  if (l.peb === "none" || l.peb === T.PEB_FOR_LPS[prev]) {
+                    l.peb = next;
+                    setProvenance(d, `calc.lines.${l.id}.peb`, { origin: "preset", source: "Předvyplněno podle třídy LPS – ověřte", confirmed: false });
+                  }
+                });
+              }
             })
           }
           options={PB_OPTIONS}
           error={issueFor(issues, "structure.lps")}
+          help={lps !== "none" ? "SPD na vstupu vedení (PEB) se předvyplní podle třídy LPS – pospojování na vstupu je povinnou součástí LPS." : undefined}
         />
       </fieldset>
 
@@ -70,8 +85,15 @@ export function StepProtection({ data, update, issues }: StepProps) {
                 })
               }
               options={PEB_OPTIONS}
+              error={issueFor(issues, `lines[${i}].peb`)}
             />
           ))}
+          {lps !== "none" && lines.some((l) => l.peb === "none") && (
+            <Notice tone="warning">
+              Stavba má LPS, ale některé vedení nemá SPD pro vyrovnání potenciálů na vstupu. Pospojování na vstupu je povinnou součástí LPS (ČSN EN 62305-3) a vzorové
+              příklady normy počítají PEB podle třídy LPS. Bez SPD vyjdou složky RU a RV výrazně vyšší.
+            </Notice>
+          )}
         </fieldset>
       )}
 

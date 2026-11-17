@@ -127,6 +127,7 @@ const SPD_LPL: Record<T.SpdLplKey, { rank: number; lpl: string; display: string 
   lpl_ii: { rank: 1, lpl: "II", display: "LPL II" },
   lpl_i: { rank: 0, lpl: "I", display: "LPL I" },
   better_0005: { rank: 0, lpl: "I", display: "lepší než LPL I" },
+  better_0002: { rank: 0, lpl: "I", display: "lepší než LPL I" },
   better_0001: { rank: 0, lpl: "I", display: "lepší než LPL I" },
 };
 

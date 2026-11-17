@@ -2,7 +2,7 @@
 
 > Soubor je generován skriptem `npm run verification:checklist`. Neupravujte ho ručně.
 
-Metodika: **ČSN EN 62305-2 ed. 2:2013** · otisk normativních dat: `8dfe709cd3124502`
+Metodika: **ČSN EN 62305-2 ed. 2:2013** · otisk normativních dat: `7e94f1e3e95342ce`
 
 Stav: ověřeno **74 / 74**, neověřeno 0, zamítnuto 0.
 
@@ -114,6 +114,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | `lpl_ii` | Koordinované SPD pro LPL II | 0.02 |
 | ☐ | `lpl_i` | Koordinované SPD pro LPL I | 0.01 |
 | ☐ | `better_0005` | SPD s lepšími parametry než pro LPL I – horní mez rozsahu | 0.005 |
+| ☐ | `better_0002` | SPD s lepšími parametry než pro LPL I – mezihodnota | 0.002 |
 | ☐ | `better_0001` | SPD s lepšími parametry než pro LPL I – dolní mez rozsahu | 0.001 |
 
 ### ED2.TAB.B.4 – Součinitele CLD a CLI podle stínění, uzemnění a izolace vedení
@@ -170,6 +171,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | `lpl_ii` | SPD pro LPL II | 0.02 |
 | ☐ | `lpl_i` | SPD pro LPL I | 0.01 |
 | ☐ | `better_0005` | SPD s lepšími parametry než pro LPL I – horní mez rozsahu | 0.005 |
+| ☐ | `better_0002` | SPD s lepšími parametry než pro LPL I – mezihodnota | 0.002 |
 | ☐ | `better_0001` | SPD s lepšími parametry než pro LPL I – dolní mez rozsahu | 0.001 |
 
 ### ED2.TAB.B.8 – Pravděpodobnost PLD podle odporu stínění RS a výdržného napětí UW
@@ -201,7 +203,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
-| ☐ | `all` | Všechny typy objektů | 0.01 |
+| ☐ | `all` | Všechny typy | 0.01 |
 
 ### ED2.TAB.C.2.LF – L1 – typická střední hodnota LF (fyzická škoda)
 
@@ -210,11 +212,11 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
-| ☐ | `explosion` | Nebezpečí výbuchu | 0.1 |
-| ☐ | `hospital_hotel_school_civic` | Nemocnice, hotel, škola, občanská budova | 0.1 |
-| ☐ | `entertainment_church_museum` | Veřejná zábava, kostel, muzeum | 0.05 |
-| ☐ | `industrial_commercial` | Průmyslový, obchodní objekt | 0.02 |
-| ☐ | `other` | Ostatní (např. obytné budovy) | 0.01 |
+| ☐ | `explosion` | Riziko výbuchu | 0.1 |
+| ☐ | `hospital_hotel_school_civic` | Nemocnice, hotel, škola, budova občanské výstavby | 0.1 |
+| ☐ | `entertainment_church_museum` | Pro veřejnou zábavu, kostel, muzeum | 0.05 |
+| ☐ | `industrial_commercial` | Průmyslový, komerční | 0.02 |
+| ☐ | `other` | Ostatní | 0.01 |
 
 ### ED2.TAB.C.2.LO – L1 – typická střední hodnota LO (porucha vnitřních systémů)
 
@@ -224,8 +226,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
 | ☐ | `explosion` | Nebezpečí výbuchu | 0.1 |
-| ☐ | `icu_operating` | Jednotka intenzivní péče a operační sály nemocnice | 0.01 |
-| ☐ | `hospital_other` | Ostatní části nemocnice | 0.001 |
+| ☐ | `icu_operating` | Jednotka intenzivní péče a operační pracoviště v nemocnicích | 0.01 |
+| ☐ | `hospital_other` | Ostatní části nemocnic | 0.001 |
 
 ### ED2.TAB.C.3 – Redukční součinitel rt podle povrchu země nebo podlahy
 
@@ -234,9 +236,9 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
-| ☐ | `agricultural_concrete` | Zemědělská půda, beton (přechodový odpor ≤ 1 kΩ) | 0.01 |
-| ☐ | `marble_ceramic` | Mramor, keramika (1–10 kΩ) | 0.001 |
-| ☐ | `gravel_carpet` | Štěrk, koberec, textilní podlaha (10–100 kΩ) | 0.0001 |
+| ☐ | `agricultural_concrete` | Zemědělská, betonová (dotykový odpor ≤ 1 kΩ) | 0.01 |
+| ☐ | `marble_ceramic` | Mramorová, keramická (1–10 kΩ) | 0.001 |
+| ☐ | `gravel_carpet` | Štěrk, mozaika, koberec (10–100 kΩ) | 0.0001 |
 | ☐ | `asphalt_linoleum_wood` | Asfalt, linoleum, dřevo (≥ 100 kΩ) | 0.00001 |
 
 ### ED2.TAB.C.4 – Redukční součinitel rp podle opatření ke zmírnění následků požáru
@@ -247,8 +249,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
 | ☐ | `none` | Žádná opatření | 1 |
-| ☐ | `manual` | Jedno z opatření: hasicí přístroje, ručně ovládané stabilní hasicí zařízení, ruční hlásiče požáru, hydranty, požární úseky, únikové cesty | 0.5 |
-| ☐ | `automatic` | Jedno z opatření: automatické stabilní hasicí zařízení, automatická elektrická požární signalizace (chráněná proti přepětí, s dojezdem hasičů do 10 min) | 0.2 |
+| ☐ | `manual` | Jedno z následujících opatření: hasicí přístroje; pevná ručně ovládaná hasicí instalace; ruční poplachové instalace; hydranty; požární úseky; únikové cesty | 0.5 |
+| ☐ | `automatic` | Jedno z následujících opatření: pevná automaticky ovládaná hasicí instalace; automatické poplachové instalace (pouze když jsou chráněny proti přepětím a jiným škodám a hasiči se mohou dostavit dříve než za 10 min) | 0.2 |
 
 ### ED2.TAB.C.5 – Redukční součinitel rf podle nebezpečí požáru nebo výbuchu
 
@@ -257,13 +259,13 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
-| ☐ | `explosion_zone_0_20` | Výbuch – zóny 0, 20 a pevné výbušniny | 1 |
-| ☐ | `explosion_zone_1_21` | Výbuch – zóny 1, 21 | 0.1 |
-| ☐ | `explosion_zone_2_22` | Výbuch – zóny 2, 22 | 0.001 |
-| ☐ | `fire_high` | Požár – vysoké nebezpečí | 0.1 |
-| ☐ | `fire_ordinary` | Požár – běžné nebezpečí | 0.01 |
-| ☐ | `fire_low` | Požár – malé nebezpečí | 0.001 |
-| ☐ | `none` | Žádné nebezpečí požáru ani výbuchu | 0 |
+| ☐ | `explosion_zone_0_20` | Výbuchu – zóny 0, 20 a pevných výbušnin | 1 |
+| ☐ | `explosion_zone_1_21` | Výbuchu – zóny 1, 21 | 0.1 |
+| ☐ | `explosion_zone_2_22` | Výbuchu – zóny 2, 22 | 0.001 |
+| ☐ | `fire_high` | Požáru – vysoká | 0.1 |
+| ☐ | `fire_ordinary` | Požáru – obvyklá | 0.01 |
+| ☐ | `fire_low` | Požáru – nízká | 0.001 |
+| ☐ | `none` | Výbuchu nebo požáru – žádné | 0 |
 
 ### ED2.TAB.C.6 – Součinitel hz zvyšující ztrátu při zvláštním nebezpečí
 
@@ -272,7 +274,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
-| ☐ | `none` | Bez zvláštního nebezpečí | 1 |
+| ☐ | `none` | Žádné zvláštní riziko | 1 |
 | ☐ | `panic_low` | Nízká úroveň paniky | 2 |
 | ☐ | `panic_average` | Průměrná úroveň paniky | 5 |
 | ☐ | `evacuation_difficult` | Obtížná evakuace | 5 |
@@ -285,8 +287,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
-| ☐ | `gas_water_power` | Dodávka plynu, vody, elektrické energie | 0.1 |
-| ☐ | `tv_tlc` | TV a telekomunikační vedení | 0.01 |
+| ☐ | `gas_water_power` | Plyn, voda, zásobování energií | 0.1 |
+| ☐ | `tv_tlc` | TV, telekomunikační vedení | 0.01 |
 
 ### ED2.TAB.C.8.LO – L2 – typická střední hodnota LO (ztráta veřejné služby, porucha systémů)
 
@@ -295,8 +297,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
-| ☐ | `gas_water_power` | Dodávka plynu, vody, elektrické energie | 0.01 |
-| ☐ | `tv_tlc` | TV a telekomunikační vedení | 0.001 |
+| ☐ | `gas_water_power` | Plyn, voda, zásobování energií | 0.01 |
+| ☐ | `tv_tlc` | TV, telekomunikační vedení | 0.001 |
 
 ### ED2.TAB.C.10 – L3 – typická střední hodnota LF (ztráta kulturního dědictví)
 
@@ -314,7 +316,7 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
-| ☐ | `animals` | Objekty, kde se vyskytují pouze zvířata | 0.01 |
+| ☐ | `animals` | Všechny typy, v nichž jsou pouze zvířata | 0.01 |
 
 ### ED2.TAB.C.12.LF – L4 – typická střední hodnota LF (ekonomická ztráta, fyzická škoda)
 
@@ -324,8 +326,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
 | ☐ | `explosion` | Nebezpečí výbuchu | 1 |
-| ☐ | `hospital_industrial_museum_agriculture` | Nemocnice, průmysl, muzeum, zemědělství | 0.5 |
-| ☐ | `hotel_school_office_church_entertainment_commercial` | Hotel, škola, kancelářská budova, kostel, veřejná zábava, obchod | 0.2 |
+| ☐ | `hospital_industrial_museum_agriculture` | Nemocnice, průmyslová, muzeum, zemědělská | 0.5 |
+| ☐ | `hotel_school_office_church_entertainment_commercial` | Hotel, škola, úřad, kostel, veřejná zábava, komerční | 0.2 |
 | ☐ | `other` | Ostatní | 0.1 |
 
 ### ED2.TAB.C.12.LO – L4 – typická střední hodnota LO (ekonomická ztráta, porucha systémů)
@@ -336,8 +338,8 @@ Popisy řádků tabulek jsou parafráze, nikoliv text normy. Ověřuje se **hodn
 | ☐ | Klíč | Popis | Hodnota |
 |---|---|---|---|
 | ☐ | `explosion` | Nebezpečí výbuchu | 0.1 |
-| ☐ | `hospital_industrial_office_hotel_commercial` | Nemocnice, průmysl, kancelářská budova, hotel, obchod | 0.01 |
-| ☐ | `museum_agriculture_school_church_entertainment` | Muzeum, zemědělství, škola, kostel, veřejná zábava | 0.001 |
+| ☐ | `hospital_industrial_office_hotel_commercial` | Nemocnice, průmyslová, úřad, hotel, komerční | 0.01 |
+| ☐ | `museum_agriculture_school_church_entertainment` | Muzeum, zemědělská, škola, kostel, veřejná zábava | 0.001 |
 | ☐ | `other` | Ostatní | 0.0001 |
 
 ### ED2.TAB.T4 – Typické hodnoty přípustného rizika RT

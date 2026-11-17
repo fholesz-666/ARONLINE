@@ -168,7 +168,7 @@ export const TABLE_PB: NormTable<PbKey> = {
   provenance: PROVENANCE_DEHN,
 };
 
-export type SpdLplKey = "none" | "lpl_iii_iv" | "lpl_ii" | "lpl_i" | "better_0005" | "better_0001";
+export type SpdLplKey = "none" | "lpl_iii_iv" | "lpl_ii" | "lpl_i" | "better_0005" | "better_0002" | "better_0001";
 export const TABLE_PSPD: NormTable<SpdLplKey> = {
   id: "ED2.TAB.B.3",
   symbol: "PSPD",
@@ -183,6 +183,11 @@ export const TABLE_PSPD: NormTable<SpdLplKey> = {
       label: "SPD s lepšími parametry než pro LPL I – horní mez rozsahu",
       value: 0.005,
       help: "Pozn. 2 k tab. B.3 připouští 0,005–0,001 pro SPD s lepšími charakteristikami (vyšší In, nižší Up) – nutno doložit.",
+    },
+    better_0002: {
+      label: "SPD s lepšími parametry než pro LPL I – mezihodnota",
+      value: 0.002,
+      help: "Hodnota z rozsahu 0,005–0,001 podle pozn. k tab. B.3 (použita i ve vzorovém příkladu E.4 c) normy) – nutno doložit.",
     },
     better_0001: {
       label: "SPD s lepšími parametry než pro LPL I – dolní mez rozsahu",
@@ -310,10 +315,26 @@ export const TABLE_PEB: NormTable<SpdLplKey> = {
     lpl_ii: { label: "SPD pro LPL II", value: 0.02 },
     lpl_i: { label: "SPD pro LPL I", value: 0.01 },
     better_0005: { label: "SPD s lepšími parametry než pro LPL I – horní mez rozsahu", value: 0.005 },
+    better_0002: { label: "SPD s lepšími parametry než pro LPL I – mezihodnota", value: 0.002 },
     better_0001: { label: "SPD s lepšími parametry než pro LPL I – dolní mez rozsahu", value: 0.001 },
   },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
+};
+
+/**
+ * SPD pro vyrovnání potenciálů na vstupu vedení, které odpovídají třídě LPS.
+ * Pospojování na vstupu je povinnou součástí LPS (ČSN EN 62305-3); vzorové příklady E.3–E.5
+ * ČSN EN 62305-2 ed. 2 proto u stavby s LPS vždy počítají PEB podle LPL odpovídající třídě LPS.
+ */
+export const PEB_FOR_LPS: Record<PbKey, SpdLplKey> = {
+  none: "none",
+  lps_iv: "lpl_iii_iv",
+  lps_iii: "lpl_iii_iv",
+  lps_ii: "lpl_ii",
+  lps_i: "lpl_i",
+  lps_i_framework: "lpl_i",
+  metal_roof_framework: "lpl_i",
 };
 
 /** Impulzní výdržné napětí zařízení UW (kV) – sloupce tabulek B.8 a B.9. */
@@ -383,7 +404,7 @@ export const TABLE_L1_LT: NormTable<"all"> = {
   symbol: "LT",
   title: "L1 – typická střední hodnota LT (úraz dotykovým a krokovým napětím)",
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.2",
-  rows: { all: { label: "Všechny typy objektů", value: 0.01 } },
+  rows: { all: { label: "Všechny typy", value: 0.01 } },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
 };
@@ -394,11 +415,15 @@ export const TABLE_L1_LF: NormTable<L1LfKey> = {
   title: "L1 – typická střední hodnota LF (fyzická škoda)",
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.2",
   rows: {
-    explosion: { label: "Nebezpečí výbuchu", value: 0.1 },
-    hospital_hotel_school_civic: { label: "Nemocnice, hotel, škola, občanská budova", value: 0.1 },
-    entertainment_church_museum: { label: "Veřejná zábava, kostel, muzeum", value: 0.05 },
-    industrial_commercial: { label: "Průmyslový, obchodní objekt", value: 0.02 },
-    other: { label: "Ostatní (např. obytné budovy)", value: 0.01 },
+    explosion: { label: "Riziko výbuchu", value: 0.1 },
+    hospital_hotel_school_civic: {
+      label: "Nemocnice, hotel, škola, budova občanské výstavby",
+      value: 0.1,
+      help: "Vzorové příklady normy E.2 (venkovský dům) a E.5 (bytový dům) počítají s LF = 0,1 i u obytných budov.",
+    },
+    entertainment_church_museum: { label: "Pro veřejnou zábavu, kostel, muzeum", value: 0.05 },
+    industrial_commercial: { label: "Průmyslový, komerční", value: 0.02 },
+    other: { label: "Ostatní", value: 0.01 },
   },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
@@ -411,8 +436,8 @@ export const TABLE_L1_LO: NormTable<L1LoKey> = {
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.2",
   rows: {
     explosion: { label: "Nebezpečí výbuchu", value: 0.1 },
-    icu_operating: { label: "Jednotka intenzivní péče a operační sály nemocnice", value: 0.01 },
-    hospital_other: { label: "Ostatní části nemocnice", value: 0.001 },
+    icu_operating: { label: "Jednotka intenzivní péče a operační pracoviště v nemocnicích", value: 0.01 },
+    hospital_other: { label: "Ostatní části nemocnic", value: 0.001 },
   },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
@@ -425,9 +450,9 @@ export const TABLE_RT_FLOOR: NormTable<RtKey> = {
   title: "Redukční součinitel rt podle povrchu země nebo podlahy",
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.3",
   rows: {
-    agricultural_concrete: { label: "Zemědělská půda, beton (přechodový odpor ≤ 1 kΩ)", value: 0.01 },
-    marble_ceramic: { label: "Mramor, keramika (1–10 kΩ)", value: 0.001 },
-    gravel_carpet: { label: "Štěrk, koberec, textilní podlaha (10–100 kΩ)", value: 0.0001 },
+    agricultural_concrete: { label: "Zemědělská, betonová (dotykový odpor ≤ 1 kΩ)", value: 0.01 },
+    marble_ceramic: { label: "Mramorová, keramická (1–10 kΩ)", value: 0.001 },
+    gravel_carpet: { label: "Štěrk, mozaika, koberec (10–100 kΩ)", value: 0.0001 },
     asphalt_linoleum_wood: { label: "Asfalt, linoleum, dřevo (≥ 100 kΩ)", value: 0.00001 },
   },
   publicSources: [],
@@ -444,12 +469,12 @@ export const TABLE_RP: NormTable<RpKey> = {
     none: { label: "Žádná opatření", value: 1 },
     manual: {
       label:
-        "Jedno z opatření: hasicí přístroje, ručně ovládané stabilní hasicí zařízení, ruční hlásiče požáru, hydranty, požární úseky, únikové cesty",
+        "Jedno z následujících opatření: hasicí přístroje; pevná ručně ovládaná hasicí instalace; ruční poplachové instalace; hydranty; požární úseky; únikové cesty",
       value: 0.5,
     },
     automatic: {
       label:
-        "Jedno z opatření: automatické stabilní hasicí zařízení, automatická elektrická požární signalizace (chráněná proti přepětí, s dojezdem hasičů do 10 min)",
+        "Jedno z následujících opatření: pevná automaticky ovládaná hasicí instalace; automatické poplachové instalace (pouze když jsou chráněny proti přepětím a jiným škodám a hasiči se mohou dostavit dříve než za 10 min)",
       value: 0.2,
     },
   },
@@ -472,25 +497,25 @@ export const TABLE_RF: NormTable<RfKey> = {
   title: "Redukční součinitel rf podle nebezpečí požáru nebo výbuchu",
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.5",
   rows: {
-    explosion_zone_0_20: { label: "Výbuch – zóny 0, 20 a pevné výbušniny", value: 1 },
-    explosion_zone_1_21: { label: "Výbuch – zóny 1, 21", value: 0.1 },
-    explosion_zone_2_22: { label: "Výbuch – zóny 2, 22", value: 0.001 },
+    explosion_zone_0_20: { label: "Výbuchu – zóny 0, 20 a pevných výbušnin", value: 1 },
+    explosion_zone_1_21: { label: "Výbuchu – zóny 1, 21", value: 0.1 },
+    explosion_zone_2_22: { label: "Výbuchu – zóny 2, 22", value: 0.001 },
     fire_high: {
-      label: "Požár – vysoké nebezpečí",
+      label: "Požáru – vysoká",
       value: 0.1,
-      help: "Např. stavby z hořlavých materiálů, s hořlavou střechou nebo s měrným požárním zatížením nad 800 MJ/m² (pozn. 5).",
+      help: "Pozn. 5: stavby postavené z hořlavých materiálů, stavby se střechou zhotovenou z hořlavého materiálu nebo stavby s měrným požárním zatížením větším než 800 MJ/m².",
     },
     fire_ordinary: {
-      label: "Požár – běžné nebezpečí",
+      label: "Požáru – obvyklá",
       value: 0.01,
-      help: "Měrné požární zatížení 400–800 MJ/m² (pozn. 6).",
+      help: "Pozn. 6: stavby s měrným požárním zatížením mezi 800 MJ/m² a 400 MJ/m².",
     },
     fire_low: {
-      label: "Požár – malé nebezpečí",
+      label: "Požáru – nízká",
       value: 0.001,
-      help: "Měrné požární zatížení pod 400 MJ/m² nebo jen malé množství hořlavého materiálu (pozn. 7).",
+      help: "Pozn. 7: stavby s měrným požárním zatížením menším než 400 MJ/m² nebo stavby obsahující malé množství hořlavého materiálu.",
     },
-    none: { label: "Žádné nebezpečí požáru ani výbuchu", value: 0 },
+    none: { label: "Výbuchu nebo požáru – žádné", value: 0 },
   },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
@@ -503,26 +528,26 @@ export const TABLE_HZ: NormTable<HzKey> = {
   title: "Součinitel hz zvyšující ztrátu při zvláštním nebezpečí",
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.6",
   rows: {
-    none: { label: "Bez zvláštního nebezpečí", value: 1 },
+    none: { label: "Žádné zvláštní riziko", value: 1 },
     panic_low: {
       label: "Nízká úroveň paniky",
       value: 2,
-      help: "Např. objekt nejvýše o dvou podlažích a nejvýše 100 osobách.",
+      help: "Například stavba do dvou podlaží a počet osob není větší než 100.",
     },
     panic_average: {
       label: "Průměrná úroveň paniky",
       value: 5,
-      help: "Např. kulturní nebo sportovní akce pro 100 až 1 000 osob.",
+      help: "Například stavby navržené pro kulturní a sportovní události s počtem účastníků mezi 100 a 1 000 osob.",
     },
     evacuation_difficult: {
       label: "Obtížná evakuace",
       value: 5,
-      help: "Např. imobilní osoby, nemocnice.",
+      help: "Například stavby s nepohyblivými osobami, nemocnice.",
     },
     panic_high: {
       label: "Vysoká úroveň paniky",
       value: 10,
-      help: "Např. kulturní nebo sportovní akce pro více než 1 000 osob.",
+      help: "Například stavby pro kulturní a sportovní události s počtem účastníků větším než 1 000 osob.",
     },
   },
   publicSources: [],
@@ -536,8 +561,8 @@ export const TABLE_L2_LF: NormTable<L2Key> = {
   title: "L2 – typická střední hodnota LF (ztráta veřejné služby, fyzická škoda)",
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.8",
   rows: {
-    gas_water_power: { label: "Dodávka plynu, vody, elektrické energie", value: 0.1 },
-    tv_tlc: { label: "TV a telekomunikační vedení", value: 0.01 },
+    gas_water_power: { label: "Plyn, voda, zásobování energií", value: 0.1 },
+    tv_tlc: { label: "TV, telekomunikační vedení", value: 0.01 },
   },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
@@ -548,8 +573,8 @@ export const TABLE_L2_LO: NormTable<L2Key> = {
   title: "L2 – typická střední hodnota LO (ztráta veřejné služby, porucha systémů)",
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.8",
   rows: {
-    gas_water_power: { label: "Dodávka plynu, vody, elektrické energie", value: 0.01 },
-    tv_tlc: { label: "TV a telekomunikační vedení", value: 0.001 },
+    gas_water_power: { label: "Plyn, voda, zásobování energií", value: 0.01 },
+    tv_tlc: { label: "TV, telekomunikační vedení", value: 0.001 },
   },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
@@ -580,7 +605,7 @@ export const TABLE_L4_LT: NormTable<"animals"> = {
   symbol: "LT",
   title: "L4 – typická střední hodnota LT (ztráta zvířat)",
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.12",
-  rows: { animals: { label: "Objekty, kde se vyskytují pouze zvířata", value: 0.01 } },
+  rows: { animals: { label: "Všechny typy, v nichž jsou pouze zvířata", value: 0.01 } },
   publicSources: [],
   provenance: PROVENANCE_MEMORY,
 };
@@ -591,9 +616,9 @@ export const TABLE_L4_LF: NormTable<L4LfKey> = {
   normRef: "ČSN EN 62305-2 ed. 2, tab. C.12",
   rows: {
     explosion: { label: "Nebezpečí výbuchu", value: 1 },
-    hospital_industrial_museum_agriculture: { label: "Nemocnice, průmysl, muzeum, zemědělství", value: 0.5 },
+    hospital_industrial_museum_agriculture: { label: "Nemocnice, průmyslová, muzeum, zemědělská", value: 0.5 },
     hotel_school_office_church_entertainment_commercial: {
-      label: "Hotel, škola, kancelářská budova, kostel, veřejná zábava, obchod",
+      label: "Hotel, škola, úřad, kostel, veřejná zábava, komerční",
       value: 0.2,
     },
     other: { label: "Ostatní", value: 0.1 },
@@ -609,11 +634,11 @@ export const TABLE_L4_LO: NormTable<L4LoKey> = {
   rows: {
     explosion: { label: "Nebezpečí výbuchu", value: 0.1 },
     hospital_industrial_office_hotel_commercial: {
-      label: "Nemocnice, průmysl, kancelářská budova, hotel, obchod",
+      label: "Nemocnice, průmyslová, úřad, hotel, komerční",
       value: 0.01,
     },
     museum_agriculture_school_church_entertainment: {
-      label: "Muzeum, zemědělství, škola, kostel, veřejná zábava",
+      label: "Muzeum, zemědělská, škola, kostel, veřejná zábava",
       value: 0.001,
     },
     other: { label: "Ostatní", value: 0.0001 },

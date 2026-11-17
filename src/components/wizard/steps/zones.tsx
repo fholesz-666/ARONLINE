@@ -3,7 +3,7 @@
 import { buildingType, SYSTEM_PRESETS } from "@/catalog";
 import type { InternalSystemInput, ZoneInput } from "@/core/risk/methodologies/csn-en-62305-2-ed2/schema";
 import type { LossType } from "@/core/risk/methodologies/csn-en-62305-2-ed2/tables";
-import { defaultInsideZone } from "@/domain/project";
+import { defaultInsideZone, L4_SHARE_ANIMALS_CZ2, L4_SHARE_SYSTEMS_CZ2 } from "@/domain/project";
 import { fmtNum } from "@/core/util/format";
 import { Checkbox, Disclosure, Notice, NumberInput, QuickPicks, SelectInput, TextInput } from "../../ui";
 import { LossSelect } from "../loss-select";
@@ -53,6 +53,12 @@ function outsideZone(): ZoneInput {
   };
 }
 
+const L4_SHARE_PICKS_SYSTEMS = [
+  { value: L4_SHARE_SYSTEMS_CZ2, label: "0,15 – typicky (tab. C.Z2)" },
+  { value: 1, label: "1 – konzervativně" },
+];
+const L4_SHARE_PICKS_ANIMALS = [{ value: L4_SHARE_ANIMALS_CZ2, label: "0,10 – typicky (tab. C.Z2)" }];
+
 export function StepZones({ data, update, issues }: StepProps) {
   const calc = calcOf(data);
   const t = buildingType(data.buildingType);
@@ -78,7 +84,7 @@ export function StepZones({ data, update, issues }: StepProps) {
   const ensureLossData = (z: ZoneInput, loss: LossType) => {
     if (loss === "L2" && !z.l2) z.l2 = { lf: { source: "table", key: "gas_water_power" }, lo: { source: "table", key: "gas_water_power" }, servedUsers: 0 };
     if (loss === "L3" && !z.l3) z.l3 = { lf: { source: "table", key: "museums_galleries" }, valueShare: z.location === "inside" ? 1 : 0 };
-    if (loss === "L4" && !z.l4) z.l4 = { lt: null, lf: { source: "table", key: t.l4Lf }, lo: { source: "table", key: t.l4Lo }, shareAnimals: 0, shareTotal: 1, shareSystems: 1 };
+    if (loss === "L4" && !z.l4) z.l4 = { lt: null, lf: { source: "table", key: t.l4Lf }, lo: { source: "table", key: t.l4Lo }, shareAnimals: options.l4Animals ? L4_SHARE_ANIMALS_CZ2 : 0, shareTotal: 1, shareSystems: L4_SHARE_SYSTEMS_CZ2 };
   };
 
   const lossSummary = (z: ZoneInput) => {
@@ -143,7 +149,11 @@ export function StepZones({ data, update, issues }: StepProps) {
             onChange={(v) =>
               setRoot((c) => {
                 c.options = { ...options, l4Animals: v };
-                for (const z of c.zones ?? []) if (v && z.l4 && !z.l4.lt) z.l4.lt = { source: "table", key: "animals" };
+                for (const z of c.zones ?? []) {
+                  if (!v || !z.l4) continue;
+                  if (!z.l4.lt) z.l4.lt = { source: "table", key: "animals" };
+                  if (!z.l4.shareAnimals && z.location === "inside") z.l4.shareAnimals = L4_SHARE_ANIMALS_CZ2;
+                }
               }, "calc.options")
             }
           />
@@ -300,13 +310,24 @@ export function StepZones({ data, update, issues }: StepProps) {
                     {options.l4Animals && (
                       <>
                         <LossSelect label="L4: LT (zvířata)" table={LOSS_TABLES.L4_LT} value={z.l4.lt} onChange={(v) => setZone(i, (zz) => (zz.l4!.lt = v))} error={issueFor(issues, `${p}.l4.lt`)} />
-                        <NumberInput label="L4: podíl hodnoty zvířat ca/ct" value={z.l4.shareAnimals} onChange={(v) => setZone(i, (zz) => (zz.l4!.shareAnimals = v ?? 0))} help="0 až 1" />
+                        <div>
+                          <NumberInput label="L4: podíl hodnoty zvířat ca/ct" value={z.l4.shareAnimals} onChange={(v) => setZone(i, (zz) => (zz.l4!.shareAnimals = v ?? 0))} help="0 až 1. Typicky 0,10 (národní tab. C.Z2, objekty se zvířaty)." />
+                          <QuickPicks label="Podíl hodnoty zvířat" value={z.l4.shareAnimals} onPick={(v) => setZone(i, (zz) => (zz.l4!.shareAnimals = v))} options={L4_SHARE_PICKS_ANIMALS} />
+                        </div>
                       </>
                     )}
                     {!outside && (
                       <>
                         <NumberInput label="L4: podíl hodnoty zóny (ca+cb+cc+cs)/ct" value={z.l4.shareTotal} onChange={(v) => setZone(i, (zz) => (zz.l4!.shareTotal = v ?? 0))} help="1 = celá hodnota objektu (konzervativní, nejsou-li údaje)" />
-                        <NumberInput label="L4: podíl hodnoty systémů cs/ct" value={z.l4.shareSystems} onChange={(v) => setZone(i, (zz) => (zz.l4!.shareSystems = v ?? 0))} help="0 až 1" />
+                        <div>
+                          <NumberInput
+                            label="L4: podíl hodnoty systémů cs/ct"
+                            value={z.l4.shareSystems}
+                            onChange={(v) => setZone(i, (zz) => (zz.l4!.shareSystems = v ?? 0))}
+                            help="0 až 1. Typicky 0,15 (národní tab. C.Z2); 1 = vše jsou vnitřní systémy (konzervativní)."
+                          />
+                          <QuickPicks label="Podíl hodnoty systémů" value={z.l4.shareSystems} onPick={(v) => setZone(i, (zz) => (zz.l4!.shareSystems = v))} options={L4_SHARE_PICKS_SYSTEMS} />
+                        </div>
                       </>
                     )}
                   </>

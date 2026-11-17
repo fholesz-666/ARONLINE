@@ -160,15 +160,21 @@ export function defaultInsideZone(typeKey: BuildingTypeKey | string): ZoneInput 
       lt: t.options.l4Animals ? { source: "table", key: "animals" } : null,
       lf: { source: "table", key: t.l4Lf },
       lo: { source: "table", key: t.l4Lo },
-      shareAnimals: t.options.l4Animals ? 1 : 0,
+      // výchozí podíly podle národní tab. C.Z2 (ČSN EN 62305-2 ed. 2, Z1): bez zvířat ca/cb/cc/cs = 0/75/10/15 %, se zvířaty 10/70/5/15 %
+      shareAnimals: t.options.l4Animals ? L4_SHARE_ANIMALS_CZ2 : 0,
       shareTotal: 1,
-      shareSystems: 1,
+      shareSystems: L4_SHARE_SYSTEMS_CZ2,
     },
     shieldExternal: { wm: null, continuous: false },
     shieldInternal: { wm: null, continuous: false },
     internalSystems: [],
   };
 }
+
+/** Typický podíl hodnoty vnitřních systémů cs/ct podle národní tab. C.Z2. */
+export const L4_SHARE_SYSTEMS_CZ2 = 0.15;
+/** Typický podíl hodnoty zvířat ca/ct podle národní tab. C.Z2 (objekty se zvířaty). */
+export const L4_SHARE_ANIMALS_CZ2 = 0.1;
 
 /** Výchozí rozpracovaný vstup výpočtu pro nový projekt. */
 export function defaultCalc(typeKey: BuildingTypeKey | string): Partial<Ed2Input> {

@@ -32,7 +32,7 @@ export function LossSelect({
         error={error}
         onChange={(v) => (v === "__custom" ? onChange({ source: "custom", value: 0, note: "" }) : onChange({ source: "table", key: v }))}
         options={options}
-        help={`${table.normRef}`}
+        help={current && current !== "__custom" && table.rows[current]?.help ? `${table.normRef}. ${table.rows[current].help}` : table.normRef}
       />
       {value?.source === "custom" && (
         <div className="grid gap-2 border-l-2 border-signal pl-3 sm:grid-cols-[8rem_1fr]">

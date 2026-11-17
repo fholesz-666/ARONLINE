@@ -18,4 +18,9 @@ describe("český bankovní účet", () => {
       "SPD*1.0*ACC:CZ8903000000000242406724*AM:149.00*CC:CZK*X-VS:2612345678*MSG:ARONLINE ANALYZA 1",
     );
   });
+  it("QR Platba s okamžitou platbou (PT:IP)", () => {
+    expect(spayd({ iban: "CZ8903000000000242406724", amountHaler: 14900, vs: "2612345678", instant: true })).toBe(
+      "SPD*1.0*ACC:CZ8903000000000242406724*AM:149.00*CC:CZK*PT:IP*X-VS:2612345678",
+    );
+  });
 });

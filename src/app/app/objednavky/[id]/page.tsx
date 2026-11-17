@@ -8,6 +8,7 @@ import { formatIban, spayd } from "@/domain/bank";
 import { getCurrent } from "@/server/auth/session";
 import { getDb } from "@/server/db";
 import { invoices, memberships, orders } from "@/server/db/schema";
+import { paymentsAvailable } from "@/server/payments/service";
 import { getSettings } from "@/server/services/settings";
 
 export const dynamic = "force-dynamic";
@@ -32,9 +33,10 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
   const due = new Date(order.createdAt.getTime() + settings.bank.dueDays * 86_400_000);
   const qrText =
     order.paymentMethod === "BANK" && settings.bank.iban
-      ? spayd({ iban: settings.bank.iban, amountHaler: order.amountHaler, vs: order.variableSymbol ?? undefined, message: `ARONLINE ${order.number}` })
+      ? spayd({ iban: settings.bank.iban, amountHaler: order.amountHaler, vs: order.variableSymbol ?? undefined, message: `ARONLINE ${order.number}`, instant: true })
       : null;
-  const qrSvg = qrText ? await QRCode.toString(qrText, { type: "svg", errorCorrectionLevel: "M", margin: 1, width: 220 }) : null;
+  const qrSvg = qrText ? await QRCode.toString(qrText, { type: "svg", errorCorrectionLevel: "M", margin: 1, width: 240 }) : null;
+  const cardAvailable = paymentsAvailable(order.productCode).available;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
@@ -78,7 +80,11 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
       ) : order.paymentMethod === "BANK" ? (
         <section className="panel mt-6 grid gap-6 p-5 sm:grid-cols-[1fr_auto]">
           <div>
-            <h2 className="text-lg">Platební údaje</h2>
+            <h2 className="text-lg">Zaplaťte QR kódem</h2>
+            <p className="mt-1 text-sm text-ink-soft">
+              Naskenujte QR kód v bankovní aplikaci – částka, účet i variabilní symbol se vyplní samy. Pošlete prosím jako <strong>okamžitou platbu</strong>,
+              {order.projectId ? " analýzu odemkneme" : " kredity připíšeme"} hned, jak platbu na účtu uvidíme, a pošleme vám doklad e-mailem.
+            </p>
             <dl className="mt-3 grid grid-cols-[9rem_1fr] gap-y-1.5 text-sm">
               <dt className="text-ink-soft">Částka</dt>
               <dd className="font-semibold">{czk(order.amountHaler)}</dd>
@@ -102,9 +108,14 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
           </div>
           {qrSvg && (
             <figure className="text-center">
-              <div className="mx-auto w-[220px] bg-white p-1" dangerouslySetInnerHTML={{ __html: qrSvg }} />
+              <div className="mx-auto w-[240px] bg-white p-1" dangerouslySetInnerHTML={{ __html: qrSvg }} />
               <figcaption className="mt-1 text-xs text-muted">QR Platba – naskenujte v bankovní aplikaci</figcaption>
             </figure>
+          )}
+          {!cardAvailable && (
+            <p className="text-sm text-muted sm:col-span-2" data-testid="gateway-soon">
+              Platba kartou přes platební bránu bude již brzy.
+            </p>
           )}
         </section>
       ) : (

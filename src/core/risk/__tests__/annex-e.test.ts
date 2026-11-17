@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { calculateScenario } from "../methodologies/csn-en-62305-2-ed2/calculate";
 import { zEd2Input, type Ed2Input } from "../methodologies/csn-en-62305-2-ed2/schema";
+import { rfFromFireLoad } from "../methodologies/csn-en-62305-2-ed2/tables";
 
 /**
  * Vzorové příklady z přílohy E ČSN EN 62305-2 ed. 2 – hodnoty opsané z textu normy
@@ -266,5 +267,32 @@ describe("Kontroly zadání odvozené z příkladů", () => {
 
   it("L1 s ohrožením života poruchou systémů nevyžaduje LO ve venkovní zóně", () => {
     expect(() => hospital()).not.toThrow();
+  });
+
+  it("rf podle měrného požárního zatížení – hranice pozn. 5–7 k tab. C.5", () => {
+    expect(rfFromFireLoad(0)).toBe("fire_low");
+    expect(rfFromFireLoad(399.9)).toBe("fire_low");
+    expect(rfFromFireLoad(400)).toBe("fire_ordinary");
+    expect(rfFromFireLoad(800)).toBe("fire_ordinary");
+    expect(rfFromFireLoad(800.1)).toBe("fire_high");
+  });
+
+  it("rf neodpovídající zadanému zatížení → info (vyšší) nebo varování (nižší), shoda bez hlášení", () => {
+    const withLoad = (rf: string, mj: number | null) => {
+      const inp = apartments(20, rf, "lps_iii", "none", "lpl_iii_iv");
+      inp.zones.forEach((z) => {
+        if (z.location === "inside") z.fireLoadMJ = mj;
+      });
+      return calculateScenario(parse(inp), "designed").messages.filter((m) => m.code === "RF_VS_FIRE_LOAD");
+    };
+    expect(withLoad("fire_ordinary", 500)).toHaveLength(0);
+    expect(withLoad("fire_ordinary", null)).toHaveLength(0);
+    const higher = withLoad("fire_high", 500);
+    expect(higher.length).toBeGreaterThan(0);
+    expect(higher[0].severity).toBe("info");
+    expect(higher[0].message).toContain("pozn. 5");
+    const lower = withLoad("fire_low", 900);
+    expect(lower.length).toBeGreaterThan(0);
+    expect(lower[0].severity).toBe("warning");
   });
 });

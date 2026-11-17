@@ -275,7 +275,7 @@ export function BillingPanel() {
         })()}
         <p className="mt-3 text-sm text-muted">
           Jednorázovou analýzu můžete koupit i přímo u konkrétního projektu – po zaplacení se odemkne automaticky. Při platbě QR kódem (převodem) se kredit připíše po
-          přijetí platby na účet – u okamžité platby obvykle týž den. Předplatné se hradí jen kartou (opakovaná platba).
+          přijetí platby na účet. Předplatné se hradí jen kartou (opakovaná platba).
         </p>
       </section>
 

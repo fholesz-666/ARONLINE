@@ -69,7 +69,7 @@ export const SITE_TEXTS = {
     label: "Platba převodem – pokyny",
     where: "Stránka s platebními údaji po objednávce převodem",
     default:
-      "Po připsání platby na účet (obvykle 1–2 pracovní dny) odemkneme dokumentaci a pošleme doklad e-mailem. Uveďte prosím správný variabilní symbol.",
+      "Po připsání platby na účet odemkneme dokumentaci a pošleme doklad e-mailem. Uveďte prosím správný variabilní symbol.",
     multiline: true,
   },
 } satisfies Record<string, SiteTextDef>;

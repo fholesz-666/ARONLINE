@@ -66,7 +66,7 @@ export default async function TermsPage() {
         </li>
         <li>
           Jednorázová analýza a balíček analýz se hradí předem. Kredity se připíší po potvrzení platby platební bránou, u převodu po připsání platby na účet
-          provozovatele (obvykle 1–2 pracovní dny). Neuhrazená objednávka převodem se po uplynutí splatnosti může zrušit. Kredity nemají omezenou platnost, nejsou
+          provozovatele. Neuhrazená objednávka převodem se po uplynutí splatnosti může zrušit. Kredity nemají omezenou platnost, nejsou
           převoditelné mimo pracovní prostor a nelze je směnit za peníze.
         </li>
         <li>Úhrada se považuje za provedenou až potvrzením platby platební bránou nebo připsáním na účet; samotné přesměrování z brány není potvrzením platby.</li>

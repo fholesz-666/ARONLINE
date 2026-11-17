@@ -67,7 +67,7 @@ export default async function PricingPage() {
             {bank.enabled && (
               <li>
                 Jednorázovou analýzu a balíček zaplatíte QR kódem v bankovní aplikaci (bankovní převod, ideálně okamžitá platba). Kredit se připíše po přijetí platby na
-                účet{cardAvailable ? ", obvykle za 1–2 pracovní dny" : ", u okamžité platby obvykle týž den"}.
+                účet.
               </li>
             )}
             <li>Ke každé platbě se automaticky vystaví doklad (faktura), najdete ho v aplikaci a pošleme ho e-mailem.</li>
